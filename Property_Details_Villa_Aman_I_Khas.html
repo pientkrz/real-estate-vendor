@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Villa Aman-I-Khas | Estate Authority</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@300;400;500;600;700;800&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed": "#2b1700",
+                        "primary-fixed-dim": "#edc06d",
+                        "on-primary": "#ffffff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e5e2e1",
+                        "surface": "#fcf9f8",
+                        "primary": "#7a590c",
+                        "on-secondary-fixed-variant": "#5f411a",
+                        "tertiary-fixed": "#e4e2e1",
+                        "secondary": "#79582f",
+                        "on-surface": "#1c1b1b",
+                        "on-primary-fixed": "#271900",
+                        "on-tertiary-fixed": "#1b1c1c",
+                        "background": "#fcf9f8",
+                        "tertiary-fixed-dim": "#c8c6c6",
+                        "surface-tint": "#7a590c",
+                        "surface-dim": "#dcd9d9",
+                        "on-primary-container": "#493200",
+                        "secondary-fixed-dim": "#ebbf8d",
+                        "surface-container-highest": "#e5e2e1",
+                        "secondary-fixed": "#ffddb8",
+                        "outline": "#807666",
+                        "on-tertiary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "tertiary": "#5f5e5e",
+                        "surface-bright": "#fcf9f8",
+                        "surface-container-high": "#ebe7e7",
+                        "surface-container": "#f0edec",
+                        "on-error-container": "#93000a",
+                        "on-error": "#ffffff",
+                        "on-tertiary-container": "#363636",
+                        "inverse-surface": "#313030",
+                        "primary-fixed": "#ffdea6",
+                        "on-background": "#1c1b1b",
+                        "primary-container": "#c2994a",
+                        "on-primary-fixed-variant": "#5e4200",
+                        "inverse-on-surface": "#f3f0ef",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "on-surface-variant": "#4e4638",
+                        "tertiary-container": "#a09f9f",
+                        "surface-container-low": "#f6f3f2",
+                        "on-tertiary-fixed-variant": "#474747",
+                        "on-secondary-container": "#78572e",
+                        "inverse-primary": "#edc06d",
+                        "outline-variant": "#d2c5b3",
+                        "secondary-container": "#fdcf9c"
+                    },
+                    fontFamily: {
+                        "headline": ["Work Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fcf9f8;
+            color: #1c1b1b;
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-surface selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Navigation Bar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 dark:bg-neutral-900/80 backdrop-blur-md flex justify-between items-center px-8 py-4 max-w-full">
+<div class="text-xl font-bold tracking-tighter text-neutral-900 dark:text-neutral-50 font-headline">Estate Authority</div>
+<div class="hidden md:flex space-x-8 font-work-sans font-medium tracking-tight">
+<a class="text-amber-700 dark:text-amber-500 border-b-2 border-amber-700 pb-1 transition-colors duration-300 ease-in-out" href="#">Portfolio</a>
+<a class="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors duration-300 ease-in-out" href="#">Destinations</a>
+<a class="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors duration-300 ease-in-out" href="#">Services</a>
+<a class="text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 transition-colors duration-300 ease-in-out" href="#">Journal</a>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-2 rounded-lg font-label text-sm font-semibold tracking-wide hover:opacity-90 transition-all">
+            Enquire Now
+        </button>
+</nav>
+<main class="pt-20">
+<!-- Hero Gallery Section -->
+<section class="relative h-[870px] w-full overflow-hidden px-8">
+<div class="grid grid-cols-12 h-full gap-4">
+<div class="col-span-12 md:col-span-8 relative rounded-xl overflow-hidden group">
+<img class="w-full h-full object-cover grayscale-[20%] hover:grayscale-0 transition-all duration-700" data-alt="Ultra luxury modern villa exterior at sunset" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCfyjvkkz1YhDVNM0b8Yr36V1DlUJGYwDOP8Y4KPdrKkhvcWZ7HFQw7IGCphLEQ09B6W4ttNWIB6T7oeRLxjn0FXbzPOWdZR24HpWQVJ-DNfk1Caj1JTT7RhDpd9wTj2b_X2LbVsOQPEJQ07rjh0cvV48jatdQEFAookAKPSNIh-TTHYiB71tl8tFrk2g79hDCHtDid-2Q1yfS0ecn_b9xzSr6HI57NIqs7V7YW0JPz7aGAtHUFUbXa-07Bexkl6OQ4qW6jPSPksuS"/>
+<div class="absolute bottom-10 left-10 z-10">
+<span class="inline-block px-3 py-1 bg-primary text-on-primary font-label text-[10px] tracking-[0.2em] uppercase mb-4">New Entry</span>
+<h1 class="text-white font-headline text-5xl md:text-7xl font-extrabold tracking-tighter drop-shadow-lg">
+                            Villa Aman-I-Khas
+                        </h1>
+<p class="text-white/90 font-body text-xl mt-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-fixed-dim">location_on</span>
+                            Marbella, Spain
+                        </p>
+</div>
+</div>
+<div class="hidden md:grid col-span-4 grid-rows-2 gap-4">
+<div class="rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Infinity pool overlooking the Mediterranean sea" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPPcw_D8OXd8GNFeSa1Gg0GVZy95mid42pdrijg4XGxD6PR84AA7dIC8qPbSfsXLIkC6DGzpGjKzI-4o-k8OtmMHFPQqIGCWk3k8KjntiLaaJERTR_MX2_tuxK_GBHEjHc-1CMbs9bxiNmr2uskGcspqRxtrJ1QfNjF_Q2loNc6r58LXFjl9EOG_TykAKCXXcrkGeyjowgriIY9jwdJUAUFKSrkb3_924CFBuwrnLpBcl-WRhAWwNnjVGa1p12nRdGy0PqhsOLngnn"/>
+</div>
+<div class="rounded-xl overflow-hidden relative">
+<img class="w-full h-full object-cover" data-alt="Modern minimalist living room with floor to ceiling windows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAV0LbmGybEoQAsblR66UMgKDs204LWn0gvJFii_MWIq9cULSX-3pFHLuntEuYP_Kpjvg77NndH0AOXWdJ_3U9EWFP4v7jp7onhkWK3oZACYiC3eg4rELhvRxAte__K6t5VSEEhld-kmY3qDwZYVYJlUEmdxSD7BWLc5is-g5O6uEkYHfTZ6uECh6GA-8elACaOqNIigNLhiCTt72PZMBzFWSEOVTGmiR5JCOyTrOcp9SNYx7GEVUUuGbkUcurWwYUbYSBRFfjEc9U-"/>
+<div class="absolute inset-0 bg-black/40 flex items-center justify-center cursor-pointer group">
+<span class="text-white font-label text-sm tracking-widest border border-white/30 px-6 py-3 backdrop-blur-sm group-hover:bg-white/10 transition-all">VIEW GALLERY (24)</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Key Specs Bar -->
+<section class="mt-12 px-8">
+<div class="bg-surface-container-low p-8 flex flex-wrap justify-between items-center gap-8 rounded-xl">
+<div class="flex flex-col">
+<span class="font-label text-[10px] uppercase tracking-[0.2em] text-primary mb-1">Listing Price</span>
+<span class="font-headline text-3xl font-bold text-on-surface">€12,500,000</span>
+</div>
+<div class="h-12 w-px bg-outline-variant hidden md:block"></div>
+<div class="flex gap-12">
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary mb-2">bed</span>
+<span class="font-headline font-semibold">6 BEDS</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary mb-2">bathtub</span>
+<span class="font-headline font-semibold">8 BATHS</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="material-symbols-outlined text-secondary mb-2">square_foot</span>
+<span class="font-headline font-semibold">1,200M²</span>
+</div>
+</div>
+<button class="bg-on-surface text-surface px-8 py-4 rounded-lg font-label text-sm tracking-widest hover:bg-primary transition-colors">
+                    DOWNLOAD BROCHURE
+                </button>
+</div>
+</section>
+<!-- Main Content Grid -->
+<section class="mt-24 px-8 grid grid-cols-1 md:grid-cols-12 gap-16">
+<!-- Left Side: Editorial Copy -->
+<div class="md:col-span-7">
+<span class="font-label text-primary text-xs uppercase tracking-[0.3em] font-bold block mb-6">Architectural Narrative</span>
+<h2 class="font-headline text-4xl md:text-5xl font-bold tracking-tight text-on-surface mb-8">Mediterranean Light &amp; Architectural Integrity</h2>
+<div class="space-y-6 text-on-surface-variant font-body leading-relaxed text-lg text-justify">
+<p>
+                        Villa Aman-I-Khas is more than a residence; it is a profound dialogue between stone and sky. Located in the exclusive hills of Marbella, this architectural masterpiece captures the raw essence of the Mediterranean landscape while offering a sanctuary of unparalleled refinement.
+                    </p>
+<p>
+                        The design philosophy centers on 'Architectural Integrity'—where every line serves a purpose and every material tells a story. Floor-to-ceiling glass walls dissolve the boundaries between the curated interior and the rugged Andalusian beauty, allowing the changing Spanish light to paint shifting canvases across the limestone floors throughout the day.
+                    </p>
+<div class="py-8">
+<div class="bg-surface-container p-10 border-l-4 border-primary italic font-body text-xl text-on-surface">
+                            "Luxury is not the presence of excess, but the absence of noise. Aman-I-Khas represents the pinnacle of quiet confidence."
+                        </div>
+</div>
+<p>
+                        From the meticulously sourced travertine to the custom-milled oak cabinetry, no detail has been overlooked. The property flows effortlessly from grand entertainment halls to intimate private quarters, ensuring that whether hosting a gala or seeking a quiet retreat, the environment adapts to the inhabitant's every desire.
+                    </p>
+</div>
+<!-- Features Bento Grid -->
+<div class="mt-20">
+<h3 class="font-headline text-2xl font-bold mb-8">Exceptional Amenities</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="bg-surface-container-high p-6 rounded-lg flex items-start gap-4">
+<span class="material-symbols-outlined text-primary p-2 bg-surface rounded-full">pool</span>
+<div>
+<h4 class="font-headline font-bold">Infinity Pool</h4>
+<p class="text-sm text-on-surface-variant">25-meter heated pool with saltwater filtration and panoramic ocean views.</p>
+</div>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg flex items-start gap-4">
+<span class="material-symbols-outlined text-primary p-2 bg-surface rounded-full">wine_bar</span>
+<div>
+<h4 class="font-headline font-bold">Wine Cellar</h4>
+<p class="text-sm text-on-surface-variant">Climate-controlled vault with tasting lounge and space for 2,000 bottles.</p>
+</div>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg flex items-start gap-4">
+<span class="material-symbols-outlined text-primary p-2 bg-surface rounded-full">engineering</span>
+<div>
+<h4 class="font-headline font-bold">Staff Quarters</h4>
+<p class="text-sm text-on-surface-variant">Dedicated 3-bedroom wing with private kitchen and separate entrance.</p>
+</div>
+</div>
+<div class="bg-surface-container-high p-6 rounded-lg flex items-start gap-4">
+<span class="material-symbols-outlined text-primary p-2 bg-surface rounded-full">home_iot_device</span>
+<div>
+<h4 class="font-headline font-bold">Smart Home Automation</h4>
+<p class="text-sm text-on-surface-variant">Integrated Control4 system managing climate, lighting, and security.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Side: Contact/Enquiry Form sticky -->
+<div class="md:col-span-5">
+<div class="sticky top-32 bg-surface-container-low p-10 rounded-xl shadow-sm">
+<h3 class="font-headline text-2xl font-extrabold mb-2">Request a Private Viewing</h3>
+<p class="font-body text-on-surface-variant mb-8">Discretion is our standard. Please provide your details to schedule a confidential appointment.</p>
+<form class="space-y-6">
+<div class="group">
+<label class="block font-label text-[10px] uppercase tracking-widest text-primary mb-2">Full Name</label>
+<input class="w-full bg-transparent border-b border-outline-variant focus:border-primary focus:ring-0 transition-all py-2 font-body outline-none" placeholder="Enter your full name" type="text"/>
+</div>
+<div class="group">
+<label class="block font-label text-[10px] uppercase tracking-widest text-primary mb-2">Email Address</label>
+<input class="w-full bg-transparent border-b border-outline-variant focus:border-primary focus:ring-0 transition-all py-2 font-body outline-none" placeholder="email@domain.com" type="email"/>
+</div>
+<div class="group">
+<label class="block font-label text-[10px] uppercase tracking-widest text-primary mb-2">Message (Optional)</label>
+<textarea class="w-full bg-transparent border-b border-outline-variant focus:border-primary focus:ring-0 transition-all py-2 font-body outline-none resize-none" placeholder="Preferred viewing dates..." rows="3"></textarea>
+</div>
+<div class="flex items-center gap-3 py-2">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" id="nda" type="checkbox"/>
+<label class="text-xs text-on-surface-variant font-body leading-none cursor-pointer" for="nda">Require non-disclosure agreement before arrival</label>
+</div>
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-4 rounded-lg font-label text-sm font-bold tracking-[0.2em] uppercase hover:shadow-xl hover:-translate-y-1 transition-all" type="submit">
+                            CONFIRM REQUEST
+                        </button>
+</form>
+<div class="mt-8 pt-8 border-t border-outline-variant/30 text-center">
+<span class="block font-label text-[10px] text-tertiary uppercase tracking-widest mb-4">Direct Concierge</span>
+<div class="flex justify-center gap-6">
+<a class="text-on-surface hover:text-primary transition-colors flex items-center gap-1 font-semibold text-sm" href="#">
+<span class="material-symbols-outlined text-sm">call</span> +34 912 345 678
+                            </a>
+<a class="text-on-surface hover:text-primary transition-colors flex items-center gap-1 font-semibold text-sm" href="#">
+<span class="material-symbols-outlined text-sm">mail</span> concierge@estateauthority.com
+                            </a>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Location Map Section -->
+<section class="mt-32 px-8">
+<div class="relative h-[500px] w-full rounded-2xl overflow-hidden bg-surface-container-high group">
+<img class="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-1000" data-alt="Satellite or artistic map view of the Marbella coastline" data-location="Marbella" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDF1BJmlvQp3I340b59rCLsxVoEVk1i_ZKL9R_lvpGS6mH_6jgKLN0Zw9U47Qi_EOEK0PY989-DJThbEyimkg_uLU3fpJqg8juof9RDdvP6M-2ho9kgPWI1c6Mus9dcmB0tzvmGdgOFPNbIUomOUVrJkHppzFAv8n7E-T630g9SvlNKP2PaDEi0nzHQuNvJAUmGWq9LVuqi1P34PKh_A5Emwafj02k0Q4yPaw3xut5tQrNdamsbN4625b2gxGsHQ2nzTmkj59tHLDt3"/>
+<div class="absolute inset-0 bg-gradient-to-t from-surface via-transparent to-transparent"></div>
+<div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
+<div class="w-16 h-16 bg-primary/20 backdrop-blur-lg rounded-full flex items-center justify-center animate-pulse mb-4 mx-auto">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">location_on</span>
+</div>
+<h3 class="font-headline text-3xl font-bold">The Golden Mile</h3>
+<p class="font-body text-on-surface-variant">Confidential address provided upon verification</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-20 bg-neutral-900 dark:bg-neutral-950 grid grid-cols-1 md:grid-cols-4 gap-12 px-12 py-20 w-full text-neutral-400 font-inter text-sm tracking-wide">
+<div class="space-y-6">
+<div class="text-lg font-bold text-neutral-50 font-headline">Estate Authority</div>
+<p class="leading-relaxed">A specialized boutique for the acquisition and stewardship of the world's most significant architectural achievements.</p>
+</div>
+<div>
+<h4 class="text-neutral-50 font-bold uppercase tracking-widest text-xs mb-6">Portfolio</h4>
+<ul class="space-y-3">
+<li><a class="hover:text-amber-400 transition-colors" href="#">Residential Estates</a></li>
+<li><a class="hover:text-amber-400 transition-colors" href="#">Commercial Landmarks</a></li>
+<li><a class="hover:text-amber-400 transition-colors" href="#">Private Islands</a></li>
+<li><a class="hover:text-amber-400 transition-colors" href="#">Historical Restorations</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-neutral-50 font-bold uppercase tracking-widest text-xs mb-6">Experience</h4>
+<ul class="space-y-3">
+<li><a class="hover:text-amber-400 transition-colors" href="#">Destinations</a></li>
+<li><a class="hover:text-amber-400 transition-colors" href="#">Services</a></li>
+<li><a class="hover:text-amber-400 transition-colors" href="#">Journal</a></li>
+<li><a class="hover:text-amber-400 transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+<div>
+<h4 class="text-neutral-50 font-bold uppercase tracking-widest text-xs mb-6">Newsletter</h4>
+<p class="mb-4">Receive private notifications of off-market arrivals.</p>
+<div class="flex border-b border-neutral-700 py-2">
+<input class="bg-transparent border-none focus:ring-0 text-white w-full text-xs" placeholder="Email address" type="email"/>
+<button class="text-amber-500 material-symbols-outlined">arrow_forward</button>
+</div>
+</div>
+<div class="md:col-span-4 pt-12 border-t border-neutral-800 flex flex-col md:flex-row justify-between items-center gap-6">
+<span>© 2024 Estate Authority. All rights reserved.</span>
+<div class="flex gap-8">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors" href="#">Cookies</a>
+</div>
+</div>
+</footer>
+</body></html>
