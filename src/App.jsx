@@ -19,7 +19,7 @@ function App() {
         {loading ? (
           <div className="text-center py-24 text-primary font-headline text-2xl">Loading Collection...</div>
         ) : (
-          <FeaturedProperties properties={filteredOffers.slice(0, 6)} />
+          <FeaturedProperties properties={filteredOffers} />
         )}
         <Ethos />
       </main>
