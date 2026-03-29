@@ -37,40 +37,7 @@ const PropertyCard = ({ title, location, beds, baths, area, price, image, status
   );
 };
 
-const FeaturedProperties = () => {
-  const properties = [
-    {
-      title: "Villa Aman-I-Khas",
-      location: "Marbella, Spain",
-      beds: 6,
-      baths: 8,
-      area: "1,200m²",
-      price: "€12.5M",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuAl5pCSyDBP4BcJWnmpGxkSuAPhCUfRC_CbPn1D_75WYv0NQWjg4FBoT1v4svqrAV3EFxRkE7aR5elZsxF1g7SSF9eq2scDTK1iVRbQM1HHOGXuCLJkEhuyGSkISqVPSI24pzu2Iykow2nsjmpEPHUhCDbc6bZRN3GdPLIfLjRrabTK89GWEh41WyOdqMozo39zxkh-FJceoGS5IG9stuRy-PEbFl6smQDgPpxBGysqZycwK0h2E1w4JF1R-p0T_vc1LBi84KMqBtIS",
-      status: "Available"
-    },
-    {
-      title: "The Cerulean Point",
-      location: "Mykonos, Greece",
-      beds: 8,
-      baths: 9,
-      area: "1,850m²",
-      price: "€18.2M",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuCqZBAtGsLR054PfUHL9TpUyphvbMZSaex6rVILEkhdzNlM5RqB6CFofjE6_ia2LB4wtQlKAozptM7XlQHQabcXxsVzvG2Eb1axIGFUy3ijSMYh4gjndqA2psQKmj1F6VzswjDSC0mdeLW7cAKT5ulyHrq-Yeji-jdS3MenhE7GrF1N4amaUL7I5XG_iNHKpS5JldulIevMhJmlUcmyyNJlY6YZiXv7XZ_HPSxNWA4AYmcHnTLDDlnbdphXkft8bHq8CKqDLF2ddvzk",
-      status: "Reserved"
-    },
-    {
-      title: "Echoes of Como",
-      location: "Lake Como, Italy",
-      beds: 5,
-      baths: 6,
-      area: "940m²",
-      price: "€8.9M",
-      image: "https://lh3.googleusercontent.com/aida-public/AB6AXuDgSYIl09VKfZDI1GX65g5DW5wi_DGGb7e2JxKWhcbQyVBMFUSXidmu4aKWiPDi0-5M6H4AHV1QE5JDKoLxhYI7EfDxtm2Tp5Hsimplm3xrXUnxRjBY1ZifHBuuJTxOWUQ29iKbig4CR9n8hzDiCSmkjxq_GJNWuQzjofX6eMuqvOBXywU2NeUVmWROYtzrYaKDzTVpWML-8oDORFD00b_i2ki9BAtdtDNPQs-p_-wbRZlK9CM7BcxpoXPDCqjLAvK_j38DZjv9DT_y",
-      status: "New Listing"
-    }
-  ];
-
+const FeaturedProperties = ({ properties = [] }) => {
   return (
     <section className="px-12 py-32 max-w-screen-2xl mx-auto">
       <div className="flex justify-between items-end mb-16">
@@ -82,11 +49,25 @@ const FeaturedProperties = () => {
           View Full Portfolio
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-        {properties.map((prop, index) => (
-          <PropertyCard key={index} {...prop} />
-        ))}
-      </div>
+      {properties.length === 0 ? (
+        <div className="text-center py-12 text-on-surface-variant font-body italic">No estates match your current criteria.</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
+          {properties.map((prop, index) => (
+            <PropertyCard 
+              key={prop.id || index} 
+              title={prop.params?.miasto || "Luxury Estate"} 
+              location={prop.location?.level2 || prop.params?.miasto} 
+              beds={prop.params?.liczbapokoi} 
+              baths={prop.params?.liczbalazienek} 
+              area={`${prop.params?.powierzchnia}m²`} 
+              price={`${prop.currency === 'EUR' ? '€' : prop.currency}${ (prop.price / 1000000).toFixed(1) }M`}
+              image={prop.params?.zdjecie1} 
+              status={prop.typ === 'sprzedaz' ? 'For Sale' : 'For Rent'} 
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 };
