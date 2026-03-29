@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 
-const RealEstateFilter = () => {
-  const [filters, setFilters] = useState({
-    country: 'Spain (Costa del Sol)',
-    price: '€2,000,000 - €5,000,000',
-    bedrooms: '3+',
-    bathrooms: '2+',
-  });
-
+const RealEstateFilter = ({ filters, setFilters }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -15,7 +8,15 @@ const RealEstateFilter = () => {
 
   const handleSearch = () => {
     console.log('Searching for properties with filters:', filters);
-    // Add filtering logic here if needed
+  };
+
+  const handleReset = () => {
+    setFilters({
+      country: '',
+      priceRange: '',
+      bedrooms: '',
+      bathrooms: '',
+    });
   };
 
   return (
@@ -30,6 +31,7 @@ const RealEstateFilter = () => {
               onChange={handleChange}
               className="w-full bg-transparent border-b border-outline-variant focus:border-primary focus:ring-0 py-3 appearance-none cursor-pointer font-body"
             >
+              <option value="">All Regions</option>
               <option>Spain (Costa del Sol)</option>
               <option>Greece (Mykonos)</option>
               <option>Italy (Lake Como)</option>
@@ -42,11 +44,12 @@ const RealEstateFilter = () => {
           <label className="block text-primary font-label text-xs uppercase tracking-widest mb-3">Price Range</label>
           <div className="relative group">
             <select 
-              name="price"
-              value={filters.price}
+              name="priceRange"
+              value={filters.priceRange}
               onChange={handleChange}
               className="w-full bg-transparent border-b border-outline-variant focus:border-primary focus:ring-0 py-3 appearance-none cursor-pointer font-body"
             >
+              <option value="">Any Price</option>
               <option>€2,000,000 - €5,000,000</option>
               <option>€5,000,000 - €10,000,000</option>
               <option>€10,000,000+</option>
@@ -63,9 +66,10 @@ const RealEstateFilter = () => {
               onChange={handleChange}
               className="w-full bg-transparent border-b border-outline-variant focus:border-primary focus:ring-0 py-3 appearance-none cursor-pointer font-body"
             >
-              <option>3+</option>
-              <option>5+</option>
-              <option>8+</option>
+              <option value="">Any</option>
+              <option value="3">3+</option>
+              <option value="5">5+</option>
+              <option value="8">8+</option>
             </select>
             <span className="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
           </div>
@@ -79,19 +83,28 @@ const RealEstateFilter = () => {
               onChange={handleChange}
               className="w-full bg-transparent border-b border-outline-variant focus:border-primary focus:ring-0 py-3 appearance-none cursor-pointer font-body"
             >
-              <option>2+</option>
-              <option>4+</option>
-              <option>6+</option>
+              <option value="">Any</option>
+              <option value="2">2+</option>
+              <option value="4">4+</option>
+              <option value="6">6+</option>
             </select>
             <span className="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-outline">expand_more</span>
           </div>
         </div>
-        <button 
-          onClick={handleSearch}
-          className="editorial-gradient h-14 w-14 rounded-lg flex items-center justify-center text-on-primary transition-transform active:scale-95 shadow-lg"
-        >
-          <span className="material-symbols-outlined">search</span>
-        </button>
+        <div className="flex gap-4">
+          <button 
+            onClick={handleReset}
+            className="h-14 px-6 rounded-lg text-outline hover:text-primary transition-colors font-label text-xs uppercase tracking-widest"
+          >
+            Clear
+          </button>
+          <button 
+            onClick={handleSearch}
+            className="editorial-gradient h-14 w-14 rounded-lg flex items-center justify-center text-on-primary transition-transform active:scale-95 shadow-lg"
+          >
+            <span className="material-symbols-outlined">search</span>
+          </button>
+        </div>
       </div>
     </section>
   );
