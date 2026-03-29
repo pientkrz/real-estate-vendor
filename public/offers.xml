@@ -1,0 +1,1706 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plik>
+  <header>
+    <agencja>Global S Home</agencja>
+    <data>2026-03-29 09:46:58</data>
+    <wersja>0.4.5</wersja>
+    <cel>oferty.net</cel>
+    <zawartosc_pliku>calosc</zawartosc_pliku>
+  </header>
+  <lista_ofert>
+    <dzial tab="mieszkania" typ="sprzedaz">
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_0</id>
+      <cena waluta="EUR">19571807</cena>
+      <param nazwa="powierzchnia" typ="real">330</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_0/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_1</id>
+      <cena waluta="EUR">3345512</cena>
+      <param nazwa="powierzchnia" typ="real">167</param>
+      <param nazwa="liczbapokoi" typ="int">3</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_1/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_2</id>
+      <cena waluta="EUR">12992855</cena>
+      <param nazwa="powierzchnia" typ="real">130</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_2/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_3</id>
+      <cena waluta="EUR">12396640</cena>
+      <param nazwa="powierzchnia" typ="real">288</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_3/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_4</id>
+      <cena waluta="EUR">12413564</cena>
+      <param nazwa="powierzchnia" typ="real">478</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_4/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_5</id>
+      <cena waluta="EUR">17346031</cena>
+      <param nazwa="powierzchnia" typ="real">202</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_5/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_6</id>
+      <cena waluta="EUR">13832303</cena>
+      <param nazwa="powierzchnia" typ="real">366</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_6/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_7</id>
+      <cena waluta="EUR">1217943</cena>
+      <param nazwa="powierzchnia" typ="real">159</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_7/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_8</id>
+      <cena waluta="EUR">7150599</cena>
+      <param nazwa="powierzchnia" typ="real">390</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_8/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_9</id>
+      <cena waluta="EUR">776249</cena>
+      <param nazwa="powierzchnia" typ="real">412</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_9/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_10</id>
+      <cena waluta="EUR">1527804</cena>
+      <param nazwa="powierzchnia" typ="real">132</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_10/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_11</id>
+      <cena waluta="EUR">19497276</cena>
+      <param nazwa="powierzchnia" typ="real">260</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_11/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_12</id>
+      <cena waluta="EUR">7418955</cena>
+      <param nazwa="powierzchnia" typ="real">327</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_12/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_13</id>
+      <cena waluta="EUR">10253564</cena>
+      <param nazwa="powierzchnia" typ="real">60</param>
+      <param nazwa="liczbapokoi" typ="int">3</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_13/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_sprzedaz_14</id>
+      <cena waluta="EUR">19399729</cena>
+      <param nazwa="powierzchnia" typ="real">382</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_14/800/600</param>
+    </oferta>
+    </dzial>
+    <dzial tab="mieszkania" typ="wynajem">
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_0</id>
+      <cena waluta="EUR">16056261</cena>
+      <param nazwa="powierzchnia" typ="real">337</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_0/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_1</id>
+      <cena waluta="EUR">6203023</cena>
+      <param nazwa="powierzchnia" typ="real">68</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_1/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_2</id>
+      <cena waluta="EUR">16510914</cena>
+      <param nazwa="powierzchnia" typ="real">457</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_2/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_3</id>
+      <cena waluta="EUR">18078852</cena>
+      <param nazwa="powierzchnia" typ="real">331</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_3/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_4</id>
+      <cena waluta="EUR">12877329</cena>
+      <param nazwa="powierzchnia" typ="real">289</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_4/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_5</id>
+      <cena waluta="EUR">4902511</cena>
+      <param nazwa="powierzchnia" typ="real">208</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_5/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_6</id>
+      <cena waluta="EUR">5394846</cena>
+      <param nazwa="powierzchnia" typ="real">496</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_6/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_7</id>
+      <cena waluta="EUR">14504015</cena>
+      <param nazwa="powierzchnia" typ="real">74</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_7/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_8</id>
+      <cena waluta="EUR">12893387</cena>
+      <param nazwa="powierzchnia" typ="real">477</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_8/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_9</id>
+      <cena waluta="EUR">15134491</cena>
+      <param nazwa="powierzchnia" typ="real">187</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_9/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_10</id>
+      <cena waluta="EUR">9168138</cena>
+      <param nazwa="powierzchnia" typ="real">114</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_10/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_11</id>
+      <cena waluta="EUR">9919050</cena>
+      <param nazwa="powierzchnia" typ="real">427</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_11/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_12</id>
+      <cena waluta="EUR">9649535</cena>
+      <param nazwa="powierzchnia" typ="real">202</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_12/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_13</id>
+      <cena waluta="EUR">15716264</cena>
+      <param nazwa="powierzchnia" typ="real">90</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_13/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_mieszkania_wynajem_14</id>
+      <cena waluta="EUR">1402916</cena>
+      <param nazwa="powierzchnia" typ="real">288</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_14/800/600</param>
+    </oferta>
+    </dzial>
+    <dzial tab="domy" typ="sprzedaz">
+    <oferta>
+      <id>OFFER_domy_sprzedaz_0</id>
+      <cena waluta="EUR">19079065</cena>
+      <param nazwa="powierzchnia" typ="real">442</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_0/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_1</id>
+      <cena waluta="EUR">6524112</cena>
+      <param nazwa="powierzchnia" typ="real">294</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_1/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_2</id>
+      <cena waluta="EUR">15986418</cena>
+      <param nazwa="powierzchnia" typ="real">293</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_2/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_3</id>
+      <cena waluta="EUR">7152983</cena>
+      <param nazwa="powierzchnia" typ="real">167</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_3/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_4</id>
+      <cena waluta="EUR">19306447</cena>
+      <param nazwa="powierzchnia" typ="real">245</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_4/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_5</id>
+      <cena waluta="EUR">18253142</cena>
+      <param nazwa="powierzchnia" typ="real">440</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_5/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_6</id>
+      <cena waluta="EUR">10182291</cena>
+      <param nazwa="powierzchnia" typ="real">160</param>
+      <param nazwa="liczbapokoi" typ="int">3</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_6/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_7</id>
+      <cena waluta="EUR">545046</cena>
+      <param nazwa="powierzchnia" typ="real">195</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_7/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_8</id>
+      <cena waluta="EUR">19272768</cena>
+      <param nazwa="powierzchnia" typ="real">422</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_8/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_9</id>
+      <cena waluta="EUR">19657968</cena>
+      <param nazwa="powierzchnia" typ="real">447</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_9/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_10</id>
+      <cena waluta="EUR">2313920</cena>
+      <param nazwa="powierzchnia" typ="real">76</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_10/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_11</id>
+      <cena waluta="EUR">5203630</cena>
+      <param nazwa="powierzchnia" typ="real">287</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_11/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_12</id>
+      <cena waluta="EUR">6171984</cena>
+      <param nazwa="powierzchnia" typ="real">121</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_12/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_13</id>
+      <cena waluta="EUR">9312183</cena>
+      <param nazwa="powierzchnia" typ="real">72</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_13/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_sprzedaz_14</id>
+      <cena waluta="EUR">1912882</cena>
+      <param nazwa="powierzchnia" typ="real">97</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_14/800/600</param>
+    </oferta>
+    </dzial>
+    <dzial tab="domy" typ="wynajem">
+    <oferta>
+      <id>OFFER_domy_wynajem_0</id>
+      <cena waluta="EUR">11901809</cena>
+      <param nazwa="powierzchnia" typ="real">79</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_0/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_1</id>
+      <cena waluta="EUR">14359255</cena>
+      <param nazwa="powierzchnia" typ="real">58</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_1/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_2</id>
+      <cena waluta="EUR">13131585</cena>
+      <param nazwa="powierzchnia" typ="real">179</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_2/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_3</id>
+      <cena waluta="EUR">16556115</cena>
+      <param nazwa="powierzchnia" typ="real">397</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_3/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_4</id>
+      <cena waluta="EUR">12605165</cena>
+      <param nazwa="powierzchnia" typ="real">54</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_4/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_5</id>
+      <cena waluta="EUR">15273685</cena>
+      <param nazwa="powierzchnia" typ="real">93</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_5/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_6</id>
+      <cena waluta="EUR">10055514</cena>
+      <param nazwa="powierzchnia" typ="real">447</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_6/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_7</id>
+      <cena waluta="EUR">7513989</cena>
+      <param nazwa="powierzchnia" typ="real">273</param>
+      <param nazwa="liczbapokoi" typ="int">3</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_7/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_8</id>
+      <cena waluta="EUR">5169790</cena>
+      <param nazwa="powierzchnia" typ="real">412</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_8/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_9</id>
+      <cena waluta="EUR">10157903</cena>
+      <param nazwa="powierzchnia" typ="real">391</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_9/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_10</id>
+      <cena waluta="EUR">6595619</cena>
+      <param nazwa="powierzchnia" typ="real">426</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_10/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_11</id>
+      <cena waluta="EUR">12682747</cena>
+      <param nazwa="powierzchnia" typ="real">46</param>
+      <param nazwa="liczbapokoi" typ="int">3</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_11/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_12</id>
+      <cena waluta="EUR">11020338</cena>
+      <param nazwa="powierzchnia" typ="real">468</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_12/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_13</id>
+      <cena waluta="EUR">10459567</cena>
+      <param nazwa="powierzchnia" typ="real">296</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_13/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_domy_wynajem_14</id>
+      <cena waluta="EUR">1806493</cena>
+      <param nazwa="powierzchnia" typ="real">202</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_14/800/600</param>
+    </oferta>
+    </dzial>
+    <dzial tab="dzialki" typ="sprzedaz">
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_0</id>
+      <cena waluta="EUR">3124358</cena>
+      <param nazwa="powierzchnia" typ="real">137</param>
+      <param nazwa="liczbapokoi" typ="int">3</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_0/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_1</id>
+      <cena waluta="EUR">3465047</cena>
+      <param nazwa="powierzchnia" typ="real">243</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_1/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_2</id>
+      <cena waluta="EUR">3804793</cena>
+      <param nazwa="powierzchnia" typ="real">126</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_2/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_3</id>
+      <cena waluta="EUR">2018434</cena>
+      <param nazwa="powierzchnia" typ="real">177</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_3/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_4</id>
+      <cena waluta="EUR">2455561</cena>
+      <param nazwa="powierzchnia" typ="real">292</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_4/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_5</id>
+      <cena waluta="EUR">2398278</cena>
+      <param nazwa="powierzchnia" typ="real">432</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_5/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_6</id>
+      <cena waluta="EUR">669384</cena>
+      <param nazwa="powierzchnia" typ="real">96</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_6/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_7</id>
+      <cena waluta="EUR">355264</cena>
+      <param nazwa="powierzchnia" typ="real">103</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_7/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_8</id>
+      <cena waluta="EUR">3827970</cena>
+      <param nazwa="powierzchnia" typ="real">396</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_8/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_9</id>
+      <cena waluta="EUR">4168259</cena>
+      <param nazwa="powierzchnia" typ="real">391</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_9/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_10</id>
+      <cena waluta="EUR">4245172</cena>
+      <param nazwa="powierzchnia" typ="real">184</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_10/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_11</id>
+      <cena waluta="EUR">3777874</cena>
+      <param nazwa="powierzchnia" typ="real">240</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_11/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_12</id>
+      <cena waluta="EUR">2369257</cena>
+      <param nazwa="powierzchnia" typ="real">81</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_12/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_13</id>
+      <cena waluta="EUR">4091759</cena>
+      <param nazwa="powierzchnia" typ="real">305</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_13/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_dzialki_sprzedaz_14</id>
+      <cena waluta="EUR">1538755</cena>
+      <param nazwa="powierzchnia" typ="real">171</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_14/800/600</param>
+    </oferta>
+    </dzial>
+    <dzial tab="lokale" typ="sprzedaz">
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_0</id>
+      <cena waluta="EUR">10415822</cena>
+      <param nazwa="powierzchnia" typ="real">228</param>
+      <param nazwa="liczbapokoi" typ="int">3</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_0/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_1</id>
+      <cena waluta="EUR">13609868</cena>
+      <param nazwa="powierzchnia" typ="real">239</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_1/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_2</id>
+      <cena waluta="EUR">6123910</cena>
+      <param nazwa="powierzchnia" typ="real">160</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_2/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_3</id>
+      <cena waluta="EUR">16162793</cena>
+      <param nazwa="powierzchnia" typ="real">176</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_3/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_4</id>
+      <cena waluta="EUR">17992424</cena>
+      <param nazwa="powierzchnia" typ="real">184</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_4/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_5</id>
+      <cena waluta="EUR">12075822</cena>
+      <param nazwa="powierzchnia" typ="real">296</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_5/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_6</id>
+      <cena waluta="EUR">3060807</cena>
+      <param nazwa="powierzchnia" typ="real">143</param>
+      <param nazwa="liczbapokoi" typ="int">7</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_6/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_7</id>
+      <cena waluta="EUR">2550818</cena>
+      <param nazwa="powierzchnia" typ="real">287</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_7/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_8</id>
+      <cena waluta="EUR">16611615</cena>
+      <param nazwa="powierzchnia" typ="real">239</param>
+      <param nazwa="liczbapokoi" typ="int">3</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_8/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_9</id>
+      <cena waluta="EUR">8912683</cena>
+      <param nazwa="powierzchnia" typ="real">229</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_9/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_10</id>
+      <cena waluta="EUR">16953717</cena>
+      <param nazwa="powierzchnia" typ="real">384</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_10/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_11</id>
+      <cena waluta="EUR">14744972</cena>
+      <param nazwa="powierzchnia" typ="real">461</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_11/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_12</id>
+      <cena waluta="EUR">13217035</cena>
+      <param nazwa="powierzchnia" typ="real">264</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_12/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_13</id>
+      <cena waluta="EUR">6646090</cena>
+      <param nazwa="powierzchnia" typ="real">321</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_13/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_sprzedaz_14</id>
+      <cena waluta="EUR">5350129</cena>
+      <param nazwa="powierzchnia" typ="real">301</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">5</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_14/800/600</param>
+    </oferta>
+    </dzial>
+    <dzial tab="lokale" typ="wynajem">
+    <oferta>
+      <id>OFFER_lokale_wynajem_0</id>
+      <cena waluta="EUR">17545778</cena>
+      <param nazwa="powierzchnia" typ="real">108</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_0/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_1</id>
+      <cena waluta="EUR">17349583</cena>
+      <param nazwa="powierzchnia" typ="real">341</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_1/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_2</id>
+      <cena waluta="EUR">5286368</cena>
+      <param nazwa="powierzchnia" typ="real">85</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_2/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_3</id>
+      <cena waluta="EUR">2763561</cena>
+      <param nazwa="powierzchnia" typ="real">55</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_3/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_4</id>
+      <cena waluta="EUR">18060674</cena>
+      <param nazwa="powierzchnia" typ="real">76</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_4/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_5</id>
+      <cena waluta="EUR">11837095</cena>
+      <param nazwa="powierzchnia" typ="real">382</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">2</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_5/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_6</id>
+      <cena waluta="EUR">16999569</cena>
+      <param nazwa="powierzchnia" typ="real">460</param>
+      <param nazwa="liczbapokoi" typ="int">1</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_6/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_7</id>
+      <cena waluta="EUR">13042978</cena>
+      <param nazwa="powierzchnia" typ="real">74</param>
+      <param nazwa="liczbapokoi" typ="int">4</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_7/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_8</id>
+      <cena waluta="EUR">13114370</cena>
+      <param nazwa="powierzchnia" typ="real">459</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_8/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_9</id>
+      <cena waluta="EUR">19073191</cena>
+      <param nazwa="powierzchnia" typ="real">110</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_9/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_10</id>
+      <cena waluta="EUR">15974495</cena>
+      <param nazwa="powierzchnia" typ="real">356</param>
+      <param nazwa="liczbapokoi" typ="int">6</param>
+      <param nazwa="liczbalazienek" typ="int">4</param>
+      <param nazwa="miasto" typ="text">Spain (Costa del Sol)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Spain (Costa del Sol). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Polska</area>
+        <area level="2">Andaluzja</area>
+        <area level="3">Malaga</area>
+        <area level="4">Marbella</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_10/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_11</id>
+      <cena waluta="EUR">2693583</cena>
+      <param nazwa="powierzchnia" typ="real">400</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_11/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_12</id>
+      <cena waluta="EUR">18454743</cena>
+      <param nazwa="powierzchnia" typ="real">180</param>
+      <param nazwa="liczbapokoi" typ="int">2</param>
+      <param nazwa="liczbalazienek" typ="int">3</param>
+      <param nazwa="miasto" typ="text">France (French Riviera)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu France (French Riviera). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Francja</area>
+        <area level="2">Prowansja-Alpy-Lazurowe Wybrzeże</area>
+        <area level="3">Alpy Nadmorskie</area>
+        <area level="4">Nicea</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_12/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_13</id>
+      <cena waluta="EUR">10906659</cena>
+      <param nazwa="powierzchnia" typ="real">447</param>
+      <param nazwa="liczbapokoi" typ="int">8</param>
+      <param nazwa="liczbalazienek" typ="int">1</param>
+      <param nazwa="miasto" typ="text">Greece (Mykonos)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Greece (Mykonos). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Grecja</area>
+        <area level="2">Wyspy Egejskie</area>
+        <area level="3">Cyklady</area>
+        <area level="4">Mykonos</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_13/800/600</param>
+    </oferta>
+    <oferta>
+      <id>OFFER_lokale_wynajem_14</id>
+      <cena waluta="EUR">9910009</cena>
+      <param nazwa="powierzchnia" typ="real">416</param>
+      <param nazwa="liczbapokoi" typ="int">5</param>
+      <param nazwa="liczbalazienek" typ="int">6</param>
+      <param nazwa="miasto" typ="text">Italy (Lake Como)</param>
+      <param nazwa="opis" typ="text">Luksusowa posiadłość w sercu Italy (Lake Como). Widok na morze i nowoczesna architektura.</param>
+      <location>
+        <area level="1">Włochy</area>
+        <area level="2">Lombardia</area>
+        <area level="3">Como</area>
+        <area level="4">Lake Como</area>
+      </location>
+      <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_14/800/600</param>
+    </oferta>
+    </dzial>
+  </lista_ofert>
+</plik>
