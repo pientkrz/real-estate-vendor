@@ -13,9 +13,10 @@ function App() {
   return (
     <div className="min-h-screen bg-surface">
       <Navbar />
-      <main className="pt-24">
-        <Hero />
-        <RealEstateFilter filters={filters} setFilters={setFilters} />
+      <main>
+        <Hero>
+          <RealEstateFilter filters={filters} setFilters={setFilters} />
+        </Hero>
         {loading ? (
           <div className="text-center py-24 text-primary font-headline text-2xl">Loading Collection...</div>
         ) : (

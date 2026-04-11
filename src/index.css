@@ -63,6 +63,12 @@
   body {
     @apply bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container;
   }
+  
+  /* Fix native select options for dark background integration */
+  select option {
+    background-color: #271900; /* Darker shade matching primary-fixed */
+    color: white;
+  }
 }
 
 @layer utilities {
