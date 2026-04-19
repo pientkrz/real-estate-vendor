@@ -19,6 +19,8 @@ This document provides specialized instructions for any AI agent working on this
   - **Typography**: Editorial rhythm using **Work Sans** (Headlines) and **Inter** (Body).
   - **Accessibility**: WCAG 2.1 AA compliance. Use ARIA, semantic tags, and high-contrast labels.
   - **Micro-interactions**: Use "frosted glass" headers (backdrop-blur) and smooth tonal hover shifts. Use 135° linear gradients for CTAs.
+  - **Mobile-First App Experience**: Design with a mobile app mindset—optimize touch targets (min 44x44px), ensure bottom-navigation friendliness, and prioritize performance on mobile networks. The interface should feel like a native app when viewed on mobile devices.
+
 
 
 ### 3. SEO-Centric Refactoring & Feature Development
