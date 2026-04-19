@@ -48,10 +48,12 @@
   --color-inverse-primary: #edc06d;
   --color-secondary-fixed-dim: #ebbf8d;
   --color-on-surface: #1c1b1b;
+  --color-obsidian: #1c1b1b;
 
   --font-headline: "Work Sans", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-label: "Inter", sans-serif;
+  --font-serif: "Cormorant Garamond", serif;
 
   --radius-default: 0.125rem;
   --radius-lg: 0.25rem;
