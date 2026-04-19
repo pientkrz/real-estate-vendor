@@ -18,6 +18,9 @@
     "thumbnail": {
       "type": "string"
     },
+    "category": {
+      "type": "string"
+    },
     "$schema": {
       "type": "string"
     }

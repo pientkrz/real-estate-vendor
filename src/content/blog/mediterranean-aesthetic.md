@@ -1,7 +1,8 @@
 ---
 title: "The Mediterranean Aesthetic: Light and Mass"
-description: "Exploring the tonal depth and architectural philosophy behind the Aurelian Elite design system."
+description: "A deep dive into the tonal depth and architectural rhythm of high-end Mediterranean living."
 pubDate: 2026-04-19
+category: "ARCHITECTURAL PHILOSOPHY"
 author: "Aurelius Stone"
 thumbnail: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200"
 ---
