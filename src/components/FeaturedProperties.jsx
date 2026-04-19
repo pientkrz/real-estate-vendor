@@ -1,8 +1,8 @@
 import React from 'react';
 
-const PropertyCard = ({ title, location, beds, baths, area, price, image, status }) => {
+const PropertyCard = ({ id, title, location, beds, baths, area, price, image, status }) => {
   return (
-    <div className="group cursor-pointer">
+    <a href={`/property/${id}`} className="group block cursor-pointer">
       <div className="relative overflow-hidden aspect-[4/5] mb-6 rounded-sm">
         <img 
           alt={title} 
@@ -33,9 +33,10 @@ const PropertyCard = ({ title, location, beds, baths, area, price, image, status
         </div>
         <p className="text-primary font-headline font-bold text-xl">{price}</p>
       </div>
-    </div>
+    </a>
   );
 };
+
 
 const FeaturedProperties = ({ properties = [] }) => {
   return (
@@ -56,6 +57,7 @@ const FeaturedProperties = ({ properties = [] }) => {
           {properties.map((prop, index) => (
             <PropertyCard 
               key={prop.id || index} 
+              id={prop.id}
               title={prop.params?.miasto || "Luxury Estate"} 
               location={prop.location?.level2 || prop.params?.miasto} 
               beds={prop.params?.liczbapokoi} 
@@ -65,6 +67,7 @@ const FeaturedProperties = ({ properties = [] }) => {
               image={prop.params?.zdjecie1} 
               status={prop.typ === 'sprzedaz' ? 'For Sale' : 'For Rent'} 
             />
+
           ))}
         </div>
       )}

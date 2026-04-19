@@ -1,0 +1,66 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+
+export async function getStaticPaths() {
+	const blogEntries = await getCollection('blog');
+	return blogEntries.map(entry => ({
+		params: { slug: entry.id }, props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+---
+
+<Layout title={`${entry.data.title} | Global S Blog`} description={entry.data.description}>
+	<Navbar client:load />
+	
+	<main class="pt-48 pb-24">
+		<article class="max-w-4xl mx-auto px-6">
+			<header class="mb-16">
+				<div class="flex items-center gap-4 mb-8">
+					<span class="text-primary font-label text-xs tracking-widest uppercase">Editorial</span>
+					<span class="text-outline text-xs">—</span>
+					<time class="text-outline text-[10px] uppercase tracking-widest" datetime={entry.data.pubDate.toISOString()}>
+						{entry.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+					</time>
+				</div>
+				<h1 class="text-5xl md:text-6xl font-headline font-bold mb-8 leading-[1.2] tracking-tight">
+					{entry.data.title}
+				</h1>
+				{entry.data.author && <p class="text-on-surface-variant font-label text-xs uppercase tracking-widest">By {entry.data.author}</p>}
+			</header>
+
+			{entry.data.thumbnail && (
+				<div class="aspect-video w-full overflow-hidden rounded-sm mb-16 shadow-2xl">
+					<img src={entry.data.thumbnail} alt={entry.data.title} class="w-full h-full object-cover" />
+				</div>
+			)}
+
+			<div class="prose prose-stone prose-lg max-w-none prose-headings:font-headline prose-headings:font-bold prose-p:font-body prose-p:text-on-surface-variant prose-p:leading-relaxed">
+				<Content />
+			</div>
+		</article>
+	</main>
+	
+	<Footer />
+</Layout>
+
+<style is:global>
+	@reference "../../index.css";
+	
+
+	/* Custom blog typography styling for the "Architectural Ledger" look */
+	.prose h2 {
+		@apply text-3xl mt-16 mb-8 tracking-tight;
+	}
+	.prose p {
+		@apply mb-8;
+	}
+	.prose blockquote {
+		@apply border-l-2 border-primary pl-8 italic text-2xl font-headline text-on-surface my-12;
+	}
+</style>

@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar';
+import Hero from '../components/Hero';
+import CollectionManager from '../components/CollectionManager';
+import Ethos from '../components/Ethos';
+import Footer from '../components/Footer';
+import { parseOffersXml } from '../utils/xmlParser';
+import fs from 'node:fs';
+import path from 'node:path';
+
+// Server-side parsing of XML for initial data
+const xmlPath = path.join(process.cwd(), 'public', 'offers.xml');
+const xmlString = fs.readFileSync(xmlPath, 'utf-8');
+const allOffers = parseOffersXml(xmlString);
+
+// We still pass data to React 'Islands'
+---
+
+<Layout title="Global S Home | Premium Real Estate Collective">
+	<Navbar client:load />
+	<main>
+		<Hero>
+			<CollectionManager client:load initialOffers={allOffers} />
+		</Hero>
+		
+		<Ethos />
+
+	</main>
+	<Footer />
+</Layout>
+
+<style>
+	/* Any page-specific styles */
+</style>
