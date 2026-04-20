@@ -1,40 +1,57 @@
-# React + Vite
+# Global S Home - Premium Real Estate Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A high-performance, editorial-grade real estate platform built with **Astro** and **React**. Designed with an "Architectural Ledger" aesthetic, this site combines the performance of static generation with the interactivity of React islands.
 
-Currently, two official plugins are available:
+## 🚀 Technology Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Framework**: [Astro](https://astro.build/) (Static Site Generation & Performance)
+- **UI Library**: [React](https://react.dev/) (Interactive "Islands")
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) (Utility-first styling with a custom design system)
+- **Data**: XML-driven property listings (`public/offers.xml`)
 
-## React Compiler
+## 🏛 Design Philosophy: Mediterranean Gilded Aura
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The project follows a strict high-end design system:
+- **Architectural Ledger**: Intentional asymmetry and tonal depth.
+- **Visual Hierarchy**: Separation via light and mass, avoiding 1px solid lines.
+- **The "No-Line" Rule**: Structural separation achieved through background shifts (e.g., `surface` vs `surface-container-low`).
+- **Premium Palette**: Gold (#7a590c), Obsidian (#1c1b1b), and Bone/Cream (#fcf9f8).
+- **Typography**: Editorial rhythm using **Work Sans** (Headlines) and **Inter** (Body).
 
-## Expanding the ESLint configuration
+## 📂 Project Structure
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `src/pages/`: Astro routing. `index.astro` is the primary entry point.
+- `src/layouts/`: Base HTML templates and global components.
+- `src/components/`: Reusable UI components. React components are used for interactivity (Islands).
+- `src/hooks/`: Custom React hooks for state and data management.
+- `src/utils/`: Utility functions (e.g., XML parsing).
+- `public/`: Static assets and the `offers.xml` data source.
 
-## Getting Started
+## 🛠 Getting Started
 
-To run the application locally, follow these steps:
+### 1. Install Dependencies
+```bash
+npm install
+```
 
-1.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+### 2. Run the Development Server
+```bash
+npm run dev
+```
+Navigate to `http://localhost:4321` (default Astro port).
 
-2.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
+### 3. Build for Production
+```bash
+npm run build
+```
 
-3.  **Open your browser:**
-    Navigate to the URL provided in the terminal (usually `http://localhost:5173`).
+## 📋 Available Scripts
 
-## Available Scripts
-
-- `npm run dev`: Starts the development server.
-- `npm run build`: Builds the app for production.
+- `npm run dev`: Starts the Astro development server.
+- `npm run build`: Generates a static production build.
 - `npm run preview`: Previews the production build locally.
-- `npm run lint`: Runs ESLint to check for code quality.
+- `npm run lint`: Runs ESLint for code quality checks.
+
+---
+
+*Part of the Real Estate Vendor ecosystem.*
