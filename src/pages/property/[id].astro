@@ -1,0 +1,211 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import AgentGrid from '../../components/AgentGrid';
+import { parseOffersXml } from '../../utils/xmlParser';
+import fs from 'node:fs';
+import path from 'node:path';
+
+export async function getStaticPaths() {
+    const xmlPath = path.join(process.cwd(), 'public', 'offers.xml');
+    const xmlString = fs.readFileSync(xmlPath, 'utf-8');
+    const allOffers = parseOffersXml(xmlString);
+    
+    return allOffers.map(offer => ({
+        params: { id: offer.id },
+        props: { offer }
+    }));
+}
+
+const { offer } = Astro.props;
+const { params, location, price, currency } = offer;
+
+// Formatting helpers
+const formattedPrice = price 
+    ? `${currency === 'EUR' ? '€' : currency}${(price / 1000000).toFixed(2)}M`
+    : 'Contact for Price';
+
+const mainImage = params?.zdjecie1 || '/assets/placeholder.jpg';
+const galleryImages = [
+    params?.zdjecie2,
+    params?.zdjecie3,
+    params?.zdjecie4
+].filter(Boolean);
+
+const city = params?.miasto || 'The Estate';
+const fullAddress = `${location?.level2 || ''}, ${location?.level1 || ''}`.replace(/^, /, '');
+---
+
+<Layout title={`${city} | Global S Home`} description={params?.opis?.substring(0, 160)}>
+    <Navbar client:load />
+    
+    <main class="min-h-screen bg-surface">
+        <!-- Editorial Hero Section -->
+        <section class="pt-32 pb-16">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-8">
+                    <div class="max-w-2xl animate-in fade-in slide-in-from-bottom-6 duration-1000">
+                        <nav class="flex gap-4 mb-6 text-[10px] font-label uppercase tracking-[0.3em] text-primary">
+                            <a href="/" class="hover:opacity-70 transition-opacity">Global S Home</a>
+                            <span>/</span>
+                            <a href={`/filter?type=${offer.typ}`} class="hover:opacity-70 transition-opacity">{offer.typ === 'sprzedaz' ? 'Sale' : 'Rent'}</a>
+                        </nav>
+                        <h1 class="text-6xl md:text-8xl font-headline font-bold text-on-surface leading-[1.05] tracking-tighter mb-4">
+                            {city}
+                        </h1>
+                        <p class="text-xl text-on-surface-variant font-body">{fullAddress}</p>
+                    </div>
+                </div>
+
+                <!-- Bento Gallery Overlay -->
+                <div class="grid grid-cols-12 gap-1 lg:gap-3 rounded-xs overflow-hidden shadow-2xl">
+                    <div class="col-span-12 lg:col-span-8 aspect-[16/10] lg:aspect-auto">
+                        <img src={mainImage} alt={city} class="w-full h-full object-cover hover:scale-[1.02] transition-transform duration-1000" />
+                    </div>
+                    <div class="col-span-12 lg:col-span-4 grid grid-rows-2 gap-1 lg:gap-3">
+                        {galleryImages.length > 0 ? (
+                            galleryImages.slice(0, 2).map((img) => (
+                                <div class="aspect-[16/9] lg:aspect-auto">
+                                    <img src={img} alt={`${city} Gallery`} class="w-full h-full object-cover" />
+                                </div>
+                            ))
+                        ) : (
+                            <div class="bg-surface-container-high col-span-full h-full flex items-center justify-center text-outline/30 italic">
+                                Additional imagery protected by NDA
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dynamic Specs Bar -->
+        <div class="sticky top-[88px] z-40 bg-surface/80 backdrop-blur-xl border-y border-outline/10 h-20 flex items-center animate-in fade-in slide-in-from-top-4 duration-500 delay-500">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 w-full flex items-center justify-between text-on-surface">
+                <div class="flex items-center gap-12 overflow-x-auto no-scrollbar">
+                    <div>
+                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Investment</span>
+                        <span class="text-xl font-headline font-bold text-primary whitespace-nowrap">{formattedPrice}</span>
+                    </div>
+                    <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
+                    <div>
+                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Living Space</span>
+                        <span class="text-xl font-headline font-bold whitespace-nowrap">{params?.powierzchnia} m²</span>
+                    </div>
+                    <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
+                    <div>
+                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Beds</span>
+                        <span class="text-xl font-headline font-bold">{params?.liczbapokoi}</span>
+                    </div>
+                    <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
+                    <div>
+                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Baths</span>
+                        <span class="text-xl font-headline font-bold">{params?.liczbalazienek}</span>
+                    </div>
+                </div>
+                
+                <button class="hidden md:flex editorial-gradient px-8 py-3 rounded-none text-on-primary font-label uppercase tracking-widest text-[10px] items-center gap-3 group">
+                    Inquire via Collector
+                    <span class="material-symbols-outlined text-sm group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <section class="py-24">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-24">
+                    <!-- Editorial Column -->
+                    <div class="lg:col-span-8">
+                        <div class="max-w-2xl">
+                            <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Editorial Narrative</span>
+                            <h2 class="text-4xl font-headline font-bold text-on-surface mb-12">Architecture as an Asset of the Soul</h2>
+                            
+                            <div class="prose prose-stone max-w-none text-lg text-on-surface-variant font-body leading-[1.8] space-y-8" set:html={params?.opis} />
+
+                            <div class="mt-24 pt-24 border-t border-outline/10 grid grid-cols-2 gap-12">
+                                <div>
+                                    <h4 class="text-[10px] font-label uppercase tracking-widest text-outline mb-6">Structural Composition</h4>
+                                    <ul class="space-y-4">
+                                        <li class="flex items-center gap-4 text-on-surface">
+                                            <span class="material-symbols-outlined text-primary text-xl">architecture</span>
+                                            <span class="text-sm font-body">Modern Mediterranean</span>
+                                        </li>
+                                        <li class="flex items-center gap-4 text-on-surface">
+                                            <span class="material-symbols-outlined text-primary text-xl">layers</span>
+                                            <span class="text-sm font-body">Poured Concrete & Limestone</span>
+                                        </li>
+                                        <li class="flex items-center gap-4 text-on-surface">
+                                            <span class="material-symbols-outlined text-primary text-xl">solar_power</span>
+                                            <span class="text-sm font-body">A-Class Efficiency</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="text-[10px] font-label uppercase tracking-widest text-outline mb-6">Amenity Collective</h4>
+                                    <ul class="space-y-4">
+                                        <li class="flex items-center gap-4 text-on-surface">
+                                            <span class="material-symbols-outlined text-primary text-xl">pool</span>
+                                            <span class="text-sm font-body">Infinity Saltwater Pool</span>
+                                        </li>
+                                        <li class="flex items-center gap-4 text-on-surface">
+                                            <span class="material-symbols-outlined text-primary text-xl">wine_bar</span>
+                                            <span class="text-sm font-body">Tempered Wine Cellar</span>
+                                        </li>
+                                        <li class="flex items-center gap-4 text-on-surface">
+                                            <span class="material-symbols-outlined text-primary text-xl">security</span>
+                                            <span class="text-sm font-body">Smart Bio-Security</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sticky Collector Card -->
+                    <aside class="lg:col-span-4 h-fit sticky top-48">
+                        <div class="bg-surface-container-low border border-outline/5 p-10 rounded-sm shadow-xl">
+                            <h3 class="text-2xl font-headline font-bold text-on-surface mb-2">Request Dossier</h3>
+                            <p class="text-sm text-on-surface-variant font-body mb-8">Receive the complete architectural plans and investment analysis within 24 hours.</p>
+                            
+                            <form class="space-y-6">
+                                <div>
+                                    <input type="text" placeholder="Full Name" class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm" />
+                                </div>
+                                <div>
+                                    <input type="email" placeholder="Preferred Email" class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm" />
+                                </div>
+                                <div>
+                                    <textarea placeholder="Message to Architect" rows="4" class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm resize-none"></textarea>
+                                </div>
+                                <button class="w-full py-4 bg-obsidian text-bone font-label uppercase tracking-widest text-[11px] hover:bg-primary transition-all duration-500">
+                                    Initialize Inquiry
+                                </button>
+                            </form>
+                            
+                            <p class="mt-8 text-[10px] text-outline leading-relaxed text-center italic">
+                                Exclusive listing by Global S Home Selection — <br/>By submitting, you agree to our Digital Privacy Ethos.
+                            </p>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </section>
+
+        <!-- Integrated Agent Grid -->
+        <AgentGrid />
+    </main>
+
+    <Footer />
+</Layout>
+
+<style>
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>

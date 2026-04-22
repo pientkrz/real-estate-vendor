@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar';
+import Footer from '../../components/Footer';
+import { getCollection } from 'astro:content';
+
+const blogEntries = await getCollection('blog');
+
+// Helper to format category for the editorial look
+const getCategory = (entry) => entry.data.category || 'Editorial';
+---
+
+<Layout title="Architectural Journal | Global S Home" description="Explorations in high-end architecture, investment strategy, and Mediterranean living.">
+    <!-- Navbar with contrast -->
+    <div class="absolute top-0 left-0 w-full z-50">
+        <Navbar client:load />
+    </div>
+
+    <main class="bg-bone">
+        <!-- Immersive Hero Section -->
+        <section class="relative h-[80vh] flex flex-col items-center justify-center bg-obsidian text-bone overflow-hidden">
+            <!-- Asymmetrical Background Text -->
+            <div class="absolute inset-0 pointer-events-none select-none flex items-center justify-center">
+                <span class="text-[20vw] font-serif font-bold text-white/[0.03] leading-none uppercase tracking-tighter mix-blend-overlay italic">
+                    Journal
+                </span>
+            </div>
+            
+            <div class="relative z-10 text-center px-6 animate-in fade-in zoom-in-95 duration-1000">
+                <span class="text-primary font-label text-xs tracking-[0.4em] uppercase mb-8 block">Volume 01 — Issue 04</span>
+                <h1 class="text-7xl md:text-9xl font-serif font-bold leading-[0.9] tracking-tighter mb-12 max-w-5xl mx-auto">
+                    Architectural <br/> <span class="text-primary">Journal</span>
+                </h1>
+                <p class="max-w-xl mx-auto text-on-surface-variant font-body text-lg leading-relaxed opacity-80">
+                    A curated collective of insights on high-fidelity Mediterranean architecture and the evolving landscape of luxury real assets.
+                </p>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-4">
+                <span class="text-[10px] font-label uppercase tracking-widest opacity-40">Scroll to Explore</span>
+                <div class="w-px h-12 bg-primary/40"></div>
+            </div>
+        </section>
+
+        <!-- Category Filter (Simplified for Design) -->
+        <nav class="sticky top-[88px] z-40 bg-bone/80 backdrop-blur-xl border-y border-outline/5 h-20 flex items-center">
+            <div class="max-w-7xl mx-auto px-6 md:px-12 w-full flex items-center justify-center">
+                <ul class="flex gap-12 text-[11px] font-label uppercase tracking-widest text-outline">
+                    <li class="text-primary border-b border-primary pb-1 cursor-pointer">All Entries</li>
+                    <li class="hover:text-primary transition-colors cursor-pointer">Architecture</li>
+                    <li class="hover:text-primary transition-colors cursor-pointer">Investment</li>
+                    <li class="hover:text-primary transition-colors cursor-pointer">Lifestyle</li>
+                    <li class="hover:text-primary transition-colors cursor-pointer">Market Reports</li>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Journal Grid -->
+        <section class="py-32">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-24 gap-x-12">
+                    {blogEntries.map((entry, idx) => {
+                        // Safe date formatting
+                        const d = entry.data.date ? new Date(entry.data.date) : new Date();
+                        const day = d.getDate();
+                        const month = d.toLocaleString('default', { month: 'short' });
+
+                        return (
+                            <article class={`group ${idx % 3 === 1 ? 'lg:translate-y-12' : ''} transition-transform duration-700`}>
+                                <a href={`/blog/${entry.id}`} class="block relative">
+                                    <div class="aspect-square overflow-hidden bg-stone-200 mb-8 relative">
+                                        {entry.data.image ? (
+                                            <img 
+                                                src={entry.data.image} 
+                                                alt={entry.data.title}
+                                                class="w-full h-full object-cover grayscale brightness-90 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-1000 group-hover:scale-110"
+                                            />
+                                        ) : (
+                                            <div class="w-full h-full bg-surface-container-high" />
+                                        )}
+                                        <!-- Date Badge -->
+                                        <div class="absolute top-0 right-0 bg-bone p-4 text-[10px] font-label uppercase tracking-widest flex flex-col items-center justify-center">
+                                            <span class="text-xl font-serif font-bold text-on-surface leading-none mb-1">
+                                                {day}
+                                            </span>
+                                            <span class="text-[10px] text-outline">
+                                                {month}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="space-y-4 pr-8">
+                                        <span class="text-[10px] font-label uppercase tracking-[0.2em] text-primary">
+                                            {getCategory(entry)}
+                                        </span>
+                                        <h2 class="text-3xl font-serif font-bold text-on-surface leading-tight group-hover:text-primary transition-colors duration-500">
+                                            {entry.data.title}
+                                        </h2>
+                                        <p class="text-on-surface-variant font-body leading-relaxed line-clamp-2 italic opacity-80">
+                                            {entry.data.description}
+                                        </p>
+                                        <div class="pt-6 border-t border-outline/10 flex items-center justify-between group/btn">
+                                            <span class="text-[11px] font-label uppercase tracking-[0.2em] text-on-surface">Read Full Inquiry</span>
+                                            <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-2 transition-transform duration-500">arrow_forward</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            </article>
+                        );
+                    })}
+                </div>
+
+                {blogEntries.length === 0 && (
+                    <div class="py-48 text-center bg-surface-container-low rounded-sm">
+                        <span class="material-symbols-outlined text-4xl text-outline mb-6">edit_off</span>
+                        <p class="text-outline font-label uppercase tracking-widest italic">The editorial archive is currently in transition.</p>
+                    </div>
+                )}
+            </div>
+        </section>
+
+    </main>
+
+    <Footer />
+</Layout>
+
+<style>
+    @reference "../../index.css";
+    
+    .font-headline {
+        font-family: 'Work Sans', sans-serif;
+    }
+    
+    /* Applying the Serif font locally for the Journal feel if needed */
+    h1, h2 {
+        font-family: 'Cormorant Garamond', serif;
+    }
+</style>
