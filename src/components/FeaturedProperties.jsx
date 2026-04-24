@@ -1,8 +1,9 @@
 import React from 'react';
 
 const PropertyCard = ({ id, title, location, beds, baths, area, price, image, status }) => {
+  const base = import.meta.env.BASE_URL;
   return (
-    <a href={`/real-estate-vendor/property/${id}`} className="group block cursor-pointer">
+    <a href={`${base}property/${id}`} className="group block cursor-pointer">
       <div className="relative overflow-hidden aspect-[4/5] mb-6 rounded-sm">
         <img
           alt={title}

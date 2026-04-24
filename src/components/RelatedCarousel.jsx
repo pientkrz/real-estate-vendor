@@ -57,7 +57,7 @@ const RelatedCarousel = ({ posts, currentPostId }) => {
           {filteredPosts.map((post, index) => (
             <a 
               key={post.id}
-              href={`/blog/${post.id}`}
+              href={`${import.meta.env.BASE_URL}blog/${post.id}`}
               class={`min-w-[300px] md:min-w-[400px] group snap-start block ${index % 2 === 1 ? 'mt-12' : ''}`}
             >
               <div class="relative aspect-square overflow-hidden mb-6 bg-obsidian/5">
