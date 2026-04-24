@@ -54,12 +54,14 @@ const RelatedCarousel = ({ posts, currentPostId }) => {
           class="flex gap-8 overflow-x-auto scrollbar-hide pb-8 snap-x snap-mandatory"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {filteredPosts.map((post, index) => (
-            <a 
-              key={post.id}
-              href={`/blog/${post.id}`}
-              class={`min-w-[300px] md:min-w-[400px] group snap-start block ${index % 2 === 1 ? 'mt-12' : ''}`}
-            >
+          {filteredPosts.map((post, index) => {
+            const base = import.meta.env.BASE_URL;
+            return (
+              <a 
+                key={post.id}
+                href={`${base}blog/${post.id}`}
+                class={`min-w-[300px] md:min-w-[400px] group snap-start block ${index % 2 === 1 ? 'mt-12' : ''}`}
+              >
               <div class="relative aspect-square overflow-hidden mb-6 bg-obsidian/5">
                 <img 
                   src={post.data.thumbnail || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800"} 
@@ -79,8 +81,9 @@ const RelatedCarousel = ({ posts, currentPostId }) => {
               <h3 class="text-xl md:text-2xl font-serif leading-tight group-hover:text-primary transition-colors duration-300">
                 {post.data.title}
               </h3>
-            </a>
-          ))}
+              </a>
+            );
+          })}
         </div>
       </div>
     </section>
