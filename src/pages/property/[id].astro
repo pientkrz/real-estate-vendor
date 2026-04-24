@@ -47,9 +47,9 @@ const fullAddress = `${location?.level2 || ''}, ${location?.level1 || ''}`.repla
                 <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-8">
                     <div class="max-w-2xl animate-in fade-in slide-in-from-bottom-6 duration-1000">
                         <nav class="flex gap-4 mb-6 text-[10px] font-label uppercase tracking-[0.3em] text-primary">
-                            <a href="/" class="hover:opacity-70 transition-opacity">Global S Home</a>
+                            <a href={import.meta.env.BASE_URL} class="hover:opacity-70 transition-opacity">Global S Home</a>
                             <span>/</span>
-                            <a href={`/filter?type=${offer.typ}`} class="hover:opacity-70 transition-opacity">{offer.typ === 'sprzedaz' ? 'Sale' : 'Rent'}</a>
+                            <a href={`${import.meta.env.BASE_URL}filter?type=${offer.typ}`} class="hover:opacity-70 transition-opacity">{offer.typ === 'sprzedaz' ? 'Sale' : 'Rent'}</a>
                         </nav>
                         <h1 class="text-6xl md:text-8xl font-headline font-bold text-on-surface leading-[1.05] tracking-tighter mb-4">
                             {city}
