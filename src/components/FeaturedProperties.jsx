@@ -2,11 +2,11 @@ import React from 'react';
 
 const PropertyCard = ({ id, title, location, beds, baths, area, price, image, status }) => {
   return (
-    <a href={`/property/${id}`} className="group block cursor-pointer">
+    <a href={`/real-estate-vendor/property/${id}`} className="group block cursor-pointer">
       <div className="relative overflow-hidden aspect-[4/5] mb-6 rounded-sm">
-        <img 
-          alt={title} 
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+        <img
+          alt={title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           src={image}
         />
         <div className="absolute top-6 left-6">
@@ -55,17 +55,17 @@ const FeaturedProperties = ({ properties = [] }) => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {properties.map((prop, index) => (
-            <PropertyCard 
-              key={prop.id || index} 
+            <PropertyCard
+              key={prop.id || index}
               id={prop.id}
-              title={prop.params?.miasto || "Luxury Estate"} 
-              location={prop.location?.level2 || prop.params?.miasto} 
-              beds={prop.params?.liczbapokoi} 
-              baths={prop.params?.liczbalazienek} 
-              area={`${prop.params?.powierzchnia}m²`} 
-              price={`${prop.currency === 'EUR' ? '€' : prop.currency}${ (prop.price / 1000000).toFixed(1) }M`}
-              image={prop.params?.zdjecie1} 
-              status={prop.typ === 'sprzedaz' ? 'For Sale' : 'For Rent'} 
+              title={prop.params?.miasto || "Luxury Estate"}
+              location={prop.location?.level2 || prop.params?.miasto}
+              beds={prop.params?.liczbapokoi}
+              baths={prop.params?.liczbalazienek}
+              area={`${prop.params?.powierzchnia}m²`}
+              price={`${prop.currency === 'EUR' ? '€' : prop.currency}${(prop.price / 1000000).toFixed(1)}M`}
+              image={prop.params?.zdjecie1}
+              status={prop.typ === 'sprzedaz' ? 'For Sale' : 'For Rent'}
             />
 
           ))}
