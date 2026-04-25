@@ -86,7 +86,7 @@ const PropertyMap = ({ location = {}, city = "", params = {} }) => {
     }, [hasCoords, lat, lng]);
 
     return (
-        <div className="w-full h-[500px] relative rounded-sm overflow-hidden border border-outline/5 transition-all duration-1000 group">
+        <div className="w-full h-[300px] md:h-[500px] relative rounded-sm overflow-hidden border border-outline/5 transition-all duration-1000 group">
             {hasCoords ? (
                 <div 
                     ref={mapContainer} 
