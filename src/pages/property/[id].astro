@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import AgentGrid from '../../components/AgentGrid';
+import PropertyMap from '../../components/PropertyMap';
 import { parseOffersXml } from '../../utils/xmlParser';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -190,6 +191,18 @@ const fullAddress = `${location?.level2 || ''}, ${location?.level1 || ''}`.repla
                         </div>
                     </aside>
                 </div>
+            </div>
+        </section>
+
+        <!-- Localization Section: The Enclave -->
+        <section class="py-24 bg-surface-container-low/30 border-t border-outline/5">
+            <div class="max-w-7xl mx-auto px-6 md:px-12">
+                <div class="mb-16">
+                    <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Geographical Context</span>
+                    <h2 class="text-5xl font-headline font-bold text-on-surface tracking-tighter">The Enclave</h2>
+                </div>
+                
+                <PropertyMap client:only="react" location={location} city={city} params={params} />
             </div>
         </section>
 

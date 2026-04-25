@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <plik>
   <header>
     <agencja>Local P Home</agencja>
@@ -24,6 +24,8 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_0/800/600</param>
+      <param nazwa="latitude" typ="real">37.4467</param>
+      <param nazwa="longitude" typ="real">25.3289</param>
     </oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_1</id>
@@ -40,6 +42,8 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_1/800/600</param>
+      <param nazwa="latitude" typ="real">45.9984</param>
+      <param nazwa="longitude" typ="real">9.2556</param>
     </oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_2</id>
@@ -56,7 +60,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_2/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_3</id>
       <cena waluta="EUR">12396640</cena>
@@ -72,7 +76,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_3/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_4</id>
       <cena waluta="EUR">12413564</cena>
@@ -88,7 +92,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_4/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_5</id>
       <cena waluta="EUR">17346031</cena>
@@ -104,7 +108,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_5/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_6</id>
       <cena waluta="EUR">13832303</cena>
@@ -120,7 +124,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_6/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_7</id>
       <cena waluta="EUR">1217943</cena>
@@ -136,7 +140,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_7/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_8</id>
       <cena waluta="EUR">7150599</cena>
@@ -152,7 +156,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_8/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_9</id>
       <cena waluta="EUR">776249</cena>
@@ -168,7 +172,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_9/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_10</id>
       <cena waluta="EUR">1527804</cena>
@@ -184,7 +188,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_10/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_11</id>
       <cena waluta="EUR">19497276</cena>
@@ -200,7 +204,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_11/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_12</id>
       <cena waluta="EUR">7418955</cena>
@@ -216,7 +220,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_12/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_13</id>
       <cena waluta="EUR">10253564</cena>
@@ -232,7 +236,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_sprzedaz_13/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_sprzedaz_14</id>
       <cena waluta="EUR">19399729</cena>
@@ -266,7 +270,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_0/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_1</id>
       <cena waluta="EUR">6203023</cena>
@@ -282,7 +286,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_1/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_2</id>
       <cena waluta="EUR">16510914</cena>
@@ -298,7 +302,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_2/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_3</id>
       <cena waluta="EUR">18078852</cena>
@@ -314,7 +318,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_3/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_4</id>
       <cena waluta="EUR">12877329</cena>
@@ -330,7 +334,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_4/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_5</id>
       <cena waluta="EUR">4902511</cena>
@@ -346,7 +350,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_5/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_6</id>
       <cena waluta="EUR">5394846</cena>
@@ -362,7 +366,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_6/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_7</id>
       <cena waluta="EUR">14504015</cena>
@@ -378,7 +382,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_7/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_8</id>
       <cena waluta="EUR">12893387</cena>
@@ -394,7 +398,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_8/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_9</id>
       <cena waluta="EUR">15134491</cena>
@@ -410,7 +414,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_9/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_10</id>
       <cena waluta="EUR">9168138</cena>
@@ -426,7 +430,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_10/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_11</id>
       <cena waluta="EUR">9919050</cena>
@@ -442,7 +446,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_11/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_12</id>
       <cena waluta="EUR">9649535</cena>
@@ -458,7 +462,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_12/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_13</id>
       <cena waluta="EUR">15716264</cena>
@@ -474,7 +478,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_13/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_mieszkania_wynajem_14</id>
       <cena waluta="EUR">1402916</cena>
@@ -490,7 +494,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/mieszkania_wynajem_14/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     </dzial>
     <dzial tab="domy" typ="sprzedaz">
     <oferta>
@@ -508,7 +512,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_0/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_1</id>
       <cena waluta="EUR">6524112</cena>
@@ -524,7 +528,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_1/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_2</id>
       <cena waluta="EUR">15986418</cena>
@@ -540,7 +544,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_2/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_3</id>
       <cena waluta="EUR">7152983</cena>
@@ -556,7 +560,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_3/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_4</id>
       <cena waluta="EUR">19306447</cena>
@@ -572,7 +576,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_4/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_5</id>
       <cena waluta="EUR">18253142</cena>
@@ -588,7 +592,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_5/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_6</id>
       <cena waluta="EUR">10182291</cena>
@@ -604,7 +608,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_6/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_7</id>
       <cena waluta="EUR">545046</cena>
@@ -620,7 +624,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_7/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_8</id>
       <cena waluta="EUR">19272768</cena>
@@ -636,7 +640,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_8/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_9</id>
       <cena waluta="EUR">19657968</cena>
@@ -652,7 +656,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_9/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_10</id>
       <cena waluta="EUR">2313920</cena>
@@ -668,7 +672,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_10/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_11</id>
       <cena waluta="EUR">5203630</cena>
@@ -684,7 +688,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_11/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_12</id>
       <cena waluta="EUR">6171984</cena>
@@ -700,7 +704,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_12/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_13</id>
       <cena waluta="EUR">9312183</cena>
@@ -716,7 +720,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_13/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_sprzedaz_14</id>
       <cena waluta="EUR">1912882</cena>
@@ -732,7 +736,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_sprzedaz_14/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     </dzial>
     <dzial tab="domy" typ="wynajem">
     <oferta>
@@ -750,7 +754,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_0/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_1</id>
       <cena waluta="EUR">14359255</cena>
@@ -766,7 +770,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_1/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_2</id>
       <cena waluta="EUR">13131585</cena>
@@ -782,7 +786,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_2/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_3</id>
       <cena waluta="EUR">16556115</cena>
@@ -798,7 +802,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_3/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_4</id>
       <cena waluta="EUR">12605165</cena>
@@ -814,7 +818,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_4/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_5</id>
       <cena waluta="EUR">15273685</cena>
@@ -830,7 +834,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_5/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_6</id>
       <cena waluta="EUR">10055514</cena>
@@ -846,7 +850,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_6/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_7</id>
       <cena waluta="EUR">7513989</cena>
@@ -862,7 +866,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_7/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_8</id>
       <cena waluta="EUR">5169790</cena>
@@ -878,7 +882,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_8/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_9</id>
       <cena waluta="EUR">10157903</cena>
@@ -894,7 +898,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_9/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_10</id>
       <cena waluta="EUR">6595619</cena>
@@ -910,7 +914,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_10/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_11</id>
       <cena waluta="EUR">12682747</cena>
@@ -926,7 +930,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_11/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_12</id>
       <cena waluta="EUR">11020338</cena>
@@ -942,7 +946,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_12/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_13</id>
       <cena waluta="EUR">10459567</cena>
@@ -958,7 +962,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_13/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_domy_wynajem_14</id>
       <cena waluta="EUR">1806493</cena>
@@ -974,7 +978,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/domy_wynajem_14/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     </dzial>
     <dzial tab="dzialki" typ="sprzedaz">
     <oferta>
@@ -992,7 +996,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_0/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_1</id>
       <cena waluta="EUR">3465047</cena>
@@ -1008,7 +1012,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_1/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_2</id>
       <cena waluta="EUR">3804793</cena>
@@ -1024,7 +1028,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_2/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_3</id>
       <cena waluta="EUR">2018434</cena>
@@ -1040,7 +1044,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_3/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_4</id>
       <cena waluta="EUR">2455561</cena>
@@ -1056,7 +1060,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_4/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_5</id>
       <cena waluta="EUR">2398278</cena>
@@ -1072,7 +1076,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_5/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_6</id>
       <cena waluta="EUR">669384</cena>
@@ -1088,7 +1092,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_6/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_7</id>
       <cena waluta="EUR">355264</cena>
@@ -1104,7 +1108,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_7/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_8</id>
       <cena waluta="EUR">3827970</cena>
@@ -1120,7 +1124,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_8/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_9</id>
       <cena waluta="EUR">4168259</cena>
@@ -1136,7 +1140,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_9/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_10</id>
       <cena waluta="EUR">4245172</cena>
@@ -1152,7 +1156,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_10/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_11</id>
       <cena waluta="EUR">3777874</cena>
@@ -1168,7 +1172,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_11/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_12</id>
       <cena waluta="EUR">2369257</cena>
@@ -1184,7 +1188,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_12/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_13</id>
       <cena waluta="EUR">4091759</cena>
@@ -1200,7 +1204,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_13/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_dzialki_sprzedaz_14</id>
       <cena waluta="EUR">1538755</cena>
@@ -1216,7 +1220,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/dzialki_sprzedaz_14/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     </dzial>
     <dzial tab="lokale" typ="sprzedaz">
     <oferta>
@@ -1234,7 +1238,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_0/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_1</id>
       <cena waluta="EUR">13609868</cena>
@@ -1250,7 +1254,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_1/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_2</id>
       <cena waluta="EUR">6123910</cena>
@@ -1266,7 +1270,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_2/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_3</id>
       <cena waluta="EUR">16162793</cena>
@@ -1282,7 +1286,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_3/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_4</id>
       <cena waluta="EUR">17992424</cena>
@@ -1298,7 +1302,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_4/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_5</id>
       <cena waluta="EUR">12075822</cena>
@@ -1314,7 +1318,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_5/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_6</id>
       <cena waluta="EUR">3060807</cena>
@@ -1330,7 +1334,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_6/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_7</id>
       <cena waluta="EUR">2550818</cena>
@@ -1346,7 +1350,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_7/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_8</id>
       <cena waluta="EUR">16611615</cena>
@@ -1362,7 +1366,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_8/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_9</id>
       <cena waluta="EUR">8912683</cena>
@@ -1378,7 +1382,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_9/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_10</id>
       <cena waluta="EUR">16953717</cena>
@@ -1394,7 +1398,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_10/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_11</id>
       <cena waluta="EUR">14744972</cena>
@@ -1410,7 +1414,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_11/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_12</id>
       <cena waluta="EUR">13217035</cena>
@@ -1426,7 +1430,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_12/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_13</id>
       <cena waluta="EUR">6646090</cena>
@@ -1442,7 +1446,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_13/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_lokale_sprzedaz_14</id>
       <cena waluta="EUR">5350129</cena>
@@ -1458,7 +1462,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_sprzedaz_14/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     </dzial>
     <dzial tab="lokale" typ="wynajem">
     <oferta>
@@ -1476,7 +1480,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_0/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_1</id>
       <cena waluta="EUR">17349583</cena>
@@ -1492,7 +1496,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_1/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_2</id>
       <cena waluta="EUR">5286368</cena>
@@ -1508,7 +1512,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_2/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_3</id>
       <cena waluta="EUR">2763561</cena>
@@ -1524,7 +1528,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_3/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_4</id>
       <cena waluta="EUR">18060674</cena>
@@ -1540,7 +1544,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_4/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_5</id>
       <cena waluta="EUR">11837095</cena>
@@ -1556,7 +1560,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_5/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_6</id>
       <cena waluta="EUR">16999569</cena>
@@ -1572,7 +1576,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_6/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_7</id>
       <cena waluta="EUR">13042978</cena>
@@ -1588,7 +1592,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_7/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_8</id>
       <cena waluta="EUR">13114370</cena>
@@ -1604,7 +1608,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_8/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_9</id>
       <cena waluta="EUR">19073191</cena>
@@ -1620,7 +1624,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_9/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_10</id>
       <cena waluta="EUR">15974495</cena>
@@ -1636,7 +1640,7 @@
         <area level="4">Marbella</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_10/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">36.5101</param><param nazwa="longitude" typ="real">-4.8824</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_11</id>
       <cena waluta="EUR">2693583</cena>
@@ -1652,7 +1656,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_11/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_12</id>
       <cena waluta="EUR">18454743</cena>
@@ -1668,7 +1672,7 @@
         <area level="4">Nicea</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_12/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">43.7102</param><param nazwa="longitude" typ="real">7.2620</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_13</id>
       <cena waluta="EUR">10906659</cena>
@@ -1684,7 +1688,7 @@
         <area level="4">Mykonos</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_13/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">37.4467</param><param nazwa="longitude" typ="real">25.3289</param></oferta>
     <oferta>
       <id>OFFER_lokale_wynajem_14</id>
       <cena waluta="EUR">9910009</cena>
@@ -1700,7 +1704,7 @@
         <area level="4">Lake Como</area>
       </location>
       <param nazwa="zdjecie1" typ="text">https://picsum.photos/seed/lokale_wynajem_14/800/600</param>
-    </oferta>
+    <param nazwa="latitude" typ="real">45.9984</param><param nazwa="longitude" typ="real">9.2556</param></oferta>
     </dzial>
   </lista_ofert>
 </plik>
