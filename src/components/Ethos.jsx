@@ -2,7 +2,7 @@ import React from 'react';
 
 const Ethos = () => {
   return (
-    <section className="bg-surface-container-low py-32 overflow-hidden">
+    <section className="bg-surface py-32 overflow-hidden border-t border-outline/5">
       <div className="max-w-screen-2xl mx-auto px-12 grid grid-cols-1 lg:grid-cols-12 gap-24 items-center">
         <div className="lg:col-span-7 relative">
           <div className="grid grid-cols-2 gap-8">
