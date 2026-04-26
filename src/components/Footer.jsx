@@ -5,7 +5,7 @@ const Footer = () => {
     <footer className="bg-stone-100 w-full py-16 px-12">
       <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 items-start font-body text-sm tracking-wide">
         <div className="col-span-1 md:col-span-1">
-          <div className="text-lg font-bold text-stone-900 mb-6 font-headline">Global S Home</div>
+          <div className="text-lg font-bold text-stone-900 mb-6 font-headline">Local T P</div>
           <p className="text-stone-500 mb-8 max-w-xs leading-relaxed">Defining the next century of Mediterranean living through architectural authority and editorial precision.</p>
           <div className="flex gap-4">
             <span className="material-symbols-outlined text-amber-800 cursor-pointer">public</span>
@@ -43,7 +43,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="max-w-screen-2xl mx-auto mt-24 pt-8 border-t border-stone-200 flex flex-col md:flex-row justify-between gap-6 font-body text-xs">
-        <p className="text-stone-500">© 2024 Global S Home. Architectural Integrity & Editorial Authority.</p>
+        <p className="text-stone-500">© 2024 Local T P. Architectural Integrity & Editorial Authority.</p>
         <div className="flex gap-8">
           <a className="text-stone-500 hover:text-amber-700 transition-all" href="#">Privacy Policy</a>
           <a className="text-stone-500 hover:text-amber-700 transition-all" href="#">Terms of Service</a>

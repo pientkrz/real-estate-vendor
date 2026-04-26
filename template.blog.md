@@ -18,7 +18,7 @@
 title: "ENTER TITLE HERE"
 description: "Enter a brief, compelling summary of the blog post to attract readers."
 pubDate: 2026-04-20
-author: "GLOBAL S HOME STAFF"
+author: "Local T P STAFF"
 category: "COLLECTION"
 thumbnail: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200"
 ---

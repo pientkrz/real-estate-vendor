@@ -38,7 +38,7 @@ const city = params?.miasto || 'The Estate';
 const fullAddress = `${location?.level2 || ''}, ${location?.level1 || ''}`.replace(/^, /, '');
 ---
 
-<Layout title={`${city} | Global S Home`} description={params?.opis?.substring(0, 160)}>
+<Layout title={`${city} | Local T P`} description={params?.opis?.substring(0, 160)}>
     <Navbar client:load />
     
     <main class="min-h-screen bg-surface">
@@ -48,7 +48,7 @@ const fullAddress = `${location?.level2 || ''}, ${location?.level1 || ''}`.repla
                 <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-8">
                     <div class="max-w-2xl animate-in fade-in slide-in-from-bottom-6 duration-1000">
                         <nav class="flex gap-4 mb-6 text-[10px] font-label uppercase tracking-[0.3em] text-primary">
-                            <a href={import.meta.env.BASE_URL} class="hover:opacity-70 transition-opacity">Global S Home</a>
+                            <a href={import.meta.env.BASE_URL} class="hover:opacity-70 transition-opacity">Local T P</a>
                             <span>/</span>
                             <a href={`${import.meta.env.BASE_URL}filter?type=${offer.typ}`} class="hover:opacity-70 transition-opacity">{offer.typ === 'sprzedaz' ? 'Sale' : 'Rent'}</a>
                         </nav>
@@ -186,7 +186,7 @@ const fullAddress = `${location?.level2 || ''}, ${location?.level1 || ''}`.repla
                             </form>
                             
                             <p class="mt-8 text-[10px] text-outline leading-relaxed text-center italic">
-                                Exclusive listing by Global S Home Selection — <br/>By submitting, you agree to our Digital Privacy Ethos.
+                                Exclusive listing by Local T P Selection — <br/>By submitting, you agree to our Digital Privacy Ethos.
                             </p>
                         </div>
                     </aside>

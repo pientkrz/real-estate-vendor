@@ -1,4 +1,4 @@
-# AI Development Instructions: Global S Home
+# AI Development Instructions: Local T P
 
 This document provides specialized instructions for any AI agent working on this repository to ensure consistency, quality, and alignment with project goals.
 

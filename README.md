@@ -1,4 +1,4 @@
-# Global S Home - Premium Real Estate Platform
+# Local T P - Premium Real Estate Platform
 
 A high-performance, editorial-grade real estate platform built with **Astro** and **React**. Designed with an "Architectural Ledger" aesthetic, this site combines the performance of static generation with the interactivity of React islands.
 

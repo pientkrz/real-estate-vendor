@@ -26,7 +26,7 @@ const Ethos = () => {
           <span className="text-primary font-label text-sm tracking-[0.2em] uppercase mb-6 block">Our Ethos</span>
           <h2 className="text-5xl font-headline font-bold leading-tight mb-8">Refined Service, Global Reach, Architectural Eye.</h2>
           <p className="text-on-surface-variant text-lg leading-relaxed mb-8">
-            Global S Home isn't just a brokerage; we are curators of environments. We understand that a luxury residence is an asset of both capital and soul. Our team specializes in off-market acquisitions and bespoke architectural consultancy.
+            Local T P isn't just a brokerage; we are curators of environments. We understand that a luxury residence is an asset of both capital and soul. Our team specializes in off-market acquisitions and bespoke architectural consultancy.
           </p>
           <p className="text-on-surface-variant text-lg leading-relaxed mb-12">
             We bridge the gap between Mediterranean heritage and contemporary lifestyle, ensuring every destination in our portfolio meets the "S" standard of excellence.
