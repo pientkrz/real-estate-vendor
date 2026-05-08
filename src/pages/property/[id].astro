@@ -172,15 +172,35 @@ const fullAddress = `${location?.level2 || ''}, ${location?.level1 || ''}`.repla
                             
                             <form class="space-y-6">
                                 <div>
-                                    <input type="text" placeholder="Full Name" class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm" />
+                                    <input type="text" placeholder="Full Name" required class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm" />
                                 </div>
                                 <div>
-                                    <input type="email" placeholder="Preferred Email" class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm" />
+                                    <input type="email" placeholder="Preferred Email" required class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm" />
                                 </div>
                                 <div>
-                                    <textarea placeholder="Message to Architect" rows="4" class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm resize-none"></textarea>
+                                    <textarea placeholder="Message to Architect" rows="4" required class="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm resize-none"></textarea>
                                 </div>
-                                <button class="w-full py-4 bg-obsidian text-bone font-label uppercase tracking-widest text-[11px] hover:bg-primary transition-all duration-500">
+
+                                <label class="flex items-start gap-3 cursor-pointer pt-2">
+                                    <div class="relative flex items-start pt-1">
+                                        <input 
+                                            type="checkbox" 
+                                            required
+                                            class="peer sr-only"
+                                            onchange="document.getElementById('inquiry-btn').disabled = !this.checked"
+                                        />
+                                        <div class="w-4 h-4 min-w-[16px] border border-outline/50 rounded-sm bg-surface transition-all peer-checked:bg-primary peer-checked:border-primary flex items-center justify-center">
+                                            <svg class="w-3 h-3 text-on-primary opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                    <span class="text-[10px] text-outline leading-relaxed text-justify">
+                                        Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko, adres e-mail, numer telefonu. Administratorem danych osobowych jest firma Smart Trade Sp. z o.o. z siedzibą na ul. Agnieszki Osieckiej 18, 45-807 Opole. Dane osobowe będą przetwarzane w celu odpowiedzi na zapytanie skierowane przy użyciu formularza kontaktowego oraz prowadzenie ewentualnego dalszego kontaktu na Pani/Pana życzenie.
+                                    </span>
+                                </label>
+
+                                <button id="inquiry-btn" disabled class="w-full py-4 bg-obsidian text-bone font-label uppercase tracking-widest text-[11px] hover:bg-primary transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed">
                                     Initialize Inquiry
                                 </button>
                             </form>
