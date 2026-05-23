@@ -7,9 +7,9 @@
 
   "Action": {
     "_description": "Akcja do wykonania na ogłoszeniu",
-    "0": "update – aktualizacja / dodanie ogłoszenia",
-    "1": "inactivate – dezaktywacja ogłoszenia",
-    "2": "delete – usunięcie ogłoszenia"
+    "0": "aktualizacja / dodanie ogłoszenia",
+    "1": "dezaktywacja ogłoszenia",
+    "2": "usunięcie ogłoszenia"
   },
 
   "Country": {
@@ -55,19 +55,19 @@
 
   "ObjectName": {
     "_description": "Rodzaj oferty – determinuje który tag Details jest wymagany",
-    "0": "Flat – Mieszkanie → FlatDetails",
-    "1": "House – Dom → HouseDetails",
-    "2": "Terrain – Grunt / działka → TerrainDetails",
-    "3": "Room – Pokój → RoomDetails (OfferType musi być 1)",
-    "4": "CommercialProperty – Lokal / obiekt użytkowy → CommercialPropertyDetails",
-    "5": "Hall – Magazyn / hala → HallDetails",
-    "6": "Garage – Garaż → GarageDetails"
+    "0": "Mieszkanie → FlatDetails",
+    "1": "Dom → HouseDetails",
+    "2": "Grunt / działka → TerrainDetails",
+    "3": "Pokój → RoomDetails (OfferType musi być 1)",
+    "4": "Lokal / obiekt użytkowy → CommercialPropertyDetails",
+    "5": "Magazyn / hala → HallDetails",
+    "6": "Garaż → GarageDetails"
   },
 
   "OfferType": {
     "_description": "Typ oferty – sprzedaż lub wynajem",
-    "0": "sell – sprzedaż",
-    "1": "rent – wynajem"
+    "0": "sprzedaż",
+    "1": "wynajem"
   },
 
   "FlatDetails": {
