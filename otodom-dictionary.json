@@ -1,0 +1,664 @@
+{
+  "_meta": {
+    "source": "Otodom Import – dokumentacja formatu importu serwisu Otodom.pl, wersja 170130",
+    "copyright": "© Otodom 2016",
+    "note": "Słowniki oparte bezpośrednio na specyfikacji. Aktualne słowniki dostępne pod: http://www.otodom.pl/api/lite/dictionaries"
+  },
+
+  "Action": {
+    "_description": "Akcja do wykonania na ogłoszeniu",
+    "0": "update – aktualizacja / dodanie ogłoszenia",
+    "1": "inactivate – dezaktywacja ogłoszenia",
+    "2": "delete – usunięcie ogłoszenia"
+  },
+
+  "Country": {
+    "_description": "Kraj (tylko Polska obsługiwana w specyfikacji)",
+    "1": "Polska"
+  },
+
+  "Province": {
+    "_description": "Województwo (można podawać tekstowo lub jako ID)",
+    "1":  "dolnośląskie",
+    "2":  "kujawsko-pomorskie",
+    "3":  "lubelskie",
+    "4":  "lubuskie",
+    "5":  "łódzkie",
+    "6":  "małopolskie",
+    "7":  "mazowieckie",
+    "8":  "opolskie",
+    "9":  "podkarpackie",
+    "10": "podlaskie",
+    "11": "pomorskie",
+    "12": "śląskie",
+    "13": "świętokrzyskie",
+    "14": "warmińsko-mazurskie",
+    "15": "wielkopolskie",
+    "16": "zachodniopomorskie"
+  },
+
+  "PriceCurrency": {
+    "_description": "Waluta ceny oferty",
+    "1": "PLN",
+    "2": "EUR",
+    "3": "GBP",
+    "4": "USD",
+    "5": "AED",
+    "6": "EGP"
+  },
+
+  "MarketType": {
+    "_description": "Typ rynku nieruchomości",
+    "0": "pierwotny",
+    "1": "wtórny"
+  },
+
+  "ObjectName": {
+    "_description": "Rodzaj oferty – determinuje który tag Details jest wymagany",
+    "0": "Flat – Mieszkanie → FlatDetails",
+    "1": "House – Dom → HouseDetails",
+    "2": "Terrain – Grunt / działka → TerrainDetails",
+    "3": "Room – Pokój → RoomDetails (OfferType musi być 1)",
+    "4": "CommercialProperty – Lokal / obiekt użytkowy → CommercialPropertyDetails",
+    "5": "Hall – Magazyn / hala → HallDetails",
+    "6": "Garage – Garaż → GarageDetails"
+  },
+
+  "OfferType": {
+    "_description": "Typ oferty – sprzedaż lub wynajem",
+    "0": "sell – sprzedaż",
+    "1": "rent – wynajem"
+  },
+
+  "FlatDetails": {
+    "_description": "Pola szczegółowe dla mieszkania (ObjectName = 0)",
+
+    "BuildingType": {
+      "_description": "Rodzaj zabudowy budynku mieszkalnego",
+      "0": "blok",
+      "1": "kamienica",
+      "2": "dom wolnostojący",
+      "3": "plomba",
+      "4": "szeregowiec",
+      "5": "apartamentowiec",
+      "6": "loft"
+    },
+
+    "BuildingMaterial": {
+      "_description": "Materiał budowy",
+      "0": "cegła",
+      "1": "drewno",
+      "2": "pustak",
+      "3": "keramzyt",
+      "4": "wielka płyta",
+      "5": "beton",
+      "6": "inne",
+      "7": "silikat",
+      "8": "beton komórkowy"
+    },
+
+    "BuildingOwnership": {
+      "_description": "Forma własności mieszkania",
+      "0": "spółdzielcze własnościowe",
+      "1": "spółdzielcze własnościowe z KW",
+      "2": "pełna własność",
+      "3": "udział"
+    },
+
+    "FloorNo": {
+      "_description": "Piętro, na którym znajduje się mieszkanie (0 = suterena, 1 = parter, 2 = 1. piętro, ...)",
+      "0":  "suterena",
+      "1":  "parter",
+      "2":  "1",
+      "3":  "2",
+      "4":  "3",
+      "5":  "4",
+      "6":  "5",
+      "7":  "6",
+      "8":  "7",
+      "9":  "8",
+      "10": "9",
+      "11": "10",
+      "12": "11",
+      "13": "12",
+      "14": "13",
+      "15": "14",
+      "16": "15",
+      "17": "16",
+      "18": "17",
+      "19": "18",
+      "20": "19",
+      "21": "20",
+      "22": "21",
+      "23": "22",
+      "24": "23",
+      "25": "24",
+      "26": "25",
+      "27": "26",
+      "28": "27",
+      "29": "28",
+      "30": "29",
+      "31": "30",
+      "32": "31",
+      "33": "32",
+      "34": "33",
+      "35": "34",
+      "36": "35",
+      "37": "36",
+      "38": "37",
+      "39": "38",
+      "40": "39",
+      "41": "40",
+      "42": "41",
+      "43": "42",
+      "44": "43",
+      "45": "44",
+      "46": "45",
+      "47": "46",
+      "48": "47",
+      "49": "48",
+      "50": "49",
+      "51": "50",
+      "52": "powyżej 50"
+    },
+
+    "ExtrasMask": {
+      "_description": "Informacje dodatkowe / udogodnienia mieszkania (ArrayOfInteger)",
+      "0":  "balkon",
+      "1":  "pomieszczenie użytkowe",
+      "2":  "garaż",
+      "3":  "piwnica",
+      "4":  "ogródek",
+      "5":  "taras",
+      "6":  "winda",
+      "7":  "dwupoziomowe",
+      "8":  "oddzielna kuchnia",
+      "9":  "klimatyzacja",
+      "10": "tylko dla niepalących"
+    },
+
+    "Heating": {
+      "_description": "Rodzaj ogrzewania (pojedyncza wartość)",
+      "0": "miejskie",
+      "1": "gazowe",
+      "2": "piece kaflowe",
+      "3": "elektryczne",
+      "4": "inne"
+    },
+
+    "ConstructionStatus": {
+      "_description": "Stan wykończenia mieszkania",
+      "0": "do zamieszkania",
+      "1": "do wykończenia",
+      "2": "do remontu"
+    },
+
+    "WindowsType": {
+      "_description": "Rodzaj okien",
+      "0": "plastikowe",
+      "1": "drewniane",
+      "2": "aluminiowe"
+    },
+
+    "SecurityMask": {
+      "_description": "Zabezpieczenia (ArrayOfInteger)",
+      "0": "rolety antywłamaniowe",
+      "1": "drzwi / okna antywłamaniowe",
+      "2": "domofon / wideofon",
+      "3": "monitoring / ochrona",
+      "4": "system alarmowy",
+      "5": "teren zamknięty"
+    },
+
+    "MediaMask": {
+      "_description": "Media dostępne w mieszkaniu (ArrayOfInteger)",
+      "0": "internet",
+      "1": "telewizja",
+      "2": "telefon"
+    },
+
+    "EquipmentMask": {
+      "_description": "Wyposażenie mieszkania w sprzęt AGD (ArrayOfInteger)",
+      "0": "pralka",
+      "1": "zmywarka",
+      "2": "lodówka",
+      "3": "kuchenka",
+      "4": "piekarnik",
+      "5": "telewizor"
+    }
+  },
+
+  "HouseDetails": {
+    "_description": "Pola szczegółowe dla domu (ObjectName = 1)",
+
+    "BuildingType": {
+      "_description": "Rodzaj zabudowy domu",
+      "0": "wolnostojący",
+      "1": "bliźniak",
+      "2": "szeregowiec",
+      "3": "kamienica czynszowa",
+      "4": "dworek / pałac",
+      "5": "gospodarstwo"
+    },
+
+    "BuildingMaterial": {
+      "_description": "Materiał budowy domu",
+      "0": "cegła",
+      "1": "drewno",
+      "2": "pustak",
+      "3": "keramzyt",
+      "4": "wielka płyta",
+      "5": "beton",
+      "6": "inne",
+      "7": "silikat",
+      "8": "beton komórkowy"
+    },
+
+    "ConstructionStatus": {
+      "_description": "Stan wykończenia domu",
+      "0": "do zamieszkania",
+      "1": "do wykończenia",
+      "2": "do remontu",
+      "3": "stan surowy otwarty",
+      "4": "stan surowy zamknięty"
+    },
+
+    "RoofType": {
+      "_description": "Typ dachu",
+      "0": "brak",
+      "1": "płaski",
+      "2": "skośny"
+    },
+
+    "Type": {
+      "_description": "Typ domu / przeznaczenie",
+      "0": "mieszkalny",
+      "1": "rekreacyjny"
+    },
+
+    "FloorsNum": {
+      "_description": "Liczba pięter",
+      "0": "parter",
+      "1": "1 piętro",
+      "2": "2 piętra",
+      "3": "więcej"
+    },
+
+    "GarretType": {
+      "_description": "Rodzaj poddasza",
+      "0": "brak",
+      "1": "użytkowe",
+      "2": "nieużytkowe"
+    },
+
+    "WindowsType": {
+      "_description": "Rodzaj okien",
+      "0": "brak",
+      "1": "plastikowe",
+      "2": "drewniane",
+      "3": "aluminiowe"
+    },
+
+    "MediaMask": {
+      "_description": "Media doprowadzone do nieruchomości (ArrayOfInteger)",
+      "0": "prąd",
+      "1": "woda",
+      "2": "gaz",
+      "3": "telefon",
+      "4": "kanalizacja",
+      "5": "szambo",
+      "6": "oczyszczalnia"
+    },
+
+    "HeatingMask": {
+      "_description": "Rodzaj ogrzewania (ArrayOfInteger)",
+      "0":  "gazowe",
+      "1":  "węglowe",
+      "2":  "biomasa",
+      "3":  "pompa ciepła",
+      "4":  "kolektor słoneczny",
+      "5":  "geotermika",
+      "6":  "olejowe",
+      "7":  "elektryczne",
+      "8":  "miejskie",
+      "9":  "kominkowe",
+      "10": "piece kaflowe"
+    },
+
+    "FenceMask": {
+      "_description": "Rodzaj ogrodzenia (ArrayOfInteger)",
+      "0": "murowane",
+      "1": "siatka",
+      "2": "metalowe",
+      "3": "drewniane",
+      "4": "betonowe",
+      "5": "żywopłot",
+      "6": "inne"
+    },
+
+    "Location": {
+      "_description": "Położenie nieruchomości",
+      "0": "miasto",
+      "1": "pod miastem",
+      "2": "wieś"
+    },
+
+    "ExtrasMask": {
+      "_description": "Informacje dodatkowe / udogodnienia domu (ArrayOfInteger)",
+      "0": "piwnica",
+      "1": "strych",
+      "2": "garaż",
+      "3": "basen",
+      "4": "Internet",
+      "5": "telewizja kablowa",
+      "6": "klimatyzacja",
+      "7": "umeblowanie"
+    },
+
+    "VicinityMask": {
+      "_description": "Okolica / sąsiedztwo (ArrayOfInteger)",
+      "0": "las",
+      "1": "jezioro",
+      "2": "góry",
+      "3": "morze"
+    },
+
+    "AccessMask": {
+      "_description": "Dojazd do nieruchomości (ArrayOfInteger)",
+      "0": "utwardzony",
+      "1": "polny",
+      "2": "asfaltowy"
+    },
+
+    "SecurityMask": {
+      "_description": "Zabezpieczenia (ArrayOfInteger) – identyczne kody jak FlatDetails",
+      "0": "rolety antywłamaniowe",
+      "1": "drzwi / okna antywłamaniowe",
+      "2": "domofon / wideofon",
+      "3": "monitoring / ochrona",
+      "4": "system alarmowy",
+      "5": "teren zamknięty"
+    },
+
+    "Roofing": {
+      "_description": "Rodzaj pokrycia dachu",
+      "0": "blacha",
+      "1": "dachówka",
+      "2": "eternit",
+      "3": "gont",
+      "4": "łupek",
+      "5": "papa",
+      "6": "strzecha",
+      "7": "inne"
+    }
+  },
+
+  "TerrainDetails": {
+    "_description": "Pola szczegółowe dla gruntu / działki (ObjectName = 2)",
+
+    "Type": {
+      "_description": "Typ działki",
+      "0": "budowlana",
+      "1": "rolna",
+      "2": "rekreacyjna",
+      "3": "pod inwestycję",
+      "4": "leśna",
+      "5": "inna",
+      "6": "siedliskowa"
+    },
+
+    "MediaMask": {
+      "_description": "Media doprowadzone do działki (ArrayOfInteger)",
+      "0": "prąd",
+      "1": "woda",
+      "2": "gaz",
+      "3": "telefon",
+      "4": "kanalizacja",
+      "5": "szambo",
+      "6": "oczyszczalnia"
+    },
+
+    "AccessMask": {
+      "_description": "Dojazd do działki (pojedyncza wartość)",
+      "0": "utwardzony",
+      "1": "polny",
+      "2": "asfaltowy"
+    },
+
+    "VicinityMask": {
+      "_description": "Sąsiedztwo działki (ArrayOfInteger)",
+      "0": "las",
+      "1": "jezioro",
+      "2": "otwarty teren",
+      "3": "góry",
+      "4": "morze"
+    }
+  },
+
+  "RoomDetails": {
+    "_description": "Pola szczegółowe dla pokoju (ObjectName = 3, OfferType musi być 1)",
+
+    "PersonsMask": {
+      "_description": "Liczba osób w pokoju (ArrayOfInteger)",
+      "0": "1-osobowy",
+      "1": "2-osobowy",
+      "2": "3-osobowy",
+      "3": "4-osobowy"
+    },
+
+    "BuildingType": {
+      "_description": "Rodzaj zabudowy budynku",
+      "0": "blok",
+      "1": "kamienica czynszowa",
+      "2": "dom wolnostojący"
+    },
+
+    "MediaMask": {
+      "_description": "Media w pokoju (ArrayOfInteger)",
+      "0": "internet",
+      "1": "telewizja",
+      "2": "telefon"
+    },
+
+    "EquipmentMask": {
+      "_description": "Wyposażenie w sprzęt AGD (ArrayOfInteger)",
+      "0": "pralka",
+      "1": "zmywarka",
+      "2": "lodówka",
+      "3": "kuchenka",
+      "4": "piekarnik",
+      "5": "telewizor"
+    },
+
+    "PreferredSex": {
+      "_description": "Preferowana płeć lokatora",
+      "0": "mężczyzna",
+      "1": "kobieta",
+      "2": "para"
+    },
+
+    "PreferredProffesion": {
+      "_description": "Preferowana sytuacja zawodowa lokatora",
+      "0": "pracujący",
+      "1": "student"
+    }
+  },
+
+  "CommercialPropertyDetails": {
+    "_description": "Pola szczegółowe dla lokalu / obiektu użytkowego (ObjectName = 4)",
+
+    "PropertyUseMask": {
+      "_description": "Przeznaczenie lokalu użytkowego (ArrayOfInteger)",
+      "0": "usługowy",
+      "1": "biurowy",
+      "2": "handlowy",
+      "3": "gastronomiczny",
+      "4": "przemysłowy",
+      "5": "hotelowy"
+    },
+
+    "ExtrasMask": {
+      "_description": "Informacje dodatkowe lokalu (ArrayOfInteger)",
+      "0": "witryna",
+      "1": "parking",
+      "2": "dojazd asfaltowy",
+      "3": "winda",
+      "4": "klimatyzacja",
+      "5": "ogrzewanie"
+    },
+
+    "Floor": {
+      "_description": "Piętro lokalu (0 = suterena, 1 = parter, 2 = 1. piętro, ... 52 = powyżej 50)",
+      "0":  "suterena",
+      "1":  "parter",
+      "2":  "1",
+      "3":  "2",
+      "4":  "3",
+      "52": "powyżej 50"
+    },
+
+    "BuildingType": {
+      "_description": "Umiejscowienie lokalu",
+      "0": "w centrum handlowym",
+      "1": "w biurowcu",
+      "2": "w bloku",
+      "3": "w kamienicy",
+      "4": "w domu prywatnym",
+      "5": "w budynku zabytkowym",
+      "6": "osobny obiekt"
+    },
+
+    "ConstructionStatus": {
+      "_description": "Stan wykończenia lokalu",
+      "0": "gotowy",
+      "1": "do wykończenia",
+      "2": "do remontu"
+    },
+
+    "MediaMask": {
+      "_description": "Media dostępne w lokalu (ArrayOfInteger)",
+      "0": "prąd",
+      "1": "woda",
+      "2": "gaz",
+      "3": "telefon",
+      "4": "internet",
+      "5": "telewizja kablowa",
+      "6": "kanalizacja",
+      "7": "szambo",
+      "8": "oczyszczalnia"
+    },
+
+    "SecurityMask": {
+      "_description": "Zabezpieczenia (ArrayOfInteger) – identyczne kody jak FlatDetails / HouseDetails",
+      "0": "rolety antywłamaniowe",
+      "1": "drzwi / okna antywłamaniowe",
+      "2": "domofon / wideofon",
+      "3": "monitoring / ochrona",
+      "4": "system alarmowy",
+      "5": "teren zamknięty"
+    }
+  },
+
+  "GarageDetails": {
+    "_description": "Pola szczegółowe dla garażu (ObjectName = 6)",
+
+    "Localization": {
+      "_description": "Lokalizacja garażu",
+      "0": "w budynku",
+      "1": "samodzielny",
+      "2": "przy domu"
+    },
+
+    "Structure": {
+      "_description": "Konstrukcja garażu",
+      "0": "murowany",
+      "1": "blaszak",
+      "2": "drewniany",
+      "3": "wiata"
+    }
+  },
+
+  "HallDetails": {
+    "_description": "Pola szczegółowe dla magazynu / hali (ObjectName = 5)",
+
+    "AccessMask": {
+      "_description": "Dojazd do hali (ArrayOfInteger)",
+      "0": "utwardzony betonowy",
+      "1": "nieutwardzony",
+      "2": "asfalt"
+    },
+
+    "Structure": {
+      "_description": "Konstrukcja hali",
+      "0": "stalowa",
+      "1": "murowana",
+      "2": "wiata",
+      "3": "namiotowa",
+      "4": "drewniana",
+      "5": "szklana"
+    },
+
+    "MediaMask": {
+      "_description": "Media w hali (ArrayOfInteger)",
+      "0": "woda",
+      "1": "prąd",
+      "2": "siła",
+      "3": "kanalizacja",
+      "4": "telefon",
+      "5": "gaz",
+      "6": "internet",
+      "7": "szambo",
+      "8": "oczyszczalnia"
+    },
+
+    "UseMask": {
+      "_description": "Przeznaczenie hali (ArrayOfInteger)",
+      "0": "magazynowe",
+      "1": "produkcyjne",
+      "2": "biurowe",
+      "3": "handlowe"
+    },
+
+    "ParkingType": {
+      "_description": "Typ parkingu przy hali",
+      "0": "brak",
+      "1": "utwardzony",
+      "2": "betonowy",
+      "3": "asfaltowy",
+      "4": "nieutwardzony",
+      "5": "kostka brukowa"
+    },
+
+    "Flooring": {
+      "_description": "Posadzka hali",
+      "0": "brak",
+      "1": "pylna",
+      "2": "niepylna"
+    },
+
+    "ConstructionStatus": {
+      "_description": "Stan wykończenia hali",
+      "0": "gotowe",
+      "1": "do wykończenia",
+      "2": "do remontu",
+      "3": "stan surowy otwarty",
+      "4": "stan surowy zamknięty"
+    },
+
+    "SecurityMask": {
+      "_description": "Zabezpieczenia (ArrayOfInteger) – identyczne kody jak pozostałe obiekty",
+      "0": "rolety antywłamaniowe",
+      "1": "drzwi / okna antywłamaniowe",
+      "2": "domofon / wideofon",
+      "3": "monitoring / ochrona",
+      "4": "system alarmowy",
+      "5": "teren zamknięty"
+    },
+
+    "Fence": {
+      "_description": "Ogrodzenie hali",
+      "0": "tak",
+      "1": "nieogrodzony"
+    }
+  }
+}
