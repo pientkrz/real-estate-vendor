@@ -55,13 +55,13 @@
 
   "ObjectName": {
     "_description": "Rodzaj oferty – determinuje który tag Details jest wymagany",
-    "0": "Mieszkanie → FlatDetails",
-    "1": "Dom → HouseDetails",
-    "2": "Grunt / działka → TerrainDetails",
-    "3": "Pokój → RoomDetails (OfferType musi być 1)",
-    "4": "Lokal / obiekt użytkowy → CommercialPropertyDetails",
-    "5": "Magazyn / hala → HallDetails",
-    "6": "Garaż → GarageDetails"
+    "0": "Mieszkanie",
+    "1": "Dom",
+    "2": "Działka",
+    "3": "Pokój",
+    "4": "Lokal",
+    "5": "Magazyn",
+    "6": "Garaż"
   },
 
   "OfferType": {

@@ -2,9 +2,6 @@ import { XMLParser } from 'fast-xml-parser';
 import dict from './otodom-dictionary.json';
 import { reverseGeocode } from './reverseGeocode.js';
 
-// App-internal mapping from Otodom ObjectName code → offer tab slug
-const OBJECT_NAME_TAB = { 0: 'mieszkania', 1: 'domy', 2: 'dzialki', 3: 'pokoje', 4: 'lokale', 5: 'hale', 6: 'garaze' };
-
 // ── Otodom XML parser ─────────────────────────────────────────────────────────
 
 /**
@@ -51,7 +48,7 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
 
     const offer = {
       id: `otodom-${ins.ID}`,
-      tab: OBJECT_NAME_TAB[parseInt(ins.ObjectName)] ?? 'mieszkania',
+      tab: dict.ObjectName[String(ins.ObjectName)] ?? '',
       typ: parseInt(ins.OfferType) === 1 ? 'wynajem' : 'sprzedaz',
       price: parseFloat(ins.Price || 0),
       currency: dict.PriceCurrency[String(ins.PriceCurrency)] ?? 'EUR',
