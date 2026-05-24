@@ -57,7 +57,7 @@ const GlassSelect = ({ label, value, options, onChange, name, placeholder, width
   );
 };
 
-const RealEstateFilter = ({ filters, setFilters }) => {
+const RealEstateFilter = ({ filters, setFilters, locationOptions = [] }) => {
   const handleSelectChange = (name, value) => {
     setFilters(prev => ({ ...prev, [name]: value }));
   };
@@ -78,12 +78,12 @@ const RealEstateFilter = ({ filters, setFilters }) => {
   return (
     <section className="relative z-20 w-full animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300 px-4 md:px-0">
       <div className="bg-surface border border-outline/10 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.08)] p-8 md:p-12 rounded-3xl max-w-7xl flex flex-wrap lg:flex-nowrap items-end gap-10 mx-auto">
-        <GlassSelect 
-          label="Location" 
+        <GlassSelect
+          label="Location"
           name="country"
           value={filters.country}
           placeholder="All Destinations"
-          options={['Spain (Costa del Sol)', 'Greece (Mykonos)', 'Italy (Lake Como)', 'France (French Riviera)']}
+          options={locationOptions}
           onChange={handleSelectChange}
         />
         <GlassSelect 

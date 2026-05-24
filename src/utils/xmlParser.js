@@ -1,34 +1,9 @@
 import { XMLParser } from 'fast-xml-parser';
 import dict from './otodom-dictionary.json';
+import { reverseGeocode } from './reverseGeocode.js';
 
 // App-internal mapping from Otodom ObjectName code → offer tab slug
 const OBJECT_NAME_TAB = { 0: 'mieszkania', 1: 'domy', 2: 'dzialki', 3: 'pokoje', 4: 'lokale', 5: 'hale', 6: 'garaze' };
-// TODO: change this naive way of extracting the city since it is not guaranteed to be present in the title, and may be ambiguous (e.g. "Kreta" could refer to the island or to a street name in Warsaw)
-// Maps title keywords (case-insensitive) to the city label used in the filter
-const LOCATION_KEYWORDS = [
-  { words: ['mykonos'],                                                   label: 'Greece (Mykonos)' },
-  { words: ['kreta', 'crete', 'heraklion', 'heraklio', 'chania', 'rethymno', 'maleme'], label: 'Greece (Crete)' },
-  { words: ['costa del sol', 'marbella', 'málaga', 'malaga'],            label: 'Spain (Costa del Sol)' },
-  { words: ['como'],                                                       label: 'Italy (Lake Como)' },
-  { words: ['cannes', 'nice', 'monaco', "côte d'azur", 'cote d azur'],   label: 'France (French Riviera)' },
-];
-
-/**
- * Derives a params.miasto-compatible location label from an offer title.
- * CollectionManager matches via: city.includes(filter.split(' ')[0])
- */
-const extractLocation = (title) => {
-  const lower = title.toLowerCase();
-  for (const { words, label } of LOCATION_KEYWORDS) {
-    if (words.some(w => lower.includes(w))) return label;
-  }
-  return '';
-};
-
-const extractCountry = (title) => {
-  const label = extractLocation(title);
-  return label ? label.split(' ')[0] : '';
-};
 
 // ── Otodom XML parser ─────────────────────────────────────────────────────────
 
@@ -70,6 +45,10 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
       ins.HallDetails ??
       null;
 
+    const lat = parseFloat(ins.GeoMarker?.Latitude || 0);
+    const lon = parseFloat(ins.GeoMarker?.Longitude || 0);
+    const { city, country } = reverseGeocode(lat, lon);
+
     const offer = {
       id: `otodom-${ins.ID}`,
       tab: OBJECT_NAME_TAB[parseInt(ins.ObjectName)] ?? 'mieszkania',
@@ -80,13 +59,13 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
         powierzchnia:   parseFloat(ins.Area || 0),
         liczbapokoi:    parseInt(details?.RoomsNum || 0),
         liczbalazienek: 0,
-        miasto:         extractLocation(ins.Title || ''),
+        miasto:         city,
         opis:           ins.Description || '',
-        latitude:       parseFloat(ins.GeoMarker?.Latitude || 0),
-        longitude:      parseFloat(ins.GeoMarker?.Longitude || 0),
+        latitude:       lat,
+        longitude:      lon,
         tytul:          ins.Title || '',
       },
-      location: { level1: extractCountry(ins.Title || '') },
+      location: { country, city },
     };
 
     // Sort photos by Position (ascending) and assign as zdjecie1…N

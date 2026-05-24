@@ -10,16 +10,17 @@ const CollectionManager = ({ initialOffers = [] }) => {
     bathrooms: '',
   });
 
+  // Derive unique country options directly from the parsed offers so the
+  // filter dropdown always reflects the actual data — no hardcoding needed.
+  const locationOptions = useMemo(
+    () => [...new Set(initialOffers.map(o => o.location?.country).filter(Boolean))].sort(),
+    [initialOffers],
+  );
+
   const filteredOffers = useMemo(() => {
     return initialOffers.filter(offer => {
-      // Country Filter (miasto in params)
-      if (filters.country) {
-        // Find if any location level or param miasto matches
-        const matchesCountry = 
-          offer.params?.miasto?.includes(filters.country.split(' ')[0]) ||
-          Object.values(offer.location || {}).some(loc => loc.includes(filters.country.split(' ')[0]));
-        if (!matchesCountry) return false;
-      }
+      // Country filter — exact match against geocoded location.country
+      if (filters.country && offer.location?.country !== filters.country) return false;
 
       // Price Filter
       if (filters.priceRange) {
@@ -47,7 +48,7 @@ const CollectionManager = ({ initialOffers = [] }) => {
 
   return (
     <>
-      <RealEstateFilter filters={filters} setFilters={setFilters} />
+      <RealEstateFilter filters={filters} setFilters={setFilters} locationOptions={locationOptions} />
       <FeaturedProperties properties={filteredOffers} />
     </>
   );

@@ -61,7 +61,7 @@ const FeaturedProperties = ({ properties = [] }) => {
               key={prop.id || index}
               id={prop.id}
               title={prop.params?.miasto || "Luxury Estate"}
-              location={prop.location?.level2 || prop.params?.miasto}
+              location={prop.location?.city || prop.params?.miasto}
               beds={prop.params?.liczbapokoi}
               baths={prop.params?.liczbalazienek}
               area={`${prop.params?.powierzchnia}m²`}
