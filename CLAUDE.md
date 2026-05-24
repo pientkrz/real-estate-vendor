@@ -22,31 +22,41 @@ There is no lint script in `package.json` despite the README mentioning one — 
 
 This is an **Astro static site** (`output: 'static'`) deployed to GitHub Pages at `https://pientkrz.github.io/real-estate-vendor/`. The base path `/real-estate-vendor/` is set in `astro.config.mjs` — always use `import.meta.env.BASE_URL` for internal links in Astro pages/templates.
 
-### Data Flow: offers.xml
+### Data Flow: Otodom XML export
 
-All property listings come from a single XML file at `public/offers.xml`. The XML structure is:
+All property listings come from an Otodom-format XML export at `public/2026-05-23_13%3A07%3A04/properties_otodom.xml`. Photos are co-located in the same timestamped folder. The XML structure is:
 
 ```
-<plik> → <lista_ofert> → <dzial @tab @typ> → <oferta>
+<otoDom> → <Insertions> → <Insertion>
 ```
 
-`src/utils/xmlParser.js` (`parseOffersXml`) converts this into offer objects. Key Polish field names used throughout the codebase:
+`src/utils/xmlParser.js` exports two parsers — **`parseOtoDomXml`** (active) and the legacy `parseOffersXml` (unused, kept for reference). `parseOtoDomXml` takes the raw XML string and a `photoBasePath` prefix (e.g. `${import.meta.env.BASE_URL}2026-05-23_13%3A07%3A04/`) and returns normalised offer objects.
 
-| XML param `@nazwa` | Meaning |
-|--------------------|---------|
-| `miasto` | City/location |
-| `liczbapokoi` | Room count |
-| `liczbalazienek` | Bathroom count |
-| `powierzchnia` | Area (m²) |
-| `latitude` / `longitude` | Coordinates |
-| `opis` | Description (HTML) |
-| `zdjecie1`–`zdjecie4` | Photo URLs |
+Key Otodom XML fields and how they map to offer objects:
 
-**Index page**: XML is parsed server-side at build time in `src/pages/index.astro` using Node `fs`, then passed as `initialOffers` props to the `CollectionManager` React island — no client-side fetch needed on the homepage.
+| Otodom field | Offer property | Notes |
+|---|---|---|
+| `Insertion.ID` | `id` (`otodom-{ID}`) | |
+| `Insertion.ObjectName` | `tab` | 0=mieszkania, 1=domy, 2=dzialki, 3=pokoje, 4=lokale, 5=hale, 6=garaze |
+| `Insertion.OfferType` | `typ` | 1=wynajem, other=sprzedaz |
+| `Insertion.Price` | `price` | |
+| `Insertion.PriceCurrency` | `currency` | Resolved via `otodom-dictionary.json` |
+| `Insertion.Area` | `params.powierzchnia` | m² |
+| `*Details.RoomsNum` | `params.liczbapokoi` | From `FlatDetails`, `HouseDetails`, etc. |
+| `Insertion.GeoMarker.Latitude/Longitude` | `params.latitude/longitude` | |
+| `Insertion.Description` | `params.opis` | HTML |
+| `Insertion.Title` | `params.tytul` | Also used to derive `params.miasto` |
+| `Insertion.Photos.Photo[].File` | `params.zdjecie1…N` | Sorted by `Position`; prefixed with `photoBasePath` |
 
-**Property detail pages** (`src/pages/property/[id].astro`): Fully static with `getStaticPaths()` which reads the same XML to generate one page per offer.
+**Location derivation**: `params.miasto` is not in the XML — it is inferred from the offer title via keyword matching in `extractLocation()` (e.g. "mykonos" → `"Greece (Mykonos)"`). `CollectionManager` filters by `city.includes(filter.split(' ')[0])`.
 
-`src/hooks/useOffers.js` does a client-side `fetch('/offers.xml')` but is not used by the main pages; `CollectionManager` handles filtering directly with `useMemo`.
+**Insertions with `Action !== 0`** (deactivations/deletions) are skipped during parsing.
+
+**Index page**: XML is parsed server-side at build time in `src/pages/index.astro` using Node `fs`, then passed as `initialOffers` props to the `CollectionManager` React island — no client-side fetch on the homepage.
+
+**Property detail pages** (`src/pages/property/[id].astro`): Fully static via `getStaticPaths()`, which reads the same XML to generate one page per offer.
+
+`src/hooks/useOffers.js` is **stale** — it still fetches the old `/offers.xml` via `parseOffersXml` and is not used by any page.
 
 ### React Islands Pattern
 
