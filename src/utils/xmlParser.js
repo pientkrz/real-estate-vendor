@@ -3,7 +3,7 @@ import dict from './otodom-dictionary.json';
 
 // App-internal mapping from Otodom ObjectName code → offer tab slug
 const OBJECT_NAME_TAB = { 0: 'mieszkania', 1: 'domy', 2: 'dzialki', 3: 'pokoje', 4: 'lokale', 5: 'hale', 6: 'garaze' };
-# TODO: change this naive way of extracting the city since it is not guaranteed to be present in the title, and may be ambiguous (e.g. "Kreta" could refer to the island or to a street name in Warsaw)
+// TODO: change this naive way of extracting the city since it is not guaranteed to be present in the title, and may be ambiguous (e.g. "Kreta" could refer to the island or to a street name in Warsaw)
 // Maps title keywords (case-insensitive) to the city label used in the filter
 const LOCATION_KEYWORDS = [
   { words: ['mykonos'],                                                   label: 'Greece (Mykonos)' },
