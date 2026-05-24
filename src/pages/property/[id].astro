@@ -4,15 +4,16 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import AgentGrid from '../../components/AgentGrid';
 import PropertyMap from '../../components/PropertyMap';
-import { parseOffersXml } from '../../utils/xmlParser';
+import { parseOtoDomXml } from '../../utils/xmlParser';
 import fs from 'node:fs';
 import path from 'node:path';
 
 export async function getStaticPaths() {
-    const xmlPath = path.join(process.cwd(), 'public', 'offers.xml');
+    const xmlPath = path.join(process.cwd(), 'public', '2026-05-23_13%3A07%3A04', 'properties_otodom.xml');
     const xmlString = fs.readFileSync(xmlPath, 'utf-8');
-    const allOffers = parseOffersXml(xmlString);
-    
+    const photoBase = `${import.meta.env.BASE_URL}2026-05-23_13%3A07%3A04/`;
+    const allOffers = parseOtoDomXml(xmlString, photoBase);
+
     return allOffers.map(offer => ({
         params: { id: offer.id },
         props: { offer }
@@ -28,11 +29,14 @@ const formattedPrice = price
     : 'Contact for Price';
 
 const mainImage = params?.zdjecie1 || '/assets/placeholder.jpg';
-const galleryImages = [
-    params?.zdjecie2,
-    params?.zdjecie3,
-    params?.zdjecie4
-].filter(Boolean);
+
+// Dynamically collect all gallery photos (zdjecie2 onwards)
+const galleryImages = [];
+let _photoIdx = 2;
+while (params?.[`zdjecie${_photoIdx}`]) {
+    galleryImages.push(params[`zdjecie${_photoIdx}`]);
+    _photoIdx++;
+}
 
 const city = params?.miasto || 'The Estate';
 const fullAddress = `${location?.level2 || ''}, ${location?.level1 || ''}`.replace(/^, /, '');
