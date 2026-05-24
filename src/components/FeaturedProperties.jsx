@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatPrice } from '../utils/formatPrice';
 
 const PropertyCard = ({ id, title, location, beds, baths, area, price, image, status }) => {
   const base = import.meta.env.BASE_URL;
@@ -64,7 +65,7 @@ const FeaturedProperties = ({ properties = [] }) => {
               beds={prop.params?.liczbapokoi}
               baths={prop.params?.liczbalazienek}
               area={`${prop.params?.powierzchnia}m²`}
-              price={`${prop.currency === 'EUR' ? '€' : prop.currency}${(prop.price / 1000000).toFixed(1)}M`}
+              price={formatPrice(prop.price, prop.currency)}
               image={prop.params?.zdjecie1}
               status={prop.typ === 'sprzedaz' ? 'For Sale' : 'For Rent'}
             />

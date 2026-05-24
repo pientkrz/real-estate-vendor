@@ -5,6 +5,7 @@ import Footer from '../../components/Footer';
 import AgentGrid from '../../components/AgentGrid';
 import PropertyMap from '../../components/PropertyMap';
 import { parseOtoDomXml } from '../../utils/xmlParser';
+import { formatPrice } from '../../utils/formatPrice';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -24,9 +25,7 @@ const { offer } = Astro.props;
 const { params, location, price, currency } = offer;
 
 // Formatting helpers
-const formattedPrice = price 
-    ? `${currency === 'EUR' ? '€' : currency}${(price / 1000000).toFixed(2)}M`
-    : 'Contact for Price';
+const formattedPrice = formatPrice(price, currency);
 
 const mainImage = params?.zdjecie1 || '/assets/placeholder.jpg';
 
