@@ -103,11 +103,15 @@ const fullAddress = `${location?.city || ''}, ${location?.country || ''}`.replac
                         <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Beds</span>
                         <span class="text-xl font-headline font-bold">{params?.liczbapokoi}</span>
                     </div>
-                    <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
-                    <div>
-                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Baths</span>
-                        <span class="text-xl font-headline font-bold">{params?.liczbalazienek}</span>
-                    </div>
+                    {params?.liczbalazienek > 0 && (
+                        <>
+                            <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
+                            <div>
+                                <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Baths</span>
+                                <span class="text-xl font-headline font-bold">{params.liczbalazienek}</span>
+                            </div>
+                        </>
+                    )}
                 </div>
                 
                 <button class="hidden md:flex editorial-gradient px-8 py-3 rounded-none text-on-primary font-label uppercase tracking-widest text-[10px] items-center gap-3 group">
