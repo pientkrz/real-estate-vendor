@@ -25,9 +25,11 @@ const PropertyCard = ({ id, title, location, beds, baths, area, price, image, st
             <span className="flex items-center gap-2">
               <span className="material-symbols-outlined text-sm">bed</span> {beds} Beds
             </span>
-            <span className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm">shower</span> {baths} Baths
-            </span>
+            {baths > 0 && (
+              <span className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-sm">shower</span> {baths} Baths
+              </span>
+            )}
             <span className="flex items-center gap-2">
               <span className="material-symbols-outlined text-sm">straighten</span> {area}
             </span>
