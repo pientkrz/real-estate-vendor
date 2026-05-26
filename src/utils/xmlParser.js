@@ -1,6 +1,7 @@
 import { XMLParser } from 'fast-xml-parser';
 import dict from './otodom-dictionary.json';
 import { reverseGeocode } from './reverseGeocode.js';
+import { validateOtoDomXml } from './xmlValidator.js';
 
 // ── Otodom XML parser ─────────────────────────────────────────────────────────
 
@@ -8,12 +9,25 @@ import { reverseGeocode } from './reverseGeocode.js';
  * Parses an Otodom-format XML file into the normalised offer shape that the
  * existing filter / display components expect.
  *
+ * Runs XML validation on every parse and logs warnings to the console when
+ * required fields are missing (validation failures do NOT abort parsing —
+ * valid insertions are still returned).
+ *
  * @param {string} xmlString       Raw XML content of the Otodom export file
  * @param {string} photoBasePath   URL prefix for photo files,
  *                                 e.g. "/real-estate-vendor/2026-05-23_13%3A07%3A04/"
  * @returns {Array} Normalised offer objects
  */
 export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
+  // ── Validate and log any spec violations ──────────────────────────────────
+  const validation = validateOtoDomXml(xmlString);
+  if (!validation.valid) {
+    console.warn(
+      `[otodom-parser] XML validation found ${validation.errors.length} issue(s):`,
+    );
+    validation.errors.forEach((err) => console.warn(`  ✗ ${err}`));
+  }
+
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: '@_',
@@ -32,6 +46,7 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
     if (parseInt(ins.Action) !== 0) continue;
 
     // Resolve the details block for this object type
+    const objectName = parseInt(ins.ObjectName);
     const details =
       ins.FlatDetails ??
       ins.HouseDetails ??
@@ -49,6 +64,10 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
     const offer = {
       id: `otodom-${ins.ID}`,
       tab: dict.ObjectName[String(ins.ObjectName)] ?? '',
+      /** Numeric ObjectName code (0–6); drives PropertyDetailsPanel dispatch */
+      objectName,
+      /** Raw details block from the XML; fed into propertyDetailsResolver */
+      rawDetails: details,
       typ: parseInt(ins.OfferType) === 1 ? 'wynajem' : 'sprzedaz',
       price: parseFloat(ins.Price || 0),
       currency: dict.PriceCurrency[String(ins.PriceCurrency)] ?? 'EUR',
