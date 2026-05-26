@@ -7,6 +7,7 @@ import PropertyMap from '../../components/PropertyMap';
 import PropertyDetailsPanel from '../../components/property-details/PropertyDetailsPanel';
 import { parseOtoDomXml } from '../../utils/xmlParser';
 import { formatPrice } from '../../utils/formatPrice';
+import { getYouTubeEmbedUrl } from '../../utils/videoUrl';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -27,6 +28,8 @@ const { params, location, price, currency } = offer;
 
 // Formatting helpers
 const formattedPrice = formatPrice(price, currency);
+
+const embedUrl = getYouTubeEmbedUrl(offer.videoUrl);
 
 const mainImage = params?.zdjecie1 || '/assets/placeholder.jpg';
 
@@ -187,6 +190,27 @@ const fullAddress = `${location?.city || ''}, ${location?.country || ''}`.replac
                 </div>
             </div>
         </section>
+
+        <!-- YouTube Video Tour (only rendered when a Video URL is present) -->
+        {embedUrl && (
+            <section class="py-24 border-t border-outline/5">
+                <div class="max-w-7xl mx-auto px-6 md:px-12">
+                    <div class="mb-12">
+                        <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Property Tour</span>
+                        <h2 class="text-5xl font-headline font-bold text-on-surface tracking-tighter">Visual Journey</h2>
+                    </div>
+                    <div class="aspect-video w-full rounded-sm overflow-hidden shadow-2xl">
+                        <iframe
+                            src={embedUrl}
+                            title="Property video tour"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen
+                            class="w-full h-full"
+                        />
+                    </div>
+                </div>
+            </section>
+        )}
 
         <!-- Localization Section: The Enclave -->
         <section class="py-24 bg-surface-container-low/30 border-t border-outline/5">

@@ -71,6 +71,8 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
       typ: parseInt(ins.OfferType) === 1 ? 'wynajem' : 'sprzedaz',
       price: parseFloat(ins.Price || 0),
       currency: dict.PriceCurrency[String(ins.PriceCurrency)] ?? 'EUR',
+      /** YouTube watch URL from <Video> tag, if present */
+      videoUrl: ins.Video || null,
       params: {
         powierzchnia:   parseFloat(ins.Area || 0),
         liczbapokoi:    parseInt(details?.RoomsNum || 0),
