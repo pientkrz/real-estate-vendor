@@ -59,7 +59,7 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
 
     const lat = parseFloat(ins.GeoMarker?.Latitude || 0);
     const lon = parseFloat(ins.GeoMarker?.Longitude || 0);
-    const { city, country } = reverseGeocode(lat, lon);
+    const { city, country, region } = reverseGeocode(lat, lon);
 
     const offer = {
       id: `otodom-${ins.ID}`,
@@ -83,7 +83,7 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
         longitude:      lon,
         tytul:          ins.Title || '',
       },
-      location: { country, city },
+      location: { country, city, region },
     };
 
     // Sort photos by Position (ascending) and assign as zdjecie1…N

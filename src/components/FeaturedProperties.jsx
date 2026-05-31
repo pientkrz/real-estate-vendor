@@ -1,7 +1,10 @@
 import React from 'react';
 import { formatPrice } from '../utils/formatPrice';
 
-const PropertyCard = ({ id, title, location, beds, baths, area, price, image, status }) => {
+const buildLocation = (city, region, country) =>
+  [city, region, country].filter(Boolean).join(', ');
+
+const PropertyCard = ({ id, title, city, region, country, beds, baths, area, price, image, status }) => {
   const base = import.meta.env.BASE_URL;
   return (
     <a href={`${base}property/${id}`} className="group block cursor-pointer">
@@ -20,7 +23,7 @@ const PropertyCard = ({ id, title, location, beds, baths, area, price, image, st
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-2xl font-headline font-bold mb-1">{title}</h3>
-          <p className="text-on-surface-variant font-body text-sm mb-4">{location}</p>
+          <p className="text-on-surface-variant font-body text-sm mb-4">{buildLocation(city, region, country)}</p>
           <div className="flex items-center gap-6 text-outline text-xs uppercase tracking-wider">
             <span className="flex items-center gap-2">
               <span className="material-symbols-outlined text-sm">bed</span> {beds} Beds
@@ -63,7 +66,9 @@ const FeaturedProperties = ({ properties = [] }) => {
               key={prop.id || index}
               id={prop.id}
               title={prop.params?.miasto || "Luxury Estate"}
-              location={prop.location?.city || prop.params?.miasto}
+              city={prop.location?.city || prop.params?.miasto}
+              region={prop.location?.region}
+              country={prop.location?.country}
               beds={prop.params?.liczbapokoi}
               baths={prop.params?.liczbalazienek}
               area={`${prop.params?.powierzchnia}m²`}

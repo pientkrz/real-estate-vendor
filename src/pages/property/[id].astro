@@ -42,7 +42,7 @@ while (params?.[`zdjecie${_photoIdx}`]) {
 }
 
 const city = params?.miasto || 'The Estate';
-const fullAddress = `${location?.city || ''}, ${location?.country || ''}`.replace(/^, /, '');
+const fullAddress = [location?.city, location?.region, location?.country].filter(Boolean).join(', ');
 ---
 
 <Layout title={`${city} | Local T P`} description={params?.opis?.substring(0, 160)}>

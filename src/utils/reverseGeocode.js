@@ -53,11 +53,16 @@ export const reverseGeocode = (lat, lon) => {
 
   const countryCode = nearest?.country ?? '';
   const country = countryCode ? (displayNames.of(countryCode) ?? countryCode) : '';
+  const rawAdmin = nearest?.adminCode ?? '';
+  // Only keep admin codes that are human-readable (alphabetic, e.g. US states "CA", UK "ENG").
+  // Purely numeric GeoNames codes (e.g. Greek regions "91") are not surfaced.
+  const region = /^[A-Za-z]+$/.test(rawAdmin) ? rawAdmin : '';
 
   // todo getting the nearest city instead of the actual city might be problematic - needs to verify with broker
   return {
     city: nearest?.name ?? '',
     country,
     countryCode,
+    region,
   };
 };
