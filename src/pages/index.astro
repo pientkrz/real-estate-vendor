@@ -1,36 +1,18 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar';
-import Hero from '../components/Hero';
 import CollectionManager from '../components/CollectionManager';
-import Ethos from '../components/Ethos';
-import Footer from '../components/Footer';
 import { parseOtoDomXml } from '../utils/xmlParser';
 import fs from 'node:fs';
 import path from 'node:path';
 
-// Server-side parsing of Otodom XML for initial data
 const xmlPath = path.join(process.cwd(), 'public', '2026-05-23_13%3A07%3A04', 'properties_otodom.xml');
 const xmlString = fs.readFileSync(xmlPath, 'utf-8');
 const photoBase = `${import.meta.env.BASE_URL}2026-05-23_13%3A07%3A04/`;
 const allOffers = parseOtoDomXml(xmlString, photoBase);
-
-// We still pass data to React 'Islands'
 ---
 
-<Layout title="Local T P | Premium Real Estate Collective">
+<Layout title="Local T P | Premium Real Estate Collective" lockViewport>
 	<Navbar client:load />
-	<main>
-		<Hero>
-			<CollectionManager client:load initialOffers={allOffers} />
-		</Hero>
-		
-		<Ethos />
-
-	</main>
-	<Footer />
+	<CollectionManager client:only="react" initialOffers={allOffers} />
 </Layout>
-
-<style>
-	/* Any page-specific styles */
-</style>

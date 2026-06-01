@@ -1,87 +1,97 @@
 import React from 'react';
 import { formatPrice } from '../utils/formatPrice';
 
-const buildLocation = (city, region, country) =>
-  [city, region, country].filter(Boolean).join(', ');
-
-const PropertyCard = ({ id, title, city, region, country, beds, baths, area, price, image, status }) => {
+const PropertyCard = ({ id, title, city, region, country, beds, baths, area, price, image, status, tab }) => {
   const base = import.meta.env.BASE_URL;
+  const loc = [city, region, country].filter(Boolean).join(', ');
+
   return (
     <a href={`${base}property/${id}`} className="group block cursor-pointer">
-      <div className="relative overflow-hidden aspect-[4/5] mb-6 rounded-sm">
+      <div className="relative overflow-hidden mb-6 aspect-[4/3] rounded-sm">
         <img
           alt={title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           src={image}
+          className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
         />
-        <div className="absolute top-6 left-6">
-          <span className="bg-surface/90 glass-effect px-4 py-1 text-[10px] font-label uppercase tracking-widest text-on-surface">
+        <div className="absolute top-4 left-4">
+          <span className="bg-surface/90 backdrop-blur-md px-3 py-1 font-label text-[10px] tracking-widest text-primary uppercase">
             {status}
           </span>
         </div>
+        <button
+          className="absolute top-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={e => e.preventDefault()}
+        >
+          <span className="material-symbols-outlined">favorite</span>
+        </button>
       </div>
-      <div className="flex justify-between items-start">
-        <div>
-          <h3 className="text-2xl font-headline font-bold mb-1">{title}</h3>
-          <p className="text-on-surface-variant font-body text-sm mb-4">{buildLocation(city, region, country)}</p>
-          <div className="flex items-center gap-6 text-outline text-xs uppercase tracking-wider">
-            <span className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm">bed</span> {beds} Beds
-            </span>
-            {baths > 0 && (
-              <span className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-sm">shower</span> {baths} Baths
-              </span>
-            )}
-            <span className="flex items-center gap-2">
-              <span className="material-symbols-outlined text-sm">straighten</span> {area}
-            </span>
-          </div>
+
+      <div className="space-y-2">
+        <div className="flex justify-between items-start gap-4">
+          <h3 className="font-headline text-xl font-bold tracking-tight text-on-surface">{title}</h3>
+          <span className="font-headline text-lg font-bold text-primary shrink-0">{price}</span>
         </div>
-        <p className="text-primary font-headline font-bold text-xl">{price}</p>
+        <p className="text-on-surface-variant text-sm font-body">{loc}</p>
+        <div className="flex gap-6 pt-2 font-label text-[10px] uppercase tracking-tighter text-outline">
+          {beds > 0 && (
+            <span className="flex items-center gap-1">
+              <span className="material-symbols-outlined text-sm">bed</span> {beds} Sypialni
+            </span>
+          )}
+          {baths > 0 && (
+            <span className="flex items-center gap-1">
+              <span className="material-symbols-outlined text-sm">bathtub</span> {baths} Łazienek
+            </span>
+          )}
+          {area && (
+            <span className="flex items-center gap-1">
+              <span className="material-symbols-outlined text-sm">square_foot</span> {area}
+            </span>
+          )}
+        </div>
       </div>
     </a>
   );
 };
 
+const FeaturedProperties = ({ properties = [] }) => (
+  <div className="p-8 space-y-12">
+    <div className="flex justify-between items-baseline">
+      <h1 className="font-headline text-3xl font-bold tracking-tight text-on-surface">
+        Wyselekcjonowane oferty
+      </h1>
+      <p className="font-label text-xs text-outline tracking-widest uppercase shrink-0 ml-4">
+        {properties.length} nieruchomości
+      </p>
+    </div>
 
-const FeaturedProperties = ({ properties = [] }) => {
-  return (
-    <section className="px-12 py-32 max-w-screen-2xl mx-auto">
-      <div className="flex justify-between items-end mb-16">
-        <div>
-          <span className="text-primary font-label text-sm tracking-[0.2em] uppercase mb-4 block">Curated Listings</span>
-          <h2 className="text-5xl font-headline font-bold tracking-tight">The Architectural Collection</h2>
-        </div>
-        <button className="text-primary font-semibold border-b border-primary pb-1 hover:opacity-70 transition-opacity">
-          View Full Portfolio
-        </button>
+    {properties.length === 0 ? (
+      <div className="py-16 text-center">
+        <span className="material-symbols-outlined text-4xl text-outline/30 mb-4 block">search_off</span>
+        <p className="text-on-surface-variant font-body italic text-sm">
+          Brak nieruchomości spełniających kryteria.
+        </p>
       </div>
-      {properties.length === 0 ? (
-        <div className="text-center py-12 text-on-surface-variant font-body italic">No estates match your current criteria.</div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {properties.map((prop, index) => (
-            <PropertyCard
-              key={prop.id || index}
-              id={prop.id}
-              title={prop.params?.miasto || "Luxury Estate"}
-              city={prop.location?.city || prop.params?.miasto}
-              region={prop.location?.region}
-              country={prop.location?.country}
-              beds={prop.params?.liczbapokoi}
-              baths={prop.params?.liczbalazienek}
-              area={`${prop.params?.powierzchnia}m²`}
-              price={formatPrice(prop.price, prop.currency)}
-              image={prop.params?.zdjecie1}
-              status={prop.typ === 'sprzedaz' ? 'For Sale' : 'For Rent'}
-            />
-
-          ))}
-        </div>
-      )}
-    </section>
-  );
-};
+    ) : (
+      properties.map((prop, index) => (
+        <PropertyCard
+          key={prop.id || index}
+          id={prop.id}
+          tab={prop.tab}
+          title={prop.params?.miasto || 'Luxury Estate'}
+          city={prop.location?.city || prop.params?.miasto}
+          region={prop.location?.region}
+          country={prop.location?.country}
+          beds={prop.params?.liczbapokoi}
+          baths={prop.params?.liczbalazienek}
+          area={prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : ''}
+          price={formatPrice(prop.price, prop.currency)}
+          image={prop.params?.zdjecie1}
+          status={prop.typ === 'sprzedaz' ? 'Na sprzedaż' : 'Wynajem'}
+        />
+      ))
+    )}
+  </div>
+);
 
 export default FeaturedProperties;
