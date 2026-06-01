@@ -8,7 +8,7 @@ import path from 'node:path';
 
 const xmlPath = path.join(process.cwd(), 'public', '2026-05-23_13%3A07%3A04', 'properties_otodom.xml');
 const xmlString = fs.readFileSync(xmlPath, 'utf-8');
-const photoBase = `${import.meta.env.BASE_URL}2026-05-23_13%3A07%3A04/`;
+const photoBase = import.meta.env.PHOTO_BASE_URL ?? `${import.meta.env.BASE_URL}2026-05-23_13%3A07%3A04/`;
 const allOffers = parseOtoDomXml(xmlString, photoBase);
 ---
 
