@@ -18,12 +18,6 @@ const PropertyCard = ({ id, title, city, region, country, beds, baths, area, pri
             {status}
           </span>
         </div>
-        <button
-          className="absolute top-4 right-4 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={e => e.preventDefault()}
-        >
-          <span className="material-symbols-outlined">favorite</span>
-        </button>
       </div>
 
       <div className="space-y-2">
