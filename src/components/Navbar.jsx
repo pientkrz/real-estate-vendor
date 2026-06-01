@@ -11,7 +11,7 @@ const Navbar = () => {
           <a className="text-stone-600 hover:text-stone-900 font-headline transition-colors duration-300 ease-in-out" href={import.meta.env.BASE_URL}>Nieruchomości</a>
           <a className="text-stone-600 hover:text-stone-900 font-headline transition-colors duration-300 ease-in-out" href={`${import.meta.env.BASE_URL}blog`}>Blog</a>
           <a className="text-stone-600 hover:text-stone-900 font-headline transition-colors duration-300 ease-in-out" href={import.meta.env.BASE_URL}>O Nas</a>
-          <a className="text-stone-600 hover:text-stone-900 font-headline transition-colors duration-300 ease-in-out" href={import.meta.env.BASE_URL}>Kontakt</a>
+          <a className="text-stone-600 hover:text-stone-900 font-headline transition-colors duration-300 ease-in-out" href={`${import.meta.env.BASE_URL}contact`}>Kontakt</a>
         </div>
         <div className="flex items-center gap-6">
           <button className="editorial-gradient text-on-primary px-8 py-3 rounded-lg font-semibold tracking-tight transition-transform active:scale-95">
