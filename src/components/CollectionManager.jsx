@@ -5,7 +5,7 @@ import FeaturedProperties from './FeaturedProperties';
 // Leaflet is browser-only — lazy-load so SSR renders the fallback
 const ListingsMap = lazy(() => import('./ListingsMap'));
 
-const NAV_H = 88;
+const NAV_H = 96;
 
 const CollectionManager = ({ initialOffers = [] }) => {
   const [filters, setFilters] = useState({
@@ -35,9 +35,9 @@ const CollectionManager = ({ initialOffers = [] }) => {
   }, [initialOffers, filters]);
 
   return (
-    <div className="pt-[88px]">
+    <div className="pt-[96px]">
       {/* Map — full width */}
-      <section className="h-[512px] w-full relative overflow-hidden bg-surface-container-low">
+      <section className="h-[420px] w-full relative overflow-hidden bg-surface-container-low">
         <Suspense
           fallback={
             <div className="w-full h-full flex items-center justify-center">
@@ -55,7 +55,7 @@ const CollectionManager = ({ initialOffers = [] }) => {
       </div>
 
       {/* Listings grid */}
-      <div className="px-8 py-16 max-w-screen-2xl mx-auto w-full">
+      <div className="px-8 py-6 w-full">
         <FeaturedProperties properties={filteredOffers} />
       </div>
     </div>

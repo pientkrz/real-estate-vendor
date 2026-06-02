@@ -7,7 +7,7 @@ const PropertyCard = ({ id, title, city, region, country, beds, baths, area, pri
 
   return (
     <a href={`${base}property/${id}`} className="group block cursor-pointer">
-      <div className="relative overflow-hidden mb-6 aspect-[4/5] rounded-sm">
+      <div className="relative overflow-hidden mb-4 aspect-[4/5] lg:aspect-[5/3] rounded-sm">
         <img
           alt={title}
           src={image}
@@ -50,14 +50,11 @@ const PropertyCard = ({ id, title, city, region, country, beds, baths, area, pri
 
 const FeaturedProperties = ({ properties = [] }) => (
   <div>
-    <div className="mb-12 flex justify-between items-end">
+    <div className="mb-4 flex justify-between items-end">
       <div>
         <h2 className="font-headline text-4xl font-bold tracking-tight text-on-surface mb-2">
           Wyselekcjonowane oferty
         </h2>
-        <p className="text-on-surface-variant font-body max-w-lg">
-          Wyselekcjonowane nieruchomości definiowane przez integralność strukturalną i klarowność przestrzenną.
-        </p>
       </div>
       <p className="font-label text-xs text-outline tracking-widest uppercase shrink-0 ml-4">
         {properties.length} nieruchomości
@@ -72,9 +69,9 @@ const FeaturedProperties = ({ properties = [] }) => (
         </p>
       </div>
     ) : (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-8 gap-y-10">
         {properties.map((prop, index) => (
-          <div key={prop.id || index} className={index % 3 === 1 ? 'lg:pt-12' : ''}>
+          <div key={prop.id || index} className={index % 3 === 1 ? 'lg:pt-12 xl:pt-0' : ''}>
             <PropertyCard
               id={prop.id}
               tab={prop.tab}
