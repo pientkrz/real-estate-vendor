@@ -1,7 +1,7 @@
 import React from 'react';
 import { formatPrice } from '../utils/formatPrice';
 
-const PropertyCard = ({ id, title, city, region, country, beds, baths, area, price, image, status }) => {
+const PropertyCard = ({ id, title, city, region, country, rooms, baths, area, price, image, status }) => {
   const base = import.meta.env.BASE_URL;
   const loc = [city, region, country].filter(Boolean).join(', ');
 
@@ -27,9 +27,9 @@ const PropertyCard = ({ id, title, city, region, country, beds, baths, area, pri
         </div>
         <p className="text-on-surface-variant text-sm font-body">{loc}</p>
         <div className="flex gap-6 pt-2 font-label text-[10px] uppercase tracking-tighter text-outline">
-          {beds > 0 && (
+          {rooms > 0 && (
             <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">bed</span> {beds} Sypialni
+              <span className="material-symbols-outlined text-sm">meeting_room</span> {rooms} Pokoi
             </span>
           )}
           {baths > 0 && (
@@ -77,7 +77,7 @@ const FeaturedProperties = ({ properties = [] }) => (
               city={prop.location?.city || prop.params?.miasto}
               region={prop.location?.region}
               country={prop.location?.country}
-              beds={prop.params?.liczbapokoi}
+              rooms={prop.params?.liczbapokoi}
               baths={prop.params?.liczbalazienek}
               area={prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : ''}
               price={formatPrice(prop.price, prop.currency)}
