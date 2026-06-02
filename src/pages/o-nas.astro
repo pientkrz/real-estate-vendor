@@ -1,0 +1,160 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+---
+
+<Layout title="O nas | Global S Home">
+  <Navbar client:load />
+
+  <main class="bg-surface min-h-screen overflow-x-hidden">
+    <section class="pt-[96px] relative">
+
+      <!-- Decorative globe watermark -->
+      <div class="absolute top-1/2 right-[-10%] -translate-y-1/2 w-[700px] h-[700px] pointer-events-none opacity-[0.035] hidden lg:block">
+        <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" class="w-full h-full">
+          <circle cx="200" cy="200" r="196" stroke="#7a590c" stroke-width="2" fill="none"/>
+          <ellipse cx="200" cy="120" rx="162" ry="35" stroke="#7a590c" stroke-width="1.5" fill="none"/>
+          <ellipse cx="200" cy="200" rx="196" ry="45" stroke="#7a590c" stroke-width="1.5" fill="none"/>
+          <ellipse cx="200" cy="280" rx="162" ry="35" stroke="#7a590c" stroke-width="1.5" fill="none"/>
+          <ellipse cx="200" cy="200" rx="50" ry="196" stroke="#7a590c" stroke-width="1.5" fill="none"/>
+          <ellipse cx="200" cy="200" rx="115" ry="196" stroke="#7a590c" stroke-width="1.5" fill="none"/>
+          <ellipse cx="200" cy="200" rx="196" ry="50" stroke="#7a590c" stroke-width="1.5" fill="none" transform="rotate(0 200 200)"/>
+          <line x1="200" y1="4" x2="200" y2="396" stroke="#7a590c" stroke-width="1.5"/>
+          <line x1="4" y1="200" x2="396" y2="200" stroke="#7a590c" stroke-width="1.5"/>
+        </svg>
+      </div>
+
+      <div class="relative z-10 max-w-screen-xl mx-auto px-6 lg:px-16 py-16 lg:py-28 grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center min-h-[calc(100vh-96px)]">
+
+        <!-- Left: Text content -->
+        <div>
+          <h1 class="font-headline text-5xl lg:text-7xl font-bold text-on-surface tracking-tight mb-10">
+            O nas
+          </h1>
+
+          <div class="font-body text-on-surface-variant leading-[1.8] space-y-6 text-[15px] lg:text-[17px]">
+            <p>
+              Od lat wspieramy klientów oraz inwestorów na rynku nieruchomości w Polsce. Czy w tej branży może być coś przyjemniejszego niż nieruchomości skąpane w promieniach śródziemnomorskiego słońca?
+            </p>
+
+            <p>
+              Dla nas to <strong class="text-on-surface font-bold">PASJA</strong> i z przyjemnością chcemy spełnić Twoje marzenia. Wychodząc naprzeciw oczekiwaniom naszych klientów, którzy coraz częściej wybierają śródziemnomorskie raje zamiast lokalnych opcji, nasza firma otwiera ten rynek.
+            </p>
+
+            <p>
+              Misją <em>Global S Home</em> jest <strong class="text-on-surface font-bold">POSZERZANIE HORYZONTÓW</strong> inwestycyjnych na rynku nieruchomości.<br/>
+              Dlaczego inwestycje na Cyprze, w Grecji, Hiszpanii i ZEA (Dubaj) są tak atrakcyjne? Ponieważ to nie tylko bezpieczne ulokowanie kapitału na przyszłość, ale również doskonała <strong class="text-on-surface font-bold">OKAZJA</strong> na osiągnięcie stabilnego zysku.
+            </p>
+
+            <p>
+              Nasz Zespół zapewni kompleksowe wsparcie przy nabyciu nieruchomości. Prezentujemy sprawdzone inwestycje z rynku pierwotnego i wtórnego, dzięki czemu masz <strong class="text-on-surface font-bold">PEWNOŚĆ</strong>, że dobrze zainwestujesz swoje pieniądze.
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Logo -->
+        <div class="flex items-center justify-center lg:justify-end">
+          <svg viewBox="0 0 500 220" xmlns="http://www.w3.org/2000/svg" class="w-full max-w-[460px]" aria-label="Global S Home logo">
+            <defs>
+              <radialGradient id="coinGold" cx="38%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#f5d48a"/>
+                <stop offset="40%" stop-color="#c9984a"/>
+                <stop offset="100%" stop-color="#7a590c"/>
+              </radialGradient>
+              <radialGradient id="coinSheen" cx="38%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#fde9a8" stop-opacity="0.7"/>
+                <stop offset="60%" stop-color="#c2994a" stop-opacity="0"/>
+              </radialGradient>
+              <clipPath id="coinClip">
+                <circle cx="110" cy="110" r="103"/>
+              </clipPath>
+              <linearGradient id="textGold" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#c2994a"/>
+                <stop offset="100%" stop-color="#7a590c"/>
+              </linearGradient>
+            </defs>
+
+            <!-- Coin shadow -->
+            <ellipse cx="112" cy="217" rx="88" ry="6" fill="#7a590c" opacity="0.08"/>
+
+            <!-- Outer decorative ring -->
+            <circle cx="110" cy="110" r="108" fill="none" stroke="#c2994a" stroke-width="1" opacity="0.5"/>
+            <circle cx="110" cy="110" r="104" fill="none" stroke="#edc06d" stroke-width="0.5" opacity="0.4"/>
+
+            <!-- Coin fill -->
+            <circle cx="110" cy="110" r="103" fill="url(#coinGold)"/>
+
+            <!-- Globe meridians & parallels (clipped) -->
+            <g clip-path="url(#coinClip)" fill="none" stroke="#fcf9f8" stroke-width="0.8" opacity="0.2">
+              <!-- parallels -->
+              <ellipse cx="110" cy="60"  rx="86" ry="18"/>
+              <ellipse cx="110" cy="110" rx="103" ry="22"/>
+              <ellipse cx="110" cy="160" rx="86" ry="18"/>
+              <ellipse cx="110" cy="35"  rx="55" ry="10"/>
+              <ellipse cx="110" cy="185" rx="55" ry="10"/>
+              <!-- meridians -->
+              <ellipse cx="110" cy="110" rx="26" ry="103"/>
+              <ellipse cx="110" cy="110" rx="26" ry="103" transform="rotate(40 110 110)"/>
+              <ellipse cx="110" cy="110" rx="26" ry="103" transform="rotate(80 110 110)"/>
+              <ellipse cx="110" cy="110" rx="26" ry="103" transform="rotate(120 110 110)"/>
+              <ellipse cx="110" cy="110" rx="26" ry="103" transform="rotate(160 110 110)"/>
+            </g>
+
+            <!-- Coin sheen overlay -->
+            <circle cx="110" cy="110" r="103" fill="url(#coinSheen)"/>
+
+            <!-- S letter -->
+            <text
+              x="110" y="143"
+              text-anchor="middle"
+              font-family="Work Sans, sans-serif"
+              font-weight="900"
+              font-size="105"
+              fill="#fcf9f8"
+              opacity="0.92"
+              letter-spacing="-2"
+            >S</text>
+
+            <!-- House + palm tree icon (top right of text section) -->
+            <g transform="translate(448, 8)" fill="none">
+              <!-- Palm trunk -->
+              <line x1="26" y1="48" x2="20" y2="20" stroke="#c2994a" stroke-width="1.8" stroke-linecap="round"/>
+              <!-- Palm leaves -->
+              <path d="M20 20 Q8 12 5 18 Q13 18 20 20Z" fill="#c2994a"/>
+              <path d="M20 20 Q14 8 20 6 Q21 14 20 20Z" fill="#c2994a"/>
+              <path d="M20 20 Q28 8 32 14 Q25 16 20 20Z" fill="#c2994a"/>
+              <path d="M20 20 Q28 18 34 22 Q27 22 20 20Z" fill="#c2994a"/>
+              <!-- House -->
+              <path d="M2 48 L12 35 L22 48 L22 58 L2 58 Z" stroke="#c2994a" stroke-width="1.8" stroke-linejoin="round"/>
+              <rect x="9" y="50" width="6" height="8" fill="#c2994a" opacity="0.7"/>
+            </g>
+
+            <!-- GLOBAL label -->
+            <text
+              x="248" y="88"
+              font-family="Work Sans, sans-serif"
+              font-weight="700"
+              font-size="19"
+              fill="url(#textGold)"
+              letter-spacing="7"
+            >GLOBAL</text>
+
+            <!-- S HOME -->
+            <text
+              x="238" y="162"
+              font-family="Work Sans, sans-serif"
+              font-weight="800"
+              font-size="68"
+              fill="url(#textGold)"
+              letter-spacing="2"
+            >S HOME</text>
+          </svg>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <Footer client:load />
+</Layout>
