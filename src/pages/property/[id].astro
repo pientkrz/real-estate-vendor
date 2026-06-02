@@ -3,7 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import AgentGrid from '../../components/AgentGrid';
-import SimilarProperties from '../../components/SimilarProperties';
+import FeaturedProperties from '../../components/FeaturedProperties';
 import PropertyMap from '../../components/PropertyMap';
 import PropertyDetailsPanel from '../../components/property-details/PropertyDetailsPanel';
 import { parseOtoDomXml } from '../../utils/xmlParser';
@@ -242,7 +242,13 @@ const fullAddress = [location?.city, location?.region, location?.country].filter
         </section>
 
         <!-- Similar Properties -->
-        <SimilarProperties properties={relatedOffers} />
+        {relatedOffers?.length > 0 && (
+            <section class="py-24 border-t border-outline/5">
+                <div class="max-w-7xl mx-auto px-6 md:px-12">
+                    <FeaturedProperties properties={relatedOffers} title="Podobne nieruchomości" />
+                </div>
+            </section>
+        )}
 
         <!-- Integrated Agent Grid -->
         <AgentGrid />

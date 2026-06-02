@@ -48,11 +48,11 @@ const PropertyCard = ({ id, title, city, region, country, rooms, baths, area, pr
   );
 };
 
-const FeaturedProperties = ({ properties = [] }) => (
+const FeaturedProperties = ({ properties = [], title = 'Wyselekcjonowane oferty' }) => (
   <div>
     <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end">
       <h2 className="font-headline text-2xl lg:text-4xl font-bold tracking-tight text-on-surface">
-        Wyselekcjonowane oferty
+        {title}
       </h2>
       <p className="font-label text-xs text-outline tracking-widest uppercase">
         {properties.length} nieruchomości
