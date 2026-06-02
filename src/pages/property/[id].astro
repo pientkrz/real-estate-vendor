@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import AgentGrid from '../../components/AgentGrid';
+import SimilarProperties from '../../components/SimilarProperties';
 import PropertyMap from '../../components/PropertyMap';
 import PropertyDetailsPanel from '../../components/property-details/PropertyDetailsPanel';
 import { parseOtoDomXml } from '../../utils/xmlParser';
@@ -25,6 +26,22 @@ export async function getStaticPaths() {
 
 const { offer } = Astro.props;
 const { params, location, price, currency } = offer;
+
+// Compute 3 most similar properties by price (60%) + area (40%) proximity
+const _xmlPath = path.join(process.cwd(), 'public', '2026-05-23_13%3A07%3A04', 'properties_otodom.xml');
+const _allOffers = parseOtoDomXml(fs.readFileSync(_xmlPath, 'utf-8'), import.meta.env.PHOTO_BASE_URL);
+const _cp = price || 0;
+const _ca = params?.powierzchnia || 0;
+const relatedOffers = _allOffers
+    .filter(o => o.id !== offer.id)
+    .map(o => {
+        const pd = _cp > 0 ? Math.abs((o.price || 0) - _cp) / _cp : 1;
+        const ad = _ca > 0 ? Math.abs((o.params?.powierzchnia || 0) - _ca) / _ca : 1;
+        return { offer: o, score: pd * 0.6 + ad * 0.4 };
+    })
+    .sort((a, b) => a.score - b.score)
+    .slice(0, 3)
+    .map(x => x.offer);
 
 // Formatting helpers
 const formattedPrice = formatPrice(price, currency);
@@ -103,7 +120,7 @@ const fullAddress = [location?.city, location?.region, location?.country].filter
                     </div>
                     <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
                     <div>
-                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Beds</span>
+                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Pokoje</span>
                         <span class="text-xl font-headline font-bold">{params?.liczbapokoi}</span>
                     </div>
                     {params?.liczbalazienek > 0 && (
@@ -223,6 +240,9 @@ const fullAddress = [location?.city, location?.region, location?.country].filter
                 <PropertyMap client:only="react" location={location} city={city} params={params} />
             </div>
         </section>
+
+        <!-- Similar Properties -->
+        <SimilarProperties properties={relatedOffers} />
 
         <!-- Integrated Agent Grid -->
         <AgentGrid />
