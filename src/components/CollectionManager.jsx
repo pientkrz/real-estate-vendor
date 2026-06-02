@@ -35,7 +35,7 @@ const CollectionManager = ({ initialOffers = [] }) => {
   }, [initialOffers, filters]);
 
   return (
-    <div className="pt-[96px]">
+    <div className="pt-[96px] overflow-x-hidden">
       {/* Map — full width */}
       <section className="h-[420px] w-full relative overflow-hidden bg-surface-container-low">
         <Suspense
@@ -55,7 +55,7 @@ const CollectionManager = ({ initialOffers = [] }) => {
       </div>
 
       {/* Listings grid */}
-      <div className="px-8 py-6 w-full">
+      <div className="px-4 lg:px-8 py-6 w-full">
         <FeaturedProperties properties={filteredOffers} />
       </div>
     </div>

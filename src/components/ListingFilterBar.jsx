@@ -52,7 +52,7 @@ const ListingFilterBar = ({ offers, filters, setFilters }) => {
     setFilters({ priceMin: minPrice, priceMax: maxPrice, country: '', tab: '', minRooms: '', sortBy: 'price-desc' });
 
   return (
-    <section className="bg-surface px-8 py-4 border-b border-outline-variant/10 flex-shrink-0">
+    <section className="bg-surface px-4 lg:px-8 py-4 border-b border-outline-variant/10 flex-shrink-0">
       <div className="max-w-screen-2xl mx-auto flex flex-wrap items-end gap-8">
 
         {/* Price range with histogram */}

@@ -50,13 +50,11 @@ const PropertyCard = ({ id, title, city, region, country, beds, baths, area, pri
 
 const FeaturedProperties = ({ properties = [] }) => (
   <div>
-    <div className="mb-4 flex justify-between items-end">
-      <div>
-        <h2 className="font-headline text-4xl font-bold tracking-tight text-on-surface mb-2">
-          Wyselekcjonowane oferty
-        </h2>
-      </div>
-      <p className="font-label text-xs text-outline tracking-widest uppercase shrink-0 ml-4">
+    <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end">
+      <h2 className="font-headline text-2xl lg:text-4xl font-bold tracking-tight text-on-surface">
+        Wyselekcjonowane oferty
+      </h2>
+      <p className="font-label text-xs text-outline tracking-widest uppercase">
         {properties.length} nieruchomości
       </p>
     </div>
