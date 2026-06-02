@@ -5,15 +5,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-npm run dev       # Start Astro dev server at http://localhost:4321
-npm run build     # Static production build
-npm run preview   # Preview production build locally
-npm test          # Run Vitest tests (watch mode)
+pnpm dev       # Start Astro dev server at http://localhost:4321
+pnpm build     # Static production build
+pnpm preview   # Preview production build locally
+pnpm test      # Run Vitest tests (watch mode)
 ```
 
 Run a single test file:
 ```bash
-npx vitest src/components/ContactForm.test.jsx
+pnpm vitest src/components/ContactForm.test.jsx
 ```
 
 There is no lint script in `package.json` despite the README mentioning one — ESLint is configured (`eslint.config.js`) but not wired to a script.
