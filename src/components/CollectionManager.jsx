@@ -5,7 +5,7 @@ import FeaturedProperties from './FeaturedProperties';
 // Leaflet is browser-only — lazy-load so SSR renders the fallback
 const ListingsMap = lazy(() => import('./ListingsMap'));
 
-const NAV_H = 88; // matches the fixed Navbar height (px)
+const NAV_H = 88;
 
 const CollectionManager = ({ initialOffers = [] }) => {
   const [filters, setFilters] = useState({
@@ -35,30 +35,28 @@ const CollectionManager = ({ initialOffers = [] }) => {
   }, [initialOffers, filters]);
 
   return (
-    <div
-      className="flex flex-col overflow-hidden"
-      style={{ height: `calc(100vh - ${NAV_H}px)`, marginTop: `${NAV_H}px` }}
-    >
-      <ListingFilterBar offers={initialOffers} filters={filters} setFilters={setFilters} />
+    <div className="pt-[88px]">
+      {/* Map — full width */}
+      <section className="h-[512px] w-full relative overflow-hidden bg-surface-container-low">
+        <Suspense
+          fallback={
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-outline font-label text-xs uppercase tracking-widest">Ładowanie mapy…</span>
+            </div>
+          }
+        >
+          <ListingsMap properties={filteredOffers} />
+        </Suspense>
+      </section>
 
-      <div className="flex flex-1 overflow-hidden">
-        {/* Left panel — scrollable property list */}
-        <aside className="w-full md:w-[40%] h-full overflow-y-auto bg-surface">
-          <FeaturedProperties properties={filteredOffers} />
-        </aside>
+      {/* Filter bar — sticky below navbar */}
+      <div className="sticky z-40" style={{ top: `${NAV_H}px` }}>
+        <ListingFilterBar offers={initialOffers} filters={filters} setFilters={setFilters} />
+      </div>
 
-        {/* Right panel — map (browser only) */}
-        <section className="hidden md:block md:w-[60%] h-full relative bg-surface-container-high">
-          <Suspense
-            fallback={
-              <div className="w-full h-full flex items-center justify-center">
-                <span className="text-outline font-label text-xs uppercase tracking-widest">Ładowanie mapy…</span>
-              </div>
-            }
-          >
-            <ListingsMap properties={filteredOffers} />
-          </Suspense>
-        </section>
+      {/* Listings grid */}
+      <div className="px-8 py-16 max-w-screen-2xl mx-auto w-full">
+        <FeaturedProperties properties={filteredOffers} />
       </div>
     </div>
   );

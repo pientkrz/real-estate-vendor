@@ -12,7 +12,7 @@ const photoBase = import.meta.env.PHOTO_BASE_URL;
 const allOffers = parseOtoDomXml(xmlString, photoBase);
 ---
 
-<Layout title="Local T P | Premium Real Estate Collective" lockViewport>
+<Layout title="Local T P | Premium Real Estate Collective">
 	<Navbar client:load />
 	<CollectionManager client:only="react" initialOffers={allOffers} />
 </Layout>

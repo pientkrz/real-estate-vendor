@@ -1,13 +1,13 @@
 import React from 'react';
 import { formatPrice } from '../utils/formatPrice';
 
-const PropertyCard = ({ id, title, city, region, country, beds, baths, area, price, image, status, tab }) => {
+const PropertyCard = ({ id, title, city, region, country, beds, baths, area, price, image, status }) => {
   const base = import.meta.env.BASE_URL;
   const loc = [city, region, country].filter(Boolean).join(', ');
 
   return (
     <a href={`${base}property/${id}`} className="group block cursor-pointer">
-      <div className="relative overflow-hidden mb-6 aspect-[4/3] rounded-sm">
+      <div className="relative overflow-hidden mb-6 aspect-[4/5] rounded-sm">
         <img
           alt={title}
           src={image}
@@ -49,11 +49,16 @@ const PropertyCard = ({ id, title, city, region, country, beds, baths, area, pri
 };
 
 const FeaturedProperties = ({ properties = [] }) => (
-  <div className="p-8 space-y-12">
-    <div className="flex justify-between items-baseline">
-      <h1 className="font-headline text-3xl font-bold tracking-tight text-on-surface">
-        Wyselekcjonowane oferty
-      </h1>
+  <div>
+    <div className="mb-12 flex justify-between items-end">
+      <div>
+        <h2 className="font-headline text-4xl font-bold tracking-tight text-on-surface mb-2">
+          Wyselekcjonowane oferty
+        </h2>
+        <p className="text-on-surface-variant font-body max-w-lg">
+          Wyselekcjonowane nieruchomości definiowane przez integralność strukturalną i klarowność przestrzenną.
+        </p>
+      </div>
       <p className="font-label text-xs text-outline tracking-widest uppercase shrink-0 ml-4">
         {properties.length} nieruchomości
       </p>
@@ -67,23 +72,26 @@ const FeaturedProperties = ({ properties = [] }) => (
         </p>
       </div>
     ) : (
-      properties.map((prop, index) => (
-        <PropertyCard
-          key={prop.id || index}
-          id={prop.id}
-          tab={prop.tab}
-          title={prop.params?.miasto || 'Luxury Estate'}
-          city={prop.location?.city || prop.params?.miasto}
-          region={prop.location?.region}
-          country={prop.location?.country}
-          beds={prop.params?.liczbapokoi}
-          baths={prop.params?.liczbalazienek}
-          area={prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : ''}
-          price={formatPrice(prop.price, prop.currency)}
-          image={prop.params?.zdjecie1}
-          status={prop.typ === 'sprzedaz' ? 'Na sprzedaż' : 'Wynajem'}
-        />
-      ))
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16">
+        {properties.map((prop, index) => (
+          <div key={prop.id || index} className={index % 3 === 1 ? 'lg:pt-12' : ''}>
+            <PropertyCard
+              id={prop.id}
+              tab={prop.tab}
+              title={prop.params?.miasto || 'Luxury Estate'}
+              city={prop.location?.city || prop.params?.miasto}
+              region={prop.location?.region}
+              country={prop.location?.country}
+              beds={prop.params?.liczbapokoi}
+              baths={prop.params?.liczbalazienek}
+              area={prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : ''}
+              price={formatPrice(prop.price, prop.currency)}
+              image={prop.params?.zdjecie1}
+              status={prop.typ === 'sprzedaz' ? 'Na sprzedaż' : 'Wynajem'}
+            />
+          </div>
+        ))}
+      </div>
     )}
   </div>
 );
