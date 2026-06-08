@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Mock Otodom XML export for tests.
+
+  6 active offers (2 per country: Spain, Greece, Cyprus) + 1 inactive offer
+  that must be excluded by the parser (Action=1).
+
+  Coordinates are chosen so the reverseGeocode stub in CollectionManager.test.jsx
+  can distinguish countries purely from longitude:
+    lon < -3          → Madrid,       Spain
+    lon ∈ [-3, 0)     → Barcelona,    Spain
+    lon ∈ [20, 23)    → Thessaloniki, Greece
+    lon ∈ [23, 27)    → Athens,       Greece
+    lon ∈ [27, 32.5)  → Paphos,       Cyprus
+    lon ≥ 32.5        → Limassol,     Cyprus
+-->
+<otoDom>
+  <Insertions>
+
+    <!-- ── Spain ────────────────────────────────────────────────────────── -->
+    <Insertion>
+      <ID>sp1</ID>
+      <Action>0</Action>
+      <ObjectName>0</ObjectName>
+      <OfferType>0</OfferType>
+      <Price>250000</Price>
+      <PriceCurrency>2</PriceCurrency>
+      <Area>80</Area>
+      <Title>Madrid Apartment</Title>
+      <Description>Spacious flat in the heart of Madrid.</Description>
+      <GeoMarker>
+        <Latitude>40.4168</Latitude>
+        <Longitude>-3.7038</Longitude>
+      </GeoMarker>
+      <FlatDetails>
+        <RoomsNum>3</RoomsNum>
+      </FlatDetails>
+    </Insertion>
+
+    <Insertion>
+      <ID>sp2</ID>
+      <Action>0</Action>
+      <ObjectName>0</ObjectName>
+      <OfferType>0</OfferType>
+      <Price>180000</Price>
+      <PriceCurrency>2</PriceCurrency>
+      <Area>55</Area>
+      <Title>Barcelona Studio</Title>
+      <Description>Modern studio near Sagrada Familia.</Description>
+      <GeoMarker>
+        <Latitude>41.3851</Latitude>
+        <Longitude>-2.1734</Longitude>
+      </GeoMarker>
+      <FlatDetails>
+        <RoomsNum>1</RoomsNum>
+      </FlatDetails>
+    </Insertion>
+
+    <!-- ── Greece ───────────────────────────────────────────────────────── -->
+    <Insertion>
+      <ID>gr1</ID>
+      <Action>0</Action>
+      <ObjectName>0</ObjectName>
+      <OfferType>0</OfferType>
+      <Price>320000</Price>
+      <PriceCurrency>2</PriceCurrency>
+      <Area>100</Area>
+      <Title>Athens Villa</Title>
+      <Description>Bright villa with Acropolis view.</Description>
+      <GeoMarker>
+        <Latitude>37.9755</Latitude>
+        <Longitude>23.7348</Longitude>
+      </GeoMarker>
+      <FlatDetails>
+        <RoomsNum>4</RoomsNum>
+      </FlatDetails>
+    </Insertion>
+
+    <Insertion>
+      <ID>gr2</ID>
+      <Action>0</Action>
+      <ObjectName>0</ObjectName>
+      <OfferType>0</OfferType>
+      <Price>270000</Price>
+      <PriceCurrency>2</PriceCurrency>
+      <Area>75</Area>
+      <Title>Thessaloniki Flat</Title>
+      <Description>Sea-view flat in the White Tower district.</Description>
+      <GeoMarker>
+        <Latitude>40.6401</Latitude>
+        <Longitude>22.9444</Longitude>
+      </GeoMarker>
+      <FlatDetails>
+        <RoomsNum>2</RoomsNum>
+      </FlatDetails>
+    </Insertion>
+
+    <!-- ── Cyprus ───────────────────────────────────────────────────────── -->
+    <Insertion>
+      <ID>cy1</ID>
+      <Action>0</Action>
+      <ObjectName>0</ObjectName>
+      <OfferType>0</OfferType>
+      <Price>450000</Price>
+      <PriceCurrency>2</PriceCurrency>
+      <Area>120</Area>
+      <Title>Limassol Penthouse</Title>
+      <Description>Luxury penthouse with sea views.</Description>
+      <GeoMarker>
+        <Latitude>34.6751</Latitude>
+        <Longitude>33.0441</Longitude>
+      </GeoMarker>
+      <FlatDetails>
+        <RoomsNum>5</RoomsNum>
+      </FlatDetails>
+    </Insertion>
+
+    <Insertion>
+      <ID>cy2</ID>
+      <Action>0</Action>
+      <ObjectName>0</ObjectName>
+      <OfferType>0</OfferType>
+      <Price>380000</Price>
+      <PriceCurrency>2</PriceCurrency>
+      <Area>95</Area>
+      <Title>Paphos Beach House</Title>
+      <Description>Beachfront villa in the Paphos area.</Description>
+      <GeoMarker>
+        <Latitude>34.7754</Latitude>
+        <Longitude>32.4234</Longitude>
+      </GeoMarker>
+      <FlatDetails>
+        <RoomsNum>3</RoomsNum>
+      </FlatDetails>
+    </Insertion>
+
+    <!-- ── Inactive — must be excluded by parser (Action=1) ─────────────── -->
+    <Insertion>
+      <ID>inactive1</ID>
+      <Action>1</Action>
+      <ObjectName>0</ObjectName>
+      <OfferType>0</OfferType>
+      <Price>100000</Price>
+      <PriceCurrency>2</PriceCurrency>
+      <Area>50</Area>
+      <Title>Deactivated Offer</Title>
+      <Description>This offer should never appear in results.</Description>
+      <GeoMarker>
+        <Latitude>40.0</Latitude>
+        <Longitude>-3.0</Longitude>
+      </GeoMarker>
+      <FlatDetails>
+        <RoomsNum>2</RoomsNum>
+      </FlatDetails>
+    </Insertion>
+
+  </Insertions>
+</otoDom>
