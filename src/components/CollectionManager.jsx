@@ -11,7 +11,7 @@ const CollectionManager = ({ initialOffers = [] }) => {
   const [filters, setFilters] = useState({
     priceMin: null,
     priceMax: null,
-    country: '',
+    countries: [],
     tab: '',
     minRooms: '',
     sortBy: 'price-desc',
@@ -19,7 +19,7 @@ const CollectionManager = ({ initialOffers = [] }) => {
 
   const filteredOffers = useMemo(() => {
     let result = initialOffers.filter(offer => {
-      if (filters.country && offer.location?.country !== filters.country) return false;
+      if (filters.countries.length > 0 && !filters.countries.includes(offer.location?.country)) return false;
       if (filters.tab && offer.tab !== filters.tab) return false;
       if (filters.minRooms && (offer.params?.liczbapokoi || 0) < parseInt(filters.minRooms)) return false;
       if (filters.priceMin !== null && offer.price < filters.priceMin) return false;

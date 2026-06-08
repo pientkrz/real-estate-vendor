@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState, useRef } from 'react';
 
 const ListingFilterBar = ({ offers, filters, setFilters }) => {
   const { minPrice, maxPrice, buckets } = useMemo(() => {
@@ -39,9 +39,31 @@ const ListingFilterBar = ({ offers, filters, setFilters }) => {
   };
 
   const countries = useMemo(
-    () => ['', ...new Set(offers.map(o => o.location?.country).filter(Boolean)).values()].sort(),
+    () => [...new Set(offers.map(o => o.location?.country).filter(Boolean)).values()].sort(),
     [offers],
   );
+
+  const [countryOpen, setCountryOpen] = useState(false);
+  const countryRef = useRef(null);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (countryRef.current && !countryRef.current.contains(e.target)) setCountryOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const toggleCountry = (c) =>
+    setFilters(f => ({
+      ...f,
+      countries: f.countries.includes(c) ? f.countries.filter(x => x !== c) : [...f.countries, c],
+    }));
+
+  const countryLabel =
+    filters.countries.length === 0 ? 'Wszystkie kraje' :
+    filters.countries.length === 1 ? filters.countries[0] :
+    `${filters.countries.length} kraje`;
 
   const tabs = useMemo(
     () => ['', ...new Set(offers.map(o => o.tab).filter(Boolean)).values()],
@@ -49,7 +71,7 @@ const ListingFilterBar = ({ offers, filters, setFilters }) => {
   );
 
   const reset = () =>
-    setFilters({ priceMin: minPrice, priceMax: maxPrice, country: '', tab: '', minRooms: '', sortBy: 'price-desc' });
+    setFilters({ priceMin: minPrice, priceMax: maxPrice, countries: [], tab: '', minRooms: '', sortBy: 'price-desc' });
 
   return (
     <section className="bg-surface px-4 lg:px-8 py-4 border-b border-outline-variant/10 flex-shrink-0">
@@ -113,16 +135,37 @@ const ListingFilterBar = ({ offers, filters, setFilters }) => {
 
         <div className="h-10 w-px bg-outline-variant/30 hidden md:block mb-1" />
 
-        {/* Location */}
-        <div>
+        {/* Location — multi-select */}
+        <div className="relative" ref={countryRef}>
           <span className="font-label text-[10px] uppercase tracking-widest text-primary block mb-1">Lokalizacja</span>
-          <select
-            className="bg-transparent border-none text-on-surface font-medium focus:ring-0 p-0 text-sm cursor-pointer hover:text-primary transition-colors"
-            value={filters.country ?? ''}
-            onChange={e => setFilters(f => ({ ...f, country: e.target.value }))}
+          <button
+            onClick={() => setCountryOpen(o => !o)}
+            className="flex items-center gap-1 text-on-surface font-medium text-sm hover:text-primary transition-colors"
           >
-            {countries.map(c => <option key={c} value={c}>{c || 'Wszystkie kraje'}</option>)}
-          </select>
+            {countryLabel}
+            <span className="material-symbols-outlined text-sm leading-none">
+              {countryOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
+            </span>
+          </button>
+
+          {countryOpen && (
+            <div className="absolute top-full left-0 mt-2 bg-surface border border-outline-variant/20 shadow-xl z-50 min-w-[180px] py-1">
+              {countries.map(c => (
+                <label
+                  key={c}
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-surface-container-low cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={filters.countries.includes(c)}
+                    onChange={() => toggleCountry(c)}
+                    className="accent-primary w-3.5 h-3.5 cursor-pointer"
+                  />
+                  <span className="font-body text-sm text-on-surface">{c}</span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Property type */}
