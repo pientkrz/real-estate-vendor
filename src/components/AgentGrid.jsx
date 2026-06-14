@@ -3,7 +3,7 @@ import React from 'react';
 const agents = [
   {
     name: 'Monika Chwajoł',
-    role: 'CEO & Principal Strategist',
+    role: 'Dyrektor Generalna i Główna Strateg',
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800', // High-end portrait for Monika
     languages: ['PL', 'EN', 'PT'],
     phone: '+48 500 000 000',
@@ -11,7 +11,7 @@ const agents = [
   },
   {
     name: 'Wojciech Jaskuła',
-    role: 'Investment Director',
+    role: 'Dyrektor ds. Inwestycji',
     image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800',
     languages: ['PL', 'EN', 'IT'],
     phone: '+48 600 000 000',
@@ -19,7 +19,7 @@ const agents = [
   },
   {
     name: 'Krzysztof Jaruszowiec',
-    role: 'Luxury Lease Advisor',
+    role: 'Doradca ds. Wynajmu Luksusowego',
     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=800',
     languages: ['PL', 'EN'],
     phone: '+48 700 000 000',
@@ -27,7 +27,7 @@ const agents = [
   },
   {
     name: 'Szymon Janas',
-    role: 'Property Valuation Expert',
+    role: 'Ekspert ds. Wyceny Nieruchomości',
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=800',
     languages: ['PL', 'EN', 'DE'],
     phone: '+48 800 000 000',
@@ -41,13 +41,13 @@ const AgentGrid = () => {
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
           <div>
-            <span className="text-primary font-label text-sm tracking-[0.3em] uppercase mb-4 block">Our Experts</span>
+            <span className="text-primary font-label text-sm tracking-[0.3em] uppercase mb-4 block">Nasi eksperci</span>
             <h2 className="text-5xl md:text-6xl font-headline font-bold text-on-surface tracking-tight">
-              Contact Our Specialists
+              Skontaktuj się z naszymi specjalistami
             </h2>
           </div>
           <p className="max-w-md text-on-surface-variant font-body text-lg leading-relaxed">
-            Our team of dedicated professionals is here to guide you through every step of your luxury real estate journey.
+            Nasz zespół doświadczonych profesjonalistów przeprowadzi Cię przez każdy etap transakcji na rynku luksusowych nieruchomości.
           </p>
         </div>
 
@@ -102,7 +102,7 @@ const AgentGrid = () => {
 
                 <div className="mt-8 pt-6 border-t border-outline/10">
                   <button className="w-full py-3 text-[11px] font-label uppercase tracking-[0.2em] text-primary border border-primary/20 hover:bg-primary hover:text-on-primary transition-all duration-300">
-                    Schedule View
+                    Umów spotkanie
                   </button>
                 </div>
               </div>
