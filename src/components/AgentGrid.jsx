@@ -7,7 +7,7 @@ const agents = [
     image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=800', // High-end portrait for Monika
     languages: ['PL', 'EN', 'PT'],
     phone: '+48 500 000 000',
-    email: 'monika@globals-home.com'
+    email: 'monika@globalshome.com'
   },
   {
     name: 'Wojciech Jaskuła',
@@ -15,7 +15,7 @@ const agents = [
     image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=800',
     languages: ['PL', 'EN', 'IT'],
     phone: '+48 600 000 000',
-    email: 'wojciech@globals-home.com'
+    email: 'wojciech@globalshome.com'
   },
   {
     name: 'Krzysztof Jaruszowiec',
@@ -23,7 +23,7 @@ const agents = [
     image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=800',
     languages: ['PL', 'EN'],
     phone: '+48 700 000 000',
-    email: 'krzysztof@globals-home.com'
+    email: 'krzysztof@globalshome.com'
   },
   {
     name: 'Szymon Janas',
@@ -31,7 +31,7 @@ const agents = [
     image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=800',
     languages: ['PL', 'EN', 'DE'],
     phone: '+48 800 000 000',
-    email: 'szymon@globals-home.com'
+    email: 'szymon@globalshome.com'
   }
 ];
 
