@@ -1,0 +1,24 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+
+const entries = await getCollection('privacyPolicy');
+const entry = entries[0];
+const { Content } = await render(entry);
+---
+
+<Layout title={`${entry.data.title} | Global S Home`} description={entry.data.description}>
+	<Navbar client:load />
+
+	<main class="bg-background min-h-screen pt-32 pb-24">
+		<div class="max-w-3xl mx-auto px-6 md:px-12">
+			<div class="prose prose-stone max-w-none prose-headings:font-headline prose-headings:text-obsidian prose-headings:tracking-tight prose-a:text-primary prose-p:font-body prose-p:text-obsidian/80 prose-li:text-obsidian/80">
+				<Content />
+			</div>
+		</div>
+	</main>
+
+	<Footer />
+</Layout>

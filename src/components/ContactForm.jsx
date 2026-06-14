@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const ContactForm = () => {
+const ContactForm = ({ basePath = '/' }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -128,7 +128,8 @@ const ContactForm = () => {
                             </div>
                         </div>
                         <span className="text-[10px] text-outline leading-relaxed text-justify">
-                            Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko, adres e-mail, numer telefonu. Administratorem danych osobowych jest firma Smart Trade Sp. z o.o. z siedzibą na ul. Agnieszki Osieckiej 18, 45-807 Opole. Dane osobowe będą przetwarzane w celu odpowiedzi na zapytanie skierowane przy użyciu formularza kontaktowego oraz prowadzenie ewentualnego dalszego kontaktu na Pani/Pana życzenie.
+                            Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko, adres e-mail, numer telefonu. Administratorem danych osobowych jest firma Smart Trade Sp. z o.o. z siedzibą na ul. Agnieszki Osieckiej 18, 45-807 Opole. Dane osobowe będą przetwarzane w celu odpowiedzi na zapytanie skierowane przy użyciu formularza kontaktowego oraz prowadzenie ewentualnego dalszego kontaktu na Pani/Pana życzenie.{' '}
+                            <a href={`${basePath}privacy-policy`} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-70 transition-opacity">Polityka Prywatności</a>
                         </span>
                     </label>
                 </div>

@@ -13,4 +13,12 @@ const blog = defineCollection({
 	}),
 });
 
-export const collections = { blog };
+const privacyPolicy = defineCollection({
+	loader: glob({ pattern: "**/*.md", base: import.meta.env.PRIVACY_POLICY_CONTENT_PATH }),
+	schema: z.object({
+		title: z.string(),
+		description: z.string().optional(),
+	}),
+});
+
+export const collections = { blog, privacyPolicy };
