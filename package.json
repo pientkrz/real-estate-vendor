@@ -11,7 +11,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "validate:agents": "node scripts/validate-agents.mjs"
   },
   "dependencies": {
     "@astrojs/react": "^5.0.3",

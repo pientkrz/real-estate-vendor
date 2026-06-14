@@ -60,6 +60,9 @@ while (params?.[`zdjecie${_photoIdx}`]) {
 
 const city = params?.miasto || 'The Estate';
 const fullAddress = [location?.city, location?.region, location?.country].filter(Boolean).join(', ');
+
+const agentsPath = path.join(process.cwd(), import.meta.env.AGENTS_FILE_PATH);
+const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
 ---
 
 <Layout title={`${city} | Global S Home`} description={params?.opis?.substring(0, 160)}>
@@ -248,7 +251,7 @@ const fullAddress = [location?.city, location?.region, location?.country].filter
         )}
 
         <!-- Integrated Agent Grid -->
-        <AgentGrid />
+        <AgentGrid agents={agents} />
     </main>
 
     <Footer />
