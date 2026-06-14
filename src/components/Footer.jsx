@@ -3,7 +3,7 @@ import React from 'react';
 const Footer = () => {
   return (
     <footer className="bg-stone-100 w-full py-16 px-12">
-      <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-start font-body text-sm tracking-wide">
+      <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between gap-12 items-start font-body text-sm tracking-wide">
         <div>
           <div className="text-lg font-bold text-stone-900 mb-6 font-headline">Global S Home</div>
           <p className="text-stone-500 mb-8 max-w-xs leading-relaxed">Pomagamy znaleźć i nabyć wyjątkowe nieruchomości w Polsce i za granicą.</p>
