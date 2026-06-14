@@ -96,7 +96,7 @@ const recentPosts = allPosts
 		<RelatedCarousel client:visible posts={recentPosts} currentPostId={entry.id} />
 	</main>
 	
-	<Footer />
+	<Footer basePath={import.meta.env.BASE_URL} />
 </Layout>
 
 <style is:global>
