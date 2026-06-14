@@ -3,8 +3,8 @@ import React from 'react';
 const Footer = () => {
   return (
     <footer className="bg-stone-100 w-full py-16 px-12">
-      <div className="max-w-screen-2xl mx-auto flex flex-col md:flex-row justify-between gap-12 items-start font-body text-sm tracking-wide">
-        <div>
+      <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 items-start font-body text-sm tracking-wide">
+        <div className="md:col-start-2">
           <div className="text-lg font-bold text-stone-900 mb-6 font-headline">Global S Home</div>
           <p className="text-stone-500 mb-8 max-w-xs leading-relaxed">Pomagamy znaleźć i nabyć wyjątkowe nieruchomości w Polsce i za granicą.</p>
           <div className="flex gap-4">
@@ -13,7 +13,7 @@ const Footer = () => {
             <span className="material-symbols-outlined text-amber-800 cursor-pointer">mail</span>
           </div>
         </div>
-        <div>
+        <div className="md:col-start-4">
           <h4 className="text-amber-800 font-bold mb-6 uppercase tracking-widest text-xs font-label">Dane firmowe</h4>
           <p className="text-stone-500 mb-4 leading-relaxed">
             Smart Trade Sp. z o.o.<br />
