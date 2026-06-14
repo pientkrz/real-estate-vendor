@@ -95,3 +95,11 @@ Utility class `.editorial-gradient` applies the gold gradient (`#7a590c` → `#c
 ### Testing
 
 Tests are co-located with components (e.g., `src/components/ContactForm.test.jsx`). The test environment is `jsdom` with setup in `test/setup.js`. Uses Vitest + React Testing Library.
+
+## Conventions
+
+### Documentation and manuals
+All user-facing instructions and manuals (how-to guides, onboarding docs, process instructions) go in `docs/`. Do not place them in the repo root or alongside source files.
+
+### External validators and tooling
+Any validator or tool intended for use **outside the application** (i.e. not imported by Astro/React code, not part of the build) belongs in `public/content/validators/`. This keeps external tooling co-located, deployed with the site, and accessible without a local dev environment. Example: `public/content/validators/validate-agents.html`.
