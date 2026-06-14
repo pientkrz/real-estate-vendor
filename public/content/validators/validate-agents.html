@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Walidator agentów — Global S Home</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #fcf9f8;
+      color: #1c1b1b;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 16px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e5e2e1;
+      border-radius: 6px;
+      padding: 40px;
+      width: 100%;
+      max-width: 680px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
+
+    .logo {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #7a590c;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      color: #4e4638;
+      font-size: 14px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .upload-area {
+      border: 2px dashed #c2994a;
+      border-radius: 6px;
+      padding: 36px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 32px;
+    }
+    .upload-area:hover { background: #fdf5e8; }
+
+    .upload-area input[type="file"] {
+      display: none;
+    }
+
+    .upload-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+    }
+
+    .upload-label {
+      font-size: 15px;
+      color: #1c1b1b;
+      margin-bottom: 6px;
+    }
+
+    .upload-hint {
+      font-size: 12px;
+      color: #807666;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 16px;
+      padding: 10px 24px;
+      background: #7a590c;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+
+    #results { display: none; }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .result-header.ok  { background: #e8f5e9; color: #2e7d32; }
+    .result-header.err { background: #fdecea; color: #b71c1c; }
+
+    .result-header .icon { font-size: 22px; }
+
+    .agent-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+
+    .agent-card {
+      border: 1px solid #e5e2e1;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .agent-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 14px;
+      background: #f7f4f3;
+    }
+    .agent-title .badge {
+      font-size: 16px;
+    }
+
+    .agent-errors {
+      padding: 10px 16px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .error-line {
+      font-size: 13px;
+      color: #b71c1c;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      line-height: 1.5;
+    }
+    .error-line::before { content: "✗"; flex-shrink: 0; font-weight: 700; }
+
+    .file-name {
+      font-size: 12px;
+      color: #807666;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .reset-btn {
+      margin-top: 24px;
+      background: none;
+      border: 1px solid #c2994a;
+      color: #7a590c;
+      padding: 8px 20px;
+      border-radius: 4px;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+    .reset-btn:hover { background: #fdf5e8; }
+
+    .syntax-error {
+      background: #fdecea;
+      border: 1px solid #ef9a9a;
+      border-radius: 6px;
+      padding: 16px;
+      color: #b71c1c;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">Global S Home</div>
+  <h1>Walidator listy agentów</h1>
+  <p class="subtitle">
+    Wybierz plik <strong>agents.json</strong>, aby sprawdzić jego poprawność przed opublikowaniem zmian.
+    Żadne dane nie są wysyłane do internetu — wszystko działa lokalnie w Twojej przeglądarce.
+  </p>
+
+  <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+    <div class="upload-icon">📂</div>
+    <p class="upload-label">Kliknij, aby wybrać plik</p>
+    <p class="upload-hint">agents.json</p>
+    <button class="btn" type="button">Wybierz plik</button>
+    <input type="file" id="fileInput" accept=".json,application/json" />
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<script>
+  // ── Validation logic (mirrors validate-agents-core.mjs) ───────────────────
+
+  const REQUIRED = [
+    { field: 'name',      type: 'string', label: 'Imię i nazwisko (name)' },
+    { field: 'role',      type: 'string', label: 'Stanowisko (role)' },
+    { field: 'image',     type: 'string', label: 'URL zdjęcia (image)' },
+    { field: 'email',     type: 'string', label: 'Adres e-mail (email)' },
+    { field: 'languages', type: 'array',  label: 'Lista języków (languages)' },
+  ];
+
+  const OPTIONAL = [
+    { field: 'phone', type: 'string', label: 'Numer telefonu (phone)' },
+  ];
+
+  function validateAgent(agent, index) {
+    const label = agent.name ? `Agent #${index + 1} — ${agent.name}` : `Agent #${index + 1}`;
+    const errors = [];
+
+    for (const { field, type, label: fieldLabel } of REQUIRED) {
+      const value = agent[field];
+      if (value === undefined || value === null) {
+        errors.push(`Brakuje wymaganego pola "${field}" — ${fieldLabel}`);
+        continue;
+      }
+      if (type === 'array') {
+        if (!Array.isArray(value)) {
+          errors.push(`Pole "${field}" musi być listą (np. ["PL", "EN"]), a jest: ${typeof value}`);
+        } else if (value.length === 0) {
+          errors.push(`Pole "${field}" nie może być pustą listą`);
+        } else if (value.some(v => typeof v !== 'string')) {
+          errors.push(`Każdy element pola "${field}" musi być tekstem (np. "PL")`);
+        }
+      } else if (typeof value !== type) {
+        errors.push(`Pole "${field}" musi być tekstem, a jest: ${typeof value}`);
+      } else if (value.trim() === '') {
+        errors.push(`Pole "${field}" nie może być pustym tekstem`);
+      }
+    }
+
+    for (const { field, type } of OPTIONAL) {
+      const value = agent[field];
+      if (value !== undefined && value !== null && typeof value !== type) {
+        errors.push(`Opcjonalne pole "${field}" musi być tekstem, a jest: ${typeof value}`);
+      }
+    }
+
+    if (typeof agent.email === 'string' && agent.email.trim() !== '') {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(agent.email)) {
+        errors.push(`Adres e-mail wygląda niepoprawnie: "${agent.email}"`);
+      }
+    }
+
+    return { label, errors };
+  }
+
+  function validateAgents(data) {
+    if (!Array.isArray(data)) {
+      return { structureError: 'Plik musi zawierać listę agentów w nawiasach kwadratowych [ ... ]' };
+    }
+    if (data.length === 0) {
+      return { structureError: 'Lista agentów jest pusta — dodaj przynajmniej jednego agenta.' };
+    }
+    const results = [];
+    for (let i = 0; i < data.length; i++) {
+      if (typeof data[i] !== 'object' || Array.isArray(data[i])) {
+        results.push({ label: `Agent #${i + 1}`, errors: ['Wpis musi być obiektem { … }, a nie wartością prostą.'] });
+      } else {
+        results.push(validateAgent(data[i], i));
+      }
+    }
+    return { results };
+  }
+
+  // ── UI ─────────────────────────────────────────────────────────────────────
+
+  document.getElementById('fileInput').addEventListener('change', function (e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      showResults(file.name, evt.target.result);
+    };
+    reader.readAsText(file, 'UTF-8');
+  });
+
+  function showResults(fileName, rawText) {
+    const container = document.getElementById('results');
+    container.style.display = 'block';
+    container.innerHTML = '';
+
+    // File name
+    const nameEl = document.createElement('div');
+    nameEl.className = 'file-name';
+    nameEl.innerHTML = `📄 <strong>${escHtml(fileName)}</strong>`;
+    container.appendChild(nameEl);
+
+    // Parse JSON
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (err) {
+      container.innerHTML += `
+        <div class="syntax-error">
+          <strong>Błąd składni JSON</strong><br>
+          Plik zawiera błąd i nie może zostać odczytany.<br><br>
+          <em>${escHtml(err.message)}</em><br><br>
+          Wskazówka: sprawdź, czy wszystkie pola są w cudzysłowach, a elementy listy oddzielone przecinkami.
+        </div>`;
+      container.appendChild(resetButton());
+      return;
+    }
+
+    const outcome = validateAgents(data);
+
+    if (outcome.structureError) {
+      container.innerHTML += `<div class="syntax-error">${escHtml(outcome.structureError)}</div>`;
+      container.appendChild(resetButton());
+      return;
+    }
+
+    const totalErrors = outcome.results.reduce((n, r) => n + r.errors.length, 0);
+    const allOk = totalErrors === 0;
+
+    // Summary banner
+    const banner = document.createElement('div');
+    banner.className = `result-header ${allOk ? 'ok' : 'err'}`;
+    banner.innerHTML = allOk
+      ? `<span class="icon">✅</span> Plik jest poprawny — ${outcome.results.length} agent(ów) gotowych do użycia.`
+      : `<span class="icon">❌</span> Znaleziono ${totalErrors} błąd(ów) w ${outcome.results.filter(r => r.errors.length).length} agencie/agentach.`;
+    container.appendChild(banner);
+
+    // Per-agent cards
+    const list = document.createElement('ul');
+    list.className = 'agent-list';
+
+    for (const { label, errors } of outcome.results) {
+      const ok = errors.length === 0;
+      const li = document.createElement('li');
+      li.className = 'agent-card';
+      li.innerHTML = `
+        <div class="agent-title">
+          <span class="badge">${ok ? '✅' : '❌'}</span>
+          ${escHtml(label)}
+        </div>
+        ${!ok ? `<div class="agent-errors">${errors.map(e => `<div class="error-line">${escHtml(e)}</div>`).join('')}</div>` : ''}
+      `;
+      list.appendChild(li);
+    }
+    container.appendChild(list);
+    container.appendChild(resetButton());
+  }
+
+  function resetButton() {
+    const btn = document.createElement('button');
+    btn.className = 'reset-btn';
+    btn.textContent = '← Sprawdź inny plik';
+    btn.onclick = () => {
+      document.getElementById('results').style.display = 'none';
+      document.getElementById('results').innerHTML = '';
+      document.getElementById('fileInput').value = '';
+    };
+    return btn;
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
+</body>
+</html>
