@@ -72,7 +72,6 @@ const FeaturedProperties = ({ properties = [], title = 'Wyselekcjonowane oferty'
           <div key={prop.id || index} className={index % 3 === 1 ? 'lg:pt-12' : ''}>
             <PropertyCard
               id={prop.id}
-              tab={prop.tab}
               title={prop.params?.miasto || 'Luxury Estate'}
               city={prop.location?.city || prop.params?.miasto}
               region={prop.location?.region}
