@@ -6,8 +6,9 @@ import { getCollection } from 'astro:content';
 
 const blogEntries = await getCollection('blog');
 
-// Helper to format category for the editorial look
-const getCategory = (entry) => entry.data.category || 'Editorial';
+const getCategory = (entry) => (entry.data.category || 'Editorial').toUpperCase();
+
+const categories = [...new Set(blogEntries.map(getCategory))].sort();
 ---
 
 <Layout title="Architectural Journal | Global S Home" description="Explorations in high-end architecture, investment strategy, and Mediterranean living.">
@@ -43,15 +44,20 @@ const getCategory = (entry) => entry.data.category || 'Editorial';
             </div>
         </section>
 
-        <!-- Category Filter (Simplified for Design) -->
+        <!-- Category Filter -->
         <nav class="sticky top-[88px] z-40 bg-bone/80 backdrop-blur-xl border-y border-outline/5 h-20 flex items-center">
             <div class="max-w-7xl mx-auto px-6 md:px-12 w-full flex items-center justify-center">
                 <ul class="flex gap-12 text-[11px] font-label uppercase tracking-widest text-outline">
-                    <li class="text-primary border-b border-primary pb-1 cursor-pointer">All Entries</li>
-                    <li class="hover:text-primary transition-colors cursor-pointer">Architecture</li>
-                    <li class="hover:text-primary transition-colors cursor-pointer">Investment</li>
-                    <li class="hover:text-primary transition-colors cursor-pointer">Lifestyle</li>
-                    <li class="hover:text-primary transition-colors cursor-pointer">Market Reports</li>
+                    <li
+                        data-filter="all"
+                        class="filter-btn text-primary border-b border-primary pb-1 cursor-pointer transition-colors"
+                    >All Entries</li>
+                    {categories.map(cat => (
+                        <li
+                            data-filter={cat}
+                            class="filter-btn hover:text-primary transition-colors cursor-pointer pb-1"
+                        >{cat}</li>
+                    ))}
                 </ul>
             </div>
         </nav>
@@ -67,7 +73,10 @@ const getCategory = (entry) => entry.data.category || 'Editorial';
                         const month = d.toLocaleString('pl-PL', { month: 'short' }).toUpperCase();
 
                         return (
-                            <article class={`group ${idx % 3 === 1 ? 'lg:translate-y-12' : ''} transition-transform duration-700`}>
+                            <article
+                                data-category={getCategory(entry)}
+                                class={`group ${idx % 3 === 1 ? 'lg:translate-y-12' : ''} transition-transform duration-700`}
+                            >
                                 <a href={`${import.meta.env.BASE_URL}blog/${entry.id}`} class="block relative">
                                     <div class="aspect-square overflow-hidden bg-stone-200 mb-8 relative">
                                         {entry.data.thumbnail ? (
@@ -124,6 +133,29 @@ const getCategory = (entry) => entry.data.category || 'Editorial';
 
     <Footer />
 </Layout>
+
+<script>
+    const buttons = document.querySelectorAll('.filter-btn');
+    const articles = document.querySelectorAll('article[data-category]');
+
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const filter = btn.dataset.filter;
+
+            buttons.forEach(b => {
+                b.classList.remove('text-primary', 'border-b', 'border-primary');
+                b.classList.add('text-outline');
+            });
+            btn.classList.add('text-primary', 'border-b', 'border-primary');
+            btn.classList.remove('text-outline');
+
+            articles.forEach(article => {
+                const match = filter === 'all' || article.dataset.category === filter;
+                article.style.display = match ? '' : 'none';
+            });
+        });
+    });
+</script>
 
 <style>
     @reference "../../index.css";

@@ -31,7 +31,7 @@ const recentPosts = allPosts
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-end mb-16">
 				<div>
 					<span class="text-primary font-label text-xs tracking-[0.4em] uppercase mb-8 block">
-						{entry.data.category || "JOURNAL"}
+						{(entry.data.category || "JOURNAL").toUpperCase()}
 					</span>
 					<h1 class="text-5xl md:text-8xl font-headline font-bold leading-[0.9] tracking-tight text-obsidian">
 						{entry.data.title}
