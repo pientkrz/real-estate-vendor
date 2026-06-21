@@ -12,9 +12,9 @@ const ListingFilterBar = ({
   rates = {},
   ratesTimestamp,
 }) => {
-  const formattedRatesTime = ratesTimestamp
-    ? new Date(ratesTimestamp).toLocaleString('pl-PL', { dateStyle: 'short', timeStyle: 'short' })
-    : null;
+  const tooltipText = ratesTimestamp
+    ? `Kursy z ${new Date(ratesTimestamp).toLocaleString('pl-PL', { dateStyle: 'short', timeStyle: 'short' })}`
+    : 'Kursy domyślne (brak połączenia z API)';
   const { minPrice, maxPrice, buckets } = useMemo(() => {
     const prices = offers
       .map(o => convertPrice(o.price, o.currency, displayCurrency, rates))
@@ -115,20 +115,18 @@ const ListingFilterBar = ({
                 ))}
               </div>
 
-              {/* Rates freshness tooltip */}
-              {formattedRatesTime && (
-                <div className="relative group">
-                  <span className="material-symbols-outlined text-[13px] text-outline/50 cursor-default select-none leading-none">
-                    info
-                  </span>
-                  <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5
-                                  bg-obsidian text-surface font-label text-[9px] tracking-wide whitespace-nowrap
-                                  px-2 py-1 rounded-sm
-                                  opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-50">
-                    Kursy z {formattedRatesTime}
-                  </div>
+              {/* Rates freshness tooltip — always visible */}
+              <div className="relative group">
+                <span className="material-symbols-outlined text-[13px] text-outline/50 cursor-default select-none leading-none">
+                  info
+                </span>
+                <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5
+                                bg-obsidian text-surface font-label text-[9px] tracking-wide whitespace-nowrap
+                                px-2 py-1 rounded-sm
+                                opacity-0 group-hover:opacity-100 transition-opacity duration-150 z-50">
+                  {tooltipText}
                 </div>
-              )}
+              </div>
             </div>
             <span className="font-label text-[10px] font-bold text-on-surface-variant">
               {fmt(pMin)} – {pMax >= maxPrice ? `${fmt(maxPrice)}+` : fmt(pMax)}

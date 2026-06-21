@@ -73,7 +73,7 @@ const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimes
       </section>
 
       {/* Filter bar — sticky below navbar */}
-      <div className="sticky z-40" style={{ top: `${NAV_H}px` }}>
+      <div className="sticky z-[1100]" style={{ top: `${NAV_H}px` }}>
         <ListingFilterBar
           offers={initialOffers}
           filters={filters}
