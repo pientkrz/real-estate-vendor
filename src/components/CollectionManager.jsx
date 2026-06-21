@@ -1,14 +1,14 @@
-import React, { useState, useMemo, lazy, Suspense, useEffect } from 'react';
+import React, { useState, useMemo, lazy, Suspense } from 'react';
 import ListingFilterBar from './ListingFilterBar';
 import FeaturedProperties from './FeaturedProperties';
-import { loadRates, convertPrice, FALLBACK_RATES } from '../utils/exchangeRates';
+import { convertPrice, FALLBACK_RATES } from '../utils/exchangeRates';
 
 // Leaflet is browser-only — lazy-load so SSR renders the fallback
 const ListingsMap = lazy(() => import('./ListingsMap'));
 
 const NAV_H = 96;
 
-const CollectionManager = ({ initialOffers = [] }) => {
+const CollectionManager = ({ initialOffers = [], initialRates }) => {
   const [filters, setFilters] = useState({
     priceMin: null,
     priceMax: null,
@@ -18,11 +18,7 @@ const CollectionManager = ({ initialOffers = [] }) => {
     sortBy: 'price-desc',
   });
   const [displayCurrency, setDisplayCurrency] = useState('EUR');
-  const [rates, setRates] = useState(FALLBACK_RATES);
-
-  useEffect(() => {
-    loadRates().then(data => setRates(data.rates));
-  }, []);
+  const [rates] = useState(initialRates ?? FALLBACK_RATES);
 
   const handleCurrencyChange = (currency) => {
     setDisplayCurrency(currency);
