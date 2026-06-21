@@ -8,7 +8,7 @@ const ListingsMap = lazy(() => import('./ListingsMap'));
 
 const NAV_H = 96;
 
-const CollectionManager = ({ initialOffers = [], initialRates }) => {
+const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimestamp }) => {
   const [filters, setFilters] = useState({
     priceMin: null,
     priceMax: null,
@@ -22,7 +22,6 @@ const CollectionManager = ({ initialOffers = [], initialRates }) => {
 
   const handleCurrencyChange = (currency) => {
     setDisplayCurrency(currency);
-    // Reset price bounds so histogram re-initialises in the new currency
     setFilters(f => ({ ...f, priceMin: null, priceMax: null }));
   };
 
@@ -78,6 +77,7 @@ const CollectionManager = ({ initialOffers = [], initialRates }) => {
           displayCurrency={displayCurrency}
           setDisplayCurrency={handleCurrencyChange}
           rates={rates}
+          ratesTimestamp={initialRatesTimestamp}
         />
       </div>
 

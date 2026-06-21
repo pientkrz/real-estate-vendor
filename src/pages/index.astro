@@ -9,14 +9,22 @@ import { getRates } from '../server/rateService';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const xmlPath = path.join(process.cwd(), 'public', import.meta.env.XML_COLLECTION_PATH, 'properties_otodom.xml');
+const xmlPath = import.meta.env.OFFERS_XML_PATH
+  ?? path.join(process.cwd(), 'public', import.meta.env.XML_COLLECTION_PATH ?? '', 'properties_otodom.xml');
+
 const xmlString = fs.readFileSync(xmlPath, 'utf-8');
 const photoBase = import.meta.env.PHOTO_BASE_URL;
 const allOffers = parseOtoDomXml(xmlString, photoBase);
-const { rates } = getRates();
+
+const { rates, timestamp: ratesTimestamp } = getRates();
 ---
 
 <Layout title="Global S Home | Premium Real Estate">
 	<Navbar client:load />
-	<CollectionManager client:only="react" initialOffers={allOffers} initialRates={rates} />
+	<CollectionManager
+		client:load
+		initialOffers={allOffers}
+		initialRates={rates}
+		initialRatesTimestamp={ratesTimestamp}
+	/>
 </Layout>
