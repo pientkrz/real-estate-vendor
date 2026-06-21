@@ -28,6 +28,7 @@ jobs:
           PRIVACY_POLICY_CONTENT_PATH: ./src/content/privacy-policy
           AGENTS_FILE_PATH: ./src/data/agents.json
           XML_COLLECTION_PATH: "2026-05-23_13%3A07%3A04"
+          ASTRO_OUTPUT: ${{ secrets.ASTRO_OUTPUT }}
 
   deploy:
     needs: build
