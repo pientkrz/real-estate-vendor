@@ -18,6 +18,16 @@ pnpm vitest src/components/ContactForm.test.jsx
 
 There is no lint script in `package.json` despite the README mentioning one — ESLint is configured (`eslint.config.js`) but not wired to a script.
 
+## Validation
+
+After every code change, **always validate in the browser before reporting the task as done**:
+
+1. Start the dev server (`pnpm dev`) if not already running — it starts on port 4321 (or next available).
+2. Navigate to `http://localhost:<port>/real-estate-vendor/` using Chrome DevTools (`mcp__chrome-devtools__navigate_page`).
+3. Take a screenshot (`mcp__chrome-devtools__take_screenshot`) to confirm the page renders.
+4. Check console for errors (`mcp__chrome-devtools__list_console_messages` with `types: ["error", "warn"]`) — investigate and fix any errors before finishing.
+5. For server-side errors (SSR failures, `window is not defined`, etc.) read the server terminal output — it contains the real Node.js stack trace.
+
 ## Architecture
 
 This is an **Astro static site** (`output: 'static'`) deployed to GitHub Pages at `https://pientkrz.github.io/real-estate-vendor/`. The base path `/real-estate-vendor/` is set in `astro.config.mjs` — always use `import.meta.env.BASE_URL` for internal links in Astro pages/templates.
