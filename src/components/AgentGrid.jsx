@@ -65,11 +65,6 @@ const AgentGrid = ({ agents = [] }) => {
                   </a>
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-outline/10">
-                  <button className="w-full py-3 text-[11px] font-label uppercase tracking-[0.2em] text-primary border border-primary/20 hover:bg-primary hover:text-on-primary transition-all duration-300">
-                    Umów spotkanie
-                  </button>
-                </div>
               </div>
             </div>
           ))}
