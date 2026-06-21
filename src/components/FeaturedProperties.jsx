@@ -1,5 +1,6 @@
 import React from 'react';
 import { formatPrice } from '../utils/formatPrice';
+import { convertPrice } from '../utils/exchangeRates';
 
 const PropertyCard = ({ id, title, city, region, country, rooms, baths, area, price, image, status }) => {
   const base = import.meta.env.BASE_URL;
@@ -48,7 +49,12 @@ const PropertyCard = ({ id, title, city, region, country, rooms, baths, area, pr
   );
 };
 
-const FeaturedProperties = ({ properties = [], title = 'Wyselekcjonowane oferty' }) => (
+const FeaturedProperties = ({
+  properties = [],
+  title = 'Wyselekcjonowane oferty',
+  displayCurrency = 'EUR',
+  rates = {},
+}) => (
   <div>
     <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end">
       <h2 className="font-headline text-2xl lg:text-4xl font-bold tracking-tight text-on-surface">
@@ -79,7 +85,10 @@ const FeaturedProperties = ({ properties = [], title = 'Wyselekcjonowane oferty'
               rooms={prop.params?.liczbapokoi}
               baths={prop.params?.liczbalazienek}
               area={prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : ''}
-              price={formatPrice(prop.price, prop.currency)}
+              price={formatPrice(
+                convertPrice(prop.price, prop.currency, displayCurrency, rates),
+                displayCurrency,
+              )}
               image={prop.params?.zdjecie1}
               status={prop.typ === 'sprzedaz' ? 'Na sprzedaż' : 'Wynajem'}
             />

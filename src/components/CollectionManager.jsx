@@ -1,6 +1,7 @@
-import React, { useState, useMemo, lazy, Suspense } from 'react';
+import React, { useState, useMemo, lazy, Suspense, useEffect } from 'react';
 import ListingFilterBar from './ListingFilterBar';
 import FeaturedProperties from './FeaturedProperties';
+import { loadRates, convertPrice, FALLBACK_RATES } from '../utils/exchangeRates';
 
 // Leaflet is browser-only — lazy-load so SSR renders the fallback
 const ListingsMap = lazy(() => import('./ListingsMap'));
@@ -16,23 +17,46 @@ const CollectionManager = ({ initialOffers = [] }) => {
     minRooms: '',
     sortBy: 'price-desc',
   });
+  const [displayCurrency, setDisplayCurrency] = useState('EUR');
+  const [rates, setRates] = useState(FALLBACK_RATES);
+
+  useEffect(() => {
+    loadRates().then(data => setRates(data.rates));
+  }, []);
+
+  const handleCurrencyChange = (currency) => {
+    setDisplayCurrency(currency);
+    // Reset price bounds so histogram re-initialises in the new currency
+    setFilters(f => ({ ...f, priceMin: null, priceMax: null }));
+  };
 
   const filteredOffers = useMemo(() => {
     let result = initialOffers.filter(offer => {
       if (filters.countries.length > 0 && !filters.countries.includes(offer.location?.country)) return false;
       if (filters.tab && offer.tab !== filters.tab) return false;
       if (filters.minRooms && (offer.params?.liczbapokoi || 0) < parseInt(filters.minRooms)) return false;
-      if (filters.priceMin !== null && offer.price < filters.priceMin) return false;
-      if (filters.priceMax !== null && offer.price > filters.priceMax) return false;
+      const offerPrice = convertPrice(offer.price, offer.currency, displayCurrency, rates);
+      if (filters.priceMin !== null && offerPrice < filters.priceMin) return false;
+      if (filters.priceMax !== null && offerPrice > filters.priceMax) return false;
       return true;
     });
 
-    if (filters.sortBy === 'price-asc') result = [...result].sort((a, b) => a.price - b.price);
-    else if (filters.sortBy === 'price-desc') result = [...result].sort((a, b) => b.price - a.price);
-    else if (filters.sortBy === 'area-desc') result = [...result].sort((a, b) => (b.params?.powierzchnia || 0) - (a.params?.powierzchnia || 0));
+    if (filters.sortBy === 'price-asc') {
+      result = [...result].sort((a, b) =>
+        convertPrice(a.price, a.currency, displayCurrency, rates) -
+        convertPrice(b.price, b.currency, displayCurrency, rates)
+      );
+    } else if (filters.sortBy === 'price-desc') {
+      result = [...result].sort((a, b) =>
+        convertPrice(b.price, b.currency, displayCurrency, rates) -
+        convertPrice(a.price, a.currency, displayCurrency, rates)
+      );
+    } else if (filters.sortBy === 'area-desc') {
+      result = [...result].sort((a, b) => (b.params?.powierzchnia || 0) - (a.params?.powierzchnia || 0));
+    }
 
     return result;
-  }, [initialOffers, filters]);
+  }, [initialOffers, filters, displayCurrency, rates]);
 
   return (
     <div className="pt-[96px] overflow-x-hidden">
@@ -51,12 +75,23 @@ const CollectionManager = ({ initialOffers = [] }) => {
 
       {/* Filter bar — sticky below navbar */}
       <div className="sticky z-40" style={{ top: `${NAV_H}px` }}>
-        <ListingFilterBar offers={initialOffers} filters={filters} setFilters={setFilters} />
+        <ListingFilterBar
+          offers={initialOffers}
+          filters={filters}
+          setFilters={setFilters}
+          displayCurrency={displayCurrency}
+          setDisplayCurrency={handleCurrencyChange}
+          rates={rates}
+        />
       </div>
 
       {/* Listings grid */}
       <div className="px-4 lg:px-8 py-6 w-full">
-        <FeaturedProperties properties={filteredOffers} />
+        <FeaturedProperties
+          properties={filteredOffers}
+          displayCurrency={displayCurrency}
+          rates={rates}
+        />
       </div>
     </div>
   );

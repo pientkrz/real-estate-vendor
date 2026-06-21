@@ -1,8 +1,20 @@
 import React, { useMemo, useEffect, useState, useRef } from 'react';
+import { convertPrice } from '../utils/exchangeRates';
 
-const ListingFilterBar = ({ offers, filters, setFilters }) => {
+const DISPLAY_CURRENCIES = ['EUR', 'PLN'];
+
+const ListingFilterBar = ({
+  offers,
+  filters,
+  setFilters,
+  displayCurrency = 'EUR',
+  setDisplayCurrency,
+  rates = {},
+}) => {
   const { minPrice, maxPrice, buckets } = useMemo(() => {
-    const prices = offers.map(o => o.price).filter(Boolean);
+    const prices = offers
+      .map(o => convertPrice(o.price, o.currency, displayCurrency, rates))
+      .filter(Boolean);
     if (prices.length === 0) return { minPrice: 0, maxPrice: 0, buckets: Array(10).fill(0) };
     const min = Math.min(...prices);
     const max = Math.max(...prices);
@@ -13,9 +25,9 @@ const ListingFilterBar = ({ offers, filters, setFilters }) => {
       b[i]++;
     }
     return { minPrice: min, maxPrice: max, buckets: b };
-  }, [offers]);
+  }, [offers, displayCurrency, rates]);
 
-  // Initialize price bounds once data is available
+  // Initialize price bounds once data is available (or when currency changes)
   useEffect(() => {
     if (minPrice && filters.priceMin === null) {
       setFilters(f => ({ ...f, priceMin: minPrice, priceMax: maxPrice }));
@@ -35,7 +47,7 @@ const ListingFilterBar = ({ offers, filters, setFilters }) => {
     if (!n && n !== 0) return '0';
     if (n >= 1_000_000) return `${+(n / 1_000_000).toFixed(1)}M`;
     if (n >= 1_000) return `${Math.round(n / 1_000)}k`;
-    return String(n);
+    return String(Math.round(n));
   };
 
   const countries = useMemo(
@@ -80,7 +92,25 @@ const ListingFilterBar = ({ offers, filters, setFilters }) => {
         {/* Price range with histogram */}
         <div className="flex-1 min-w-[260px]">
           <div className="flex justify-between items-center mb-1">
-            <span className="font-label text-[10px] uppercase tracking-widest text-primary">Zakres cen</span>
+            <div className="flex items-center gap-2">
+              <span className="font-label text-[10px] uppercase tracking-widest text-primary">Zakres cen</span>
+              {/* Currency toggle */}
+              <div className="flex items-center border border-outline-variant/30 rounded-sm overflow-hidden">
+                {DISPLAY_CURRENCIES.map(c => (
+                  <button
+                    key={c}
+                    onClick={() => setDisplayCurrency?.(c)}
+                    className={`px-1.5 py-0.5 font-label text-[9px] uppercase tracking-wider transition-colors ${
+                      displayCurrency === c
+                        ? 'bg-primary text-surface'
+                        : 'text-on-surface-variant hover:text-primary'
+                    }`}
+                  >
+                    {c}
+                  </button>
+                ))}
+              </div>
+            </div>
             <span className="font-label text-[10px] font-bold text-on-surface-variant">
               {fmt(pMin)} – {pMax >= maxPrice ? `${fmt(maxPrice)}+` : fmt(pMax)}
             </span>
