@@ -9,6 +9,7 @@ import PropertyDetailsPanel from '../../components/property-details/PropertyDeta
 import { parseOtoDomXml } from '../../utils/xmlParser';
 import { formatPrice } from '../../utils/formatPrice';
 import { getYouTubeEmbedUrl } from '../../utils/videoUrl';
+import { sanitizeOpisHtml, stripHtml } from '../../utils/sanitizeHtml';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -47,6 +48,8 @@ const relatedOffers = _allOffers
 const formattedPrice = formatPrice(price, currency);
 
 const embedUrl = getYouTubeEmbedUrl(offer.videoUrl);
+const safeOpis = sanitizeOpisHtml(params?.opis);
+const opisExcerpt = stripHtml(params?.opis)?.substring(0, 160);
 
 const mainImage = params?.zdjecie1 || '/assets/placeholder.jpg';
 
@@ -65,7 +68,7 @@ const agentsPath = path.join(process.cwd(), import.meta.env.AGENTS_FILE_PATH);
 const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
 ---
 
-<Layout title={`${city} | Global S Home`} description={params?.opis?.substring(0, 160)}>
+<Layout title={`${city} | Global S Home`} description={opisExcerpt}>
     <Navbar client:load />
     
     <main class="min-h-screen bg-surface">
@@ -150,7 +153,7 @@ const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
                             <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Editorial Narrative</span>
                             <h2 class="text-4xl font-headline font-bold text-on-surface mb-12">Architecture as an Asset of the Soul</h2>
                             
-                            <div class="prose prose-stone max-w-none text-lg text-on-surface-variant font-body leading-[1.8] space-y-8" set:html={params?.opis} />
+                            <div class="prose prose-stone max-w-none text-lg text-on-surface-variant font-body leading-[1.8] space-y-8" set:html={safeOpis} />
 
                             <!-- Property-type-specific details panel (driven by ObjectName) -->
                             <PropertyDetailsPanel offer={offer} />
