@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar';
 import CollectionManager from '../components/CollectionManager';
 import { parseOtoDomXml } from '../utils/xmlParser';
-import { getRates } from '../server/rateService';
+import { FALLBACK_RATES } from '../utils/exchangeRates';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -13,8 +13,6 @@ const xmlPath = import.meta.env.OFFERS_XML_PATH
 const xmlString = fs.readFileSync(xmlPath, 'utf-8');
 const photoBase = import.meta.env.PHOTO_BASE_URL;
 const allOffers = parseOtoDomXml(xmlString, photoBase);
-
-const { rates, timestamp: ratesTimestamp } = getRates();
 ---
 
 <Layout title="Global S Home | Premium Real Estate">
@@ -22,7 +20,7 @@ const { rates, timestamp: ratesTimestamp } = getRates();
 	<CollectionManager
 		client:load
 		initialOffers={allOffers}
-		initialRates={rates}
-		initialRatesTimestamp={ratesTimestamp}
+		initialRates={FALLBACK_RATES}
+		initialRatesTimestamp={null}
 	/>
 </Layout>
