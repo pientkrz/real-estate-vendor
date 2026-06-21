@@ -3,8 +3,12 @@ import ListingFilterBar from './ListingFilterBar';
 import FeaturedProperties from './FeaturedProperties';
 import { convertPrice, FALLBACK_RATES } from '../utils/exchangeRates';
 
-// Leaflet is browser-only — lazy-load so SSR renders the fallback
-const ListingsMap = lazy(() => import('./ListingsMap'));
+// Leaflet accesses `window` at module init — skip the import entirely during SSR
+const ListingsMap = lazy(() =>
+  typeof window === 'undefined'
+    ? Promise.resolve({ default: () => null })
+    : import('./ListingsMap')
+);
 
 const NAV_H = 96;
 
