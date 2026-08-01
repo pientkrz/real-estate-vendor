@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ```bash
 pnpm dev       # Start Astro dev server at http://localhost:4321
-pnpm build     # Static production build
+pnpm build     # SSR production build (dist/server + dist/client)
 pnpm preview   # Preview production build locally
 pnpm test      # Run Vitest tests (watch mode)
 ```
@@ -23,14 +23,14 @@ There is no lint script in `package.json` despite the README mentioning one — 
 After every code change, **always validate in the browser before reporting the task as done**:
 
 1. Start the dev server (`pnpm dev`) if not already running — it starts on port 4321 (or next available).
-2. Navigate to `http://localhost:<port>/real-estate-vendor/` using Chrome DevTools (`mcp__chrome-devtools__navigate_page`).
+2. Navigate to `http://localhost:<port>/` using Chrome DevTools (`mcp__chrome-devtools__navigate_page`).
 3. Take a screenshot (`mcp__chrome-devtools__take_screenshot`) to confirm the page renders.
 4. Check console for errors (`mcp__chrome-devtools__list_console_messages` with `types: ["error", "warn"]`) — investigate and fix any errors before finishing.
 5. For server-side errors (SSR failures, `window is not defined`, etc.) read the server terminal output — it contains the real Node.js stack trace.
 
 ## Architecture
 
-This is an **Astro static site** (`output: 'static'`) deployed to GitHub Pages at `https://pientkrz.github.io/real-estate-vendor/`. The base path `/real-estate-vendor/` is set in `astro.config.mjs` — always use `import.meta.env.BASE_URL` for internal links in Astro pages/templates.
+This is an **Astro SSR app** (`output: 'server'`, `@astrojs/node` standalone adapter) hosted on a self-managed VPS — no GitHub Pages, no static export. The site is served from the domain root (`base: '/'`); see `docs/vps-deployment-log.md` for the hosting setup. `site` in `astro.config.mjs` defaults to the test domain and is overridden via the `SITE_URL` env var for production once that domain exists.
 
 ### Data Flow: Otodom XML export
 
@@ -62,7 +62,7 @@ Key Otodom XML fields and how they map to offer objects:
 
 **Insertions with `Action !== 0`** (deactivations/deletions) are skipped during parsing.
 
-**Index page**: XML is parsed server-side at build time in `src/pages/index.astro` using Node `fs`, then passed as `initialOffers` props to the `CollectionManager` React island — no client-side fetch on the homepage.
+**Index page**: XML is parsed server-side on every request (SSR) in `src/pages/index.astro` using Node `fs`, then passed as `initialOffers` props to the `CollectionManager` React island — no client-side fetch, and listing updates need no rebuild since the file is re-read per request.
 
 **Property detail pages** (`src/pages/property/[id].astro`): Fully static via `getStaticPaths()`, which reads the same XML to generate one page per offer.
 
