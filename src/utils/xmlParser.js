@@ -15,7 +15,7 @@ import { validateOtoDomXml } from './xmlValidator.js';
  *
  * @param {string} xmlString       Raw XML content of the Otodom export file
  * @param {string} photoBasePath   URL prefix for photo files,
- *                                 e.g. "/real-estate-vendor/2026-05-23_13%3A07%3A04/"
+ *                                 e.g. "/2026-05-23_13%3A07%3A04/"
  * @returns {Array} Normalised offer objects
  */
 export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
