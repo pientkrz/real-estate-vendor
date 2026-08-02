@@ -13,6 +13,8 @@ import { sanitizeOpisHtml, stripHtml } from '../../utils/sanitizeHtml';
 import fs from 'node:fs';
 import path from 'node:path';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
     const xmlPath = path.join(process.cwd(), 'public', import.meta.env.XML_COLLECTION_PATH, 'properties_otodom.xml');
     const xmlString = fs.readFileSync(xmlPath, 'utf-8');
