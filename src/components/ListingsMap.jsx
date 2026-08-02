@@ -73,6 +73,7 @@ const ListingsMap = ({ properties = [] }) => {
         const title = prop.params?.miasto || 'Estate';
         const loc = [prop.location?.city, prop.location?.region, prop.location?.country].filter(Boolean).join(', ');
         const area = prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : '';
+        const photo = prop.params?.zdjecie1;
 
         const pin = L.marker([prop.lat, prop.lng], {
           icon: L.divIcon({
@@ -96,6 +97,7 @@ const ListingsMap = ({ properties = [] }) => {
 
         pin.bindPopup(`
           <div style="min-width:200px;font-family:'Work Sans',sans-serif;padding:4px;">
+            ${photo ? `<img src="${photo}" alt="${title}" loading="lazy" style="width:100%;height:120px;object-fit:cover;border-radius:2px;display:block;margin:0 0 8px;"/>` : ''}
             <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;margin:0 0 4px;">${prop.tab || 'Nieruchomość'}</p>
             <h4 style="font-size:15px;font-weight:700;margin:0 0 2px;color:#1c1b1b;">${title}</h4>
             <p style="font-size:11px;color:#4e4638;margin:0 0 6px;">${loc}</p>
