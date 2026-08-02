@@ -75,7 +75,7 @@ const FeaturedProperties = ({
     ) : (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
         {properties.map((prop, index) => (
-          <div key={prop.id || index} className={index % 3 === 1 ? 'lg:pt-12' : ''}>
+          <div key={prop.id || index}>
             <PropertyCard
               id={prop.id}
               title={prop.params?.miasto || 'Luxury Estate'}
