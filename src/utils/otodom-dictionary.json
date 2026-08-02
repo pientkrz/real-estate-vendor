@@ -55,7 +55,7 @@
 
   "ObjectName": {
     "_description": "Rodzaj oferty – determinuje który tag Details jest wymagany",
-    "0": "Mieszkanie",
+    "0": "Apartament",
     "1": "Dom",
     "2": "Działka",
     "3": "Pokój",
