@@ -11,7 +11,7 @@
 
 ---
 
-> **Szybka walidacja bez instalacji:** otwórz `https://pientkrz.github.io/real-estate-vendor/content/validators/validate-agents.html`, wybierz swój `agents.json` i odczytaj wynik bezpośrednio w przeglądarce.
+> **Szybka walidacja bez instalacji:** otwórz `http://test.ixtnzfseqk.cfolks.pl/content/validators/validate-agents.html`, wybierz swój `agents.json` i odczytaj wynik bezpośrednio w przeglądarce.
 
 ---
 
@@ -117,7 +117,7 @@ Przed opublikowaniem zmian należy sprawdzić, czy plik agentów nie zawiera bł
 
 1. Otwórz w przeglądarce adres:
    ```
-   https://pientkrz.github.io/real-estate-vendor/content/validators/validate-agents.html
+   http://test.ixtnzfseqk.cfolks.pl/content/validators/validate-agents.html
    ```
 2. Kliknij przycisk **„Wybierz plik"**.
 3. Wskaż swój plik `agents.json` na dysku — może znajdować się w dowolnym miejscu.

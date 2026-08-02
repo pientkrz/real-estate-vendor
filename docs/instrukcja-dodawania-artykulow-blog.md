@@ -188,10 +188,10 @@ Zalecane formaty: `.jpg`, `.webp`, `.png`. Zalecana szerokość: minimum 1200 px
 **Krok 2 — odwołaj się do pliku w nagłówku artykułu:**
 
 ```
-thumbnail: "/real-estate-vendor/images/blog/moje-zdjecie.jpg"
+thumbnail: "/images/blog/moje-zdjecie.jpg"
 ```
 
-> **Uwaga:** Ścieżka musi zaczynać się od `/real-estate-vendor/` — jest to stały prefiks adresu strony na serwerze. Nazwa po nim to dokładna ścieżka pliku względem folderu `public/`.
+> **Uwaga:** Ścieżka musi zaczynać się od `/` — to ścieżka pliku względem folderu `public/`.
 
 **Pełny przykład:**
 
@@ -202,7 +202,7 @@ public/images/blog/widok-na-morze.jpg
 
 Wartość pola `thumbnail`:
 ```
-thumbnail: "/real-estate-vendor/images/blog/widok-na-morze.jpg"
+thumbnail: "/images/blog/widok-na-morze.jpg"
 ```
 
 ---
