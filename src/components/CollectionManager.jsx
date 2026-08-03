@@ -12,7 +12,7 @@ const ListingsMap = lazy(() =>
 
 const NAV_H = 96;
 
-const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimestamp }) => {
+const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimestamp, initialRatesSource }) => {
   const [filters, setFilters] = useState({
     priceMin: null,
     priceMax: null,
@@ -82,6 +82,7 @@ const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimes
           setDisplayCurrency={handleCurrencyChange}
           rates={rates}
           ratesTimestamp={initialRatesTimestamp}
+          ratesSource={initialRatesSource}
         />
       </div>
 

@@ -11,9 +11,12 @@ const ListingFilterBar = ({
   setDisplayCurrency,
   rates = {},
   ratesTimestamp,
+  ratesSource,
 }) => {
+  const RATE_SOURCE_LABELS = { frankfurter: 'api.frankfurter.app', ecb: 'ecb.europa.eu' };
   const tooltipText = ratesTimestamp
     ? `Kursy z ${new Date(ratesTimestamp).toLocaleString('pl-PL', { dateStyle: 'short', timeStyle: 'short' })}`
+      + (RATE_SOURCE_LABELS[ratesSource] ? ` (źródło: ${RATE_SOURCE_LABELS[ratesSource]})` : '')
     : 'Kursy domyślne (brak połączenia z API)';
   const { minPrice, maxPrice, buckets } = useMemo(() => {
     const prices = offers

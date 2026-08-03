@@ -1,6 +1,5 @@
 import cron from 'node-cron';
-
-const FALLBACK_RATES = { EUR: 1, PLN: 4.25, GBP: 0.86, USD: 1.08, AED: 3.97, EGP: 52.0 };
+import { FALLBACK_RATES } from '../utils/exchangeRates';
 
 let currentRates = { ...FALLBACK_RATES };
 let ratesTimestamp = null;
