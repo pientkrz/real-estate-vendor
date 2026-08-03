@@ -1,13 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
-
-const formatPin = (price, currency) => {
-  if (!price) return '?';
-  const sym = currency === 'EUR' ? '€' : currency === 'PLN' ? 'zł' : currency === 'USD' ? '$' : (currency || '€');
-  if (price >= 1_000_000) return `${+(price / 1_000_000).toFixed(1)}M ${sym}`;
-  if (price >= 1_000) return `${Math.round(price / 1_000)}k ${sym}`;
-  return `${price} ${sym}`;
-};
+import { formatPrice } from '../utils/formatPrice';
 
 // Minimum on-screen pixel distance between pins before they merge into a cluster.
 const CLUSTER_RADIUS = 50;
@@ -69,7 +62,7 @@ const ListingsMap = ({ properties = [] }) => {
     for (const cluster of clusters) {
       if (cluster.items.length === 1) {
         const prop = cluster.items[0];
-        const label = formatPin(prop.price, prop.currency);
+        const label = formatPrice(prop.price, prop.currency);
         const title = prop.params?.miasto || 'Estate';
         const loc = [prop.location?.city, prop.location?.region, prop.location?.country].filter(Boolean).join(', ');
         const area = prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : '';
