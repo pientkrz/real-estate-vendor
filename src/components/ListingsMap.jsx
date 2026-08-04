@@ -2,6 +2,62 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { formatPrice } from '../utils/formatPrice';
 
+// CARTO's "light_all" tile water fill, sampled directly from the tile PNGs,
+// recoloured to the requested #c2dcff. This can't be done with a CSS filter —
+// a filter transforms every pixel uniformly, so land/roads/labels shift hue
+// along with the water (that was tried and visibly tinted the land blue).
+// Instead each tile is redrawn on a canvas after loading and only pixels near
+// the water colour are recoloured; everything else is left byte-for-byte alone.
+const WATER_RGB = [212, 218, 220];
+const WATER_TARGET_RGB = [194, 220, 255]; // #c2dcff
+const WATER_MATCH_RADIUS = 40; // land (~250,250,248) is ~57 away — safely outside this
+
+const recolorWaterPixels = (imageData) => {
+  const d = imageData.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const dr = d[i] - WATER_RGB[0];
+    const dg = d[i + 1] - WATER_RGB[1];
+    const db = d[i + 2] - WATER_RGB[2];
+    const dist = Math.sqrt(dr * dr + dg * dg + db * db);
+    if (dist >= WATER_MATCH_RADIUS) continue;
+    // Blend proportionally to closeness so antialiased coastline pixels
+    // transition smoothly instead of leaving a hard-edged fringe.
+    const t = 1 - dist / WATER_MATCH_RADIUS;
+    d[i] += (WATER_TARGET_RGB[0] - d[i]) * t;
+    d[i + 1] += (WATER_TARGET_RGB[1] - d[i + 1]) * t;
+    d[i + 2] += (WATER_TARGET_RGB[2] - d[i + 2]) * t;
+  }
+  return imageData;
+};
+
+// Drop-in replacement for L.TileLayer that recolours water after each tile loads.
+const WaterTintTileLayer = L.TileLayer.extend({
+  createTile(coords, done) {
+    const size = this.getTileSize();
+    const canvas = document.createElement('canvas');
+    canvas.width = size.x;
+    canvas.height = size.y;
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(img, 0, 0, size.x, size.y);
+      try {
+        ctx.putImageData(recolorWaterPixels(ctx.getImageData(0, 0, size.x, size.y)), 0, 0);
+      } catch {
+        // Tainted canvas (CORS misconfigured server-side) — fall back to the
+        // untinted tile rather than break the map.
+      }
+      done(null, canvas);
+    };
+    img.onerror = (err) => done(err, canvas);
+    img.src = this.getTileUrl(coords);
+
+    return canvas;
+  },
+});
+
 // Minimum on-screen pixel distance between pins before they merge into a cluster.
 const CLUSTER_RADIUS = 50;
 
@@ -158,7 +214,7 @@ const ListingsMap = ({ properties = [] }) => {
       scrollWheelZoom: true,
     });
 
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+    new WaterTintTileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       subdomains: 'abcd',
       maxZoom: 20,
       attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> © <a href="https://carto.com/attributions">CARTO</a>',
@@ -193,7 +249,7 @@ const ListingsMap = ({ properties = [] }) => {
     }
   }, [properties, renderMarkers]);
 
-  return <div ref={containerRef} className="w-full h-full" />;
+  return <div ref={containerRef} className="listings-map w-full h-full" />;
 };
 
 export default ListingsMap;
