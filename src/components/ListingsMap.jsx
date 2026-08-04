@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import L from 'leaflet';
 import { formatPrice } from '../utils/formatPrice';
 
@@ -50,7 +50,9 @@ const ListingsMap = ({ properties = [] }) => {
   const layerRef = useRef(null);
   const propertiesRef = useRef(properties);
 
-  const renderMarkers = () => {
+  // Reads everything through refs, so it never depends on `properties`/props
+  // directly — a stable, empty-deps callback is correct and always current.
+  const renderMarkers = useCallback(() => {
     const map = mapRef.current;
     const layer = layerRef.current;
     if (!map || !layer) return;
@@ -144,10 +146,7 @@ const ListingsMap = ({ properties = [] }) => {
         clusterMarker.addTo(layer);
       }
     }
-  };
-
-  const renderMarkersRef = useRef(renderMarkers);
-  renderMarkersRef.current = renderMarkers;
+  }, []);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -171,13 +170,13 @@ const ListingsMap = ({ properties = [] }) => {
 
     // Re-cluster whenever the view changes — pixel distance between two fixed
     // points shifts with zoom/pan, so overlap detection must be recomputed live.
-    map.on('zoomend moveend', () => renderMarkersRef.current());
+    map.on('zoomend moveend', renderMarkers);
 
     return () => {
       map.remove();
       mapRef.current = null;
     };
-  }, []);
+  }, [renderMarkers]);
 
   useEffect(() => {
     propertiesRef.current = properties;
@@ -192,7 +191,7 @@ const ListingsMap = ({ properties = [] }) => {
     if (bounds.length > 0) {
       mapRef.current.fitBounds(bounds, { padding: [60, 60], maxZoom: 12 });
     }
-  }, [properties]);
+  }, [properties, renderMarkers]);
 
   return <div ref={containerRef} className="w-full h-full" />;
 };

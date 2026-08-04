@@ -33,7 +33,9 @@ async function refresh() {
       ratesTimestamp = new Date().toISOString();
       ratesSource = source;
       return;
-    } catch {}
+    } catch (err) {
+      console.info(`[rateService] ${fetcher.name} failed: ${err.message}`);
+    }
   }
 }
 

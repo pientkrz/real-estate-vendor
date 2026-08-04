@@ -42,16 +42,6 @@ const validTerrain = `
   <TerrainDetails><Type>0</Type></TerrainDetails>
 </Insertion>`;
 
-const validRoom = `
-<Insertion>
-  <ID>4</ID><Action>0</Action>
-  <Country>1</Country><Province>5</Province><District>142</District><City>Łódź</City>
-  <Price>800</Price><PriceCurrency>1</PriceCurrency>
-  <MarketType>1</MarketType><ObjectName>3</ObjectName><OfferType>1</OfferType>
-  <Description>Pokój do wynajęcia</Description>
-  <RoomDetails></RoomDetails>
-</Insertion>`;
-
 const validGarage = `
 <Insertion>
   <ID>6</ID><Action>0</Action>
