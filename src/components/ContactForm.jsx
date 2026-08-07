@@ -5,7 +5,10 @@ const ContactForm = () => {
         name: '',
         email: '',
         phone: '',
-        method: 'Email',
+        direction: '',
+        purpose: '',
+        budget: '',
+        propertyType: '',
         message: '',
         accepted: false
     });
@@ -66,11 +69,11 @@ const ContactForm = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <label htmlFor="phone" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Numer telefonu (opcjonalnie)</label>
-                        <input 
-                            type="tel" 
-                            id="phone" 
-                            name="phone" 
+                        <label htmlFor="phone" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Nr telefonu</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
                             value={formData.phone}
                             onChange={handleChange}
                             className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 placeholder:text-outline/50"
@@ -79,19 +82,76 @@ const ContactForm = () => {
                     </div>
 
                     <div className="space-y-2">
-                        <label htmlFor="method" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Preferowany kontakt</label>
+                        <label htmlFor="direction" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Kierunek</label>
                         <select
-                            id="method"
-                            name="method"
-                            value={formData.method}
+                            id="direction"
+                            name="direction"
+                            value={formData.direction}
                             onChange={handleChange}
                             className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 appearance-none cursor-pointer"
                         >
-                            <option value="Email">E-mail</option>
-                            <option value="Phone">Telefon</option>
-                            <option value="WhatsApp">WhatsApp</option>
+                            <option value="" disabled>Wybierz kierunek</option>
+                            <option value="Greece">Grecja</option>
+                            <option value="Spain">Hiszpania</option>
+                            <option value="Cyprus">Cypr</option>
+                            <option value="Poland">Polska</option>
+                            <option value="UAE">Zjednoczone Emiraty Arabskie</option>
+                            <option value="Italy">Włochy</option>
+                            <option value="Other">Inny</option>
                         </select>
                     </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <label htmlFor="purpose" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Cel zakupu</label>
+                        <select
+                            id="purpose"
+                            name="purpose"
+                            value={formData.purpose}
+                            onChange={handleChange}
+                            className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 appearance-none cursor-pointer"
+                        >
+                            <option value="">Wybierz cel</option>
+                            <option value="Investment">Inwestycja</option>
+                            <option value="Personal">Użytek własny</option>
+                            <option value="Vacation">Dom wakacyjny</option>
+                            <option value="Relocation">Przeprowadzka</option>
+                        </select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <label htmlFor="budget" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Budżet (PLN)</label>
+                        <input
+                            type="text"
+                            id="budget"
+                            name="budget"
+                            value={formData.budget}
+                            onChange={handleChange}
+                            className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 placeholder:text-outline/50"
+                            placeholder="np. 500 000"
+                        />
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <label htmlFor="propertyType" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Preferowany typ nieruchomości</label>
+                    <select
+                        id="propertyType"
+                        name="propertyType"
+                        value={formData.propertyType}
+                        onChange={handleChange}
+                        className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 appearance-none cursor-pointer"
+                    >
+                        <option value="">Wybierz typ</option>
+                        <option value="mieszkania">Mieszkanie</option>
+                        <option value="domy">Dom</option>
+                        <option value="dzialki">Działka</option>
+                        <option value="pokoje">Pokój</option>
+                        <option value="lokale">Lokal</option>
+                        <option value="hale">Hala</option>
+                        <option value="garaze">Garaż</option>
+                    </select>
                 </div>
 
                 <div className="space-y-2 pt-2">
