@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
+import PhoneInput from './PhoneInput';
+import { isValidPhoneNumber } from '../utils/phoneValidation';
 
 const ContactForm = () => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         phone: '',
+        phoneDialCode: '+48',
         direction: '',
         purpose: '',
         budget: '',
@@ -12,14 +15,22 @@ const ContactForm = () => {
         message: '',
         accepted: false
     });
+    const [phoneError, setPhoneError] = useState('');
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData({ ...formData, [name]: type === 'checkbox' ? checked : value });
     };
 
+    const validatePhone = () => {
+        const valid = isValidPhoneNumber(formData.phone);
+        setPhoneError(valid ? '' : 'Podaj poprawny numer telefonu.');
+        return valid;
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!validatePhone()) return;
         alert('Dziękujemy za kontakt. Przedstawiciel Global S Home skontaktuje się z Tobą wkrótce.');
     };
 
@@ -67,20 +78,16 @@ const ContactForm = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <label htmlFor="phone" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Nr telefonu</label>
-                        <input
-                            type="tel"
-                            id="phone"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 placeholder:text-outline/50"
-                            placeholder="+1 (555) 000-0000"
-                        />
-                    </div>
+                <PhoneInput
+                    dialCode={formData.phoneDialCode}
+                    phone={formData.phone}
+                    onChange={handleChange}
+                    onBlur={validatePhone}
+                    error={phoneError}
+                    label="Nr telefonu"
+                />
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <label htmlFor="direction" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Kierunek</label>
                         <select
@@ -100,9 +107,7 @@ const ContactForm = () => {
                             <option value="Other">Inny</option>
                         </select>
                     </div>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <label htmlFor="purpose" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Cel zakupu</label>
                         <select
@@ -119,7 +124,9 @@ const ContactForm = () => {
                             <option value="Relocation">Przeprowadzka</option>
                         </select>
                     </div>
+                </div>
 
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <label htmlFor="budget" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Budżet (PLN)</label>
                         <input
@@ -132,26 +139,26 @@ const ContactForm = () => {
                             placeholder="np. 500 000"
                         />
                     </div>
-                </div>
 
-                <div className="space-y-2">
-                    <label htmlFor="propertyType" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Preferowany typ nieruchomości</label>
-                    <select
-                        id="propertyType"
-                        name="propertyType"
-                        value={formData.propertyType}
-                        onChange={handleChange}
-                        className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 appearance-none cursor-pointer"
-                    >
-                        <option value="">Wybierz typ</option>
-                        <option value="mieszkania">Mieszkanie</option>
-                        <option value="domy">Dom</option>
-                        <option value="dzialki">Działka</option>
-                        <option value="pokoje">Pokój</option>
-                        <option value="lokale">Lokal</option>
-                        <option value="hale">Hala</option>
-                        <option value="garaze">Garaż</option>
-                    </select>
+                    <div className="space-y-2">
+                        <label htmlFor="propertyType" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Preferowany typ nieruchomości</label>
+                        <select
+                            id="propertyType"
+                            name="propertyType"
+                            value={formData.propertyType}
+                            onChange={handleChange}
+                            className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 appearance-none cursor-pointer"
+                        >
+                            <option value="">Wybierz typ</option>
+                            <option value="mieszkania">Mieszkanie</option>
+                            <option value="domy">Dom</option>
+                            <option value="dzialki">Działka</option>
+                            <option value="pokoje">Pokój</option>
+                            <option value="lokale">Lokal</option>
+                            <option value="hale">Hala</option>
+                            <option value="garaze">Garaż</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div className="space-y-2 pt-2">
