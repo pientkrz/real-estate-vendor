@@ -16,6 +16,8 @@ const ContactForm = () => {
         accepted: false
     });
     const [phoneError, setPhoneError] = useState('');
+    const [status, setStatus] = useState('idle'); // idle | submitting | success | error
+    const [statusMessage, setStatusMessage] = useState('');
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -28,10 +30,28 @@ const ContactForm = () => {
         return valid;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validatePhone()) return;
-        alert('Dziękujemy za kontakt. Przedstawiciel Global S Home skontaktuje się z Tobą wkrótce.');
+
+        setStatus('submitting');
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...formData,
+                    phone: formData.phone ? `${formData.phoneDialCode} ${formData.phone}` : '',
+                    source: 'contact',
+                }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Nie udało się wysłać wiadomości.');
+            setStatus('success');
+        } catch (err) {
+            setStatus('error');
+            setStatusMessage(err.message);
+        }
     };
 
     return (
@@ -48,6 +68,17 @@ const ContactForm = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+                <input
+                    type="text"
+                    name="website"
+                    value={formData.website || ''}
+                    onChange={handleChange}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                    className="absolute -left-[9999px] w-px h-px overflow-hidden"
+                />
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                         <label htmlFor="name" className="text-xs font-label uppercase tracking-widest text-on-surface-variant">Imię i nazwisko</label>
@@ -200,13 +231,23 @@ const ContactForm = () => {
                 </div>
 
                 <div className="pt-6">
-                    <button 
-                        type="submit" 
-                        disabled={!formData.accepted}
+                    <button
+                        type="submit"
+                        disabled={!formData.accepted || status === 'submitting'}
                         className="w-full editorial-gradient text-on-primary font-label uppercase tracking-[0.2em] py-4 text-sm hover:opacity-90 transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-low disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Wyślij zapytanie
+                        {status === 'submitting' ? 'Wysyłanie...' : 'Wyślij zapytanie'}
                     </button>
+                    {status === 'success' && (
+                        <p className="text-center text-sm text-primary font-body mt-4">
+                            Dziękujemy za kontakt. Przedstawiciel Global S Home skontaktuje się z Tobą wkrótce.
+                        </p>
+                    )}
+                    {status === 'error' && (
+                        <p className="text-center text-sm text-red-600 font-body mt-4">
+                            {statusMessage}
+                        </p>
+                    )}
                     <p className="text-center text-[10px] font-label text-outline mt-4 uppercase tracking-wider">
                         Twoje dane są w pełni poufne.
                     </p>

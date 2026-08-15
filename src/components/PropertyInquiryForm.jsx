@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PhoneInput from './PhoneInput';
 import { isValidPhoneNumber } from '../utils/phoneValidation';
 
-const PropertyInquiryForm = () => {
+const PropertyInquiryForm = ({ propertyTitle, propertyUrl }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -12,6 +12,8 @@ const PropertyInquiryForm = () => {
         accepted: false,
     });
     const [phoneError, setPhoneError] = useState('');
+    const [status, setStatus] = useState('idle'); // idle | submitting | success | error
+    const [statusMessage, setStatusMessage] = useState('');
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -24,14 +26,45 @@ const PropertyInquiryForm = () => {
         return valid;
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validatePhone()) return;
-        alert('Dziękujemy za kontakt. Przedstawiciel Global S Home skontaktuje się z Tobą wkrótce.');
+
+        setStatus('submitting');
+        try {
+            const res = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...formData,
+                    phone: formData.phone ? `${formData.phoneDialCode} ${formData.phone}` : '',
+                    source: 'property-inquiry',
+                    propertyTitle,
+                    propertyUrl,
+                }),
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Nie udało się wysłać wiadomości.');
+            setStatus('success');
+        } catch (err) {
+            setStatus('error');
+            setStatusMessage(err.message);
+        }
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
+            <input
+                type="text"
+                name="website"
+                value={formData.website || ''}
+                onChange={handleChange}
+                tabIndex={-1}
+                autoComplete="off"
+                aria-hidden="true"
+                className="absolute -left-[9999px] w-px h-px overflow-hidden"
+            />
+
             <div>
                 <input
                     type="text"
@@ -100,11 +133,21 @@ const PropertyInquiryForm = () => {
 
             <button
                 type="submit"
-                disabled={!formData.accepted}
+                disabled={!formData.accepted || status === 'submitting'}
                 className="w-full editorial-gradient text-on-primary font-label uppercase tracking-[0.2em] py-4 text-sm hover:opacity-90 transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-low disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                Wyślij zapytanie
+                {status === 'submitting' ? 'Wysyłanie...' : 'Wyślij zapytanie'}
             </button>
+            {status === 'success' && (
+                <p className="text-center text-sm text-primary font-body">
+                    Dziękujemy za kontakt. Przedstawiciel Global S Home skontaktuje się z Tobą wkrótce.
+                </p>
+            )}
+            {status === 'error' && (
+                <p className="text-center text-sm text-red-600 font-body">
+                    {statusMessage}
+                </p>
+            )}
         </form>
     );
 };
