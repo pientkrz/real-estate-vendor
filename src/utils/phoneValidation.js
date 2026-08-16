@@ -1,204 +1,34 @@
-/**
- * International dial codes with Polish country names, sorted alphabetically
- * so users can scan/find their own country in the dropdown.
- */
-export const COUNTRY_DIAL_CODES = [
-  { code: '+93', country: 'Afganistan' },
-  { code: '+355', country: 'Albania' },
-  { code: '+213', country: 'Algieria' },
-  { code: '+376', country: 'Andora' },
-  { code: '+244', country: 'Angola' },
-  { code: '+966', country: 'Arabia Saudyjska' },
-  { code: '+54', country: 'Argentyna' },
-  { code: '+374', country: 'Armenia' },
-  { code: '+61', country: 'Australia' },
-  { code: '+43', country: 'Austria' },
-  { code: '+994', country: 'Azerbejdżan' },
-  { code: '+1', country: 'Bahamy' },
-  { code: '+973', country: 'Bahrajn' },
-  { code: '+880', country: 'Bangladesz' },
-  { code: '+1', country: 'Barbados' },
-  { code: '+32', country: 'Belgia' },
-  { code: '+501', country: 'Belize' },
-  { code: '+229', country: 'Benin' },
-  { code: '+375', country: 'Białoruś' },
-  { code: '+591', country: 'Boliwia' },
-  { code: '+387', country: 'Bośnia i Hercegowina' },
-  { code: '+267', country: 'Botswana' },
-  { code: '+55', country: 'Brazylia' },
-  { code: '+673', country: 'Brunei' },
-  { code: '+359', country: 'Bułgaria' },
-  { code: '+226', country: 'Burkina Faso' },
-  { code: '+257', country: 'Burundi' },
-  { code: '+56', country: 'Chile' },
-  { code: '+86', country: 'Chiny' },
-  { code: '+385', country: 'Chorwacja' },
-  { code: '+357', country: 'Cypr' },
-  { code: '+235', country: 'Czad' },
-  { code: '+382', country: 'Czarnogóra' },
-  { code: '+420', country: 'Czechy' },
-  { code: '+45', country: 'Dania' },
-  { code: '+243', country: 'Demokratyczna Republika Konga' },
-  { code: '+1', country: 'Dominikana' },
-  { code: '+253', country: 'Dżibuti' },
-  { code: '+20', country: 'Egipt' },
-  { code: '+593', country: 'Ekwador' },
-  { code: '+291', country: 'Erytrea' },
-  { code: '+372', country: 'Estonia' },
-  { code: '+268', country: 'Eswatini' },
-  { code: '+251', country: 'Etiopia' },
-  { code: '+679', country: 'Fidżi' },
-  { code: '+63', country: 'Filipiny' },
-  { code: '+358', country: 'Finlandia' },
-  { code: '+33', country: 'Francja' },
-  { code: '+241', country: 'Gabon' },
-  { code: '+220', country: 'Gambia' },
-  { code: '+233', country: 'Ghana' },
-  { code: '+30', country: 'Grecja' },
-  { code: '+1', country: 'Grenada' },
-  { code: '+995', country: 'Gruzja' },
-  { code: '+592', country: 'Gujana' },
-  { code: '+502', country: 'Gwatemala' },
-  { code: '+224', country: 'Gwinea' },
-  { code: '+245', country: 'Gwinea Bissau' },
-  { code: '+240', country: 'Gwinea Równikowa' },
-  { code: '+509', country: 'Haiti' },
-  { code: '+34', country: 'Hiszpania' },
-  { code: '+31', country: 'Holandia' },
-  { code: '+504', country: 'Honduras' },
-  { code: '+91', country: 'Indie' },
-  { code: '+62', country: 'Indonezja' },
-  { code: '+964', country: 'Irak' },
-  { code: '+98', country: 'Iran' },
-  { code: '+353', country: 'Irlandia' },
-  { code: '+354', country: 'Islandia' },
-  { code: '+972', country: 'Izrael' },
-  { code: '+1', country: 'Jamajka' },
-  { code: '+81', country: 'Japonia' },
-  { code: '+967', country: 'Jemen' },
-  { code: '+962', country: 'Jordania' },
-  { code: '+855', country: 'Kambodża' },
-  { code: '+237', country: 'Kamerun' },
-  { code: '+1', country: 'Kanada' },
-  { code: '+974', country: 'Katar' },
-  { code: '+7', country: 'Kazachstan' },
-  { code: '+254', country: 'Kenia' },
-  { code: '+996', country: 'Kirgistan' },
-  { code: '+686', country: 'Kiribati' },
-  { code: '+57', country: 'Kolumbia' },
-  { code: '+269', country: 'Komory' },
-  { code: '+242', country: 'Kongo' },
-  { code: '+82', country: 'Korea Południowa' },
-  { code: '+850', country: 'Korea Północna' },
-  { code: '+506', country: 'Kostaryka' },
-  { code: '+53', country: 'Kuba' },
-  { code: '+965', country: 'Kuwejt' },
-  { code: '+856', country: 'Laos' },
-  { code: '+266', country: 'Lesotho' },
-  { code: '+961', country: 'Liban' },
-  { code: '+231', country: 'Liberia' },
-  { code: '+218', country: 'Libia' },
-  { code: '+423', country: 'Liechtenstein' },
-  { code: '+370', country: 'Litwa' },
-  { code: '+352', country: 'Luksemburg' },
-  { code: '+371', country: 'Łotwa' },
-  { code: '+389', country: 'Macedonia Północna' },
-  { code: '+261', country: 'Madagaskar' },
-  { code: '+265', country: 'Malawi' },
-  { code: '+960', country: 'Malediwy' },
-  { code: '+60', country: 'Malezja' },
-  { code: '+223', country: 'Mali' },
-  { code: '+356', country: 'Malta' },
-  { code: '+212', country: 'Maroko' },
-  { code: '+222', country: 'Mauretania' },
-  { code: '+230', country: 'Mauritius' },
-  { code: '+52', country: 'Meksyk' },
-  { code: '+691', country: 'Mikronezja' },
-  { code: '+373', country: 'Mołdawia' },
-  { code: '+377', country: 'Monako' },
-  { code: '+976', country: 'Mongolia' },
-  { code: '+258', country: 'Mozambik' },
-  { code: '+95', country: 'Myanmar (Birma)' },
-  { code: '+264', country: 'Namibia' },
-  { code: '+674', country: 'Nauru' },
-  { code: '+977', country: 'Nepal' },
-  { code: '+49', country: 'Niemcy' },
-  { code: '+227', country: 'Niger' },
-  { code: '+234', country: 'Nigeria' },
-  { code: '+505', country: 'Nikaragua' },
-  { code: '+47', country: 'Norwegia' },
-  { code: '+64', country: 'Nowa Zelandia' },
-  { code: '+968', country: 'Oman' },
-  { code: '+92', country: 'Pakistan' },
-  { code: '+680', country: 'Palau' },
-  { code: '+507', country: 'Panama' },
-  { code: '+675', country: 'Papua-Nowa Gwinea' },
-  { code: '+595', country: 'Paragwaj' },
-  { code: '+51', country: 'Peru' },
-  { code: '+48', country: 'Polska' },
-  { code: '+351', country: 'Portugalia' },
-  { code: '+27', country: 'Republika Południowej Afryki' },
-  { code: '+236', country: 'Republika Środkowoafrykańska' },
-  { code: '+7', country: 'Rosja' },
-  { code: '+40', country: 'Rumunia' },
-  { code: '+250', country: 'Rwanda' },
-  { code: '+503', country: 'Salwador' },
-  { code: '+685', country: 'Samoa' },
-  { code: '+378', country: 'San Marino' },
-  { code: '+221', country: 'Senegal' },
-  { code: '+381', country: 'Serbia' },
-  { code: '+248', country: 'Seszele' },
-  { code: '+232', country: 'Sierra Leone' },
-  { code: '+65', country: 'Singapur' },
-  { code: '+421', country: 'Słowacja' },
-  { code: '+386', country: 'Słowenia' },
-  { code: '+252', country: 'Somalia' },
-  { code: '+94', country: 'Sri Lanka' },
-  { code: '+1', country: 'Stany Zjednoczone' },
-  { code: '+249', country: 'Sudan' },
-  { code: '+211', country: 'Sudan Południowy' },
-  { code: '+597', country: 'Surinam' },
-  { code: '+963', country: 'Syria' },
-  { code: '+41', country: 'Szwajcaria' },
-  { code: '+46', country: 'Szwecja' },
-  { code: '+992', country: 'Tadżykistan' },
-  { code: '+66', country: 'Tajlandia' },
-  { code: '+255', country: 'Tanzania' },
-  { code: '+670', country: 'Timor Wschodni' },
-  { code: '+228', country: 'Togo' },
-  { code: '+676', country: 'Tonga' },
-  { code: '+1', country: 'Trynidad i Tobago' },
-  { code: '+216', country: 'Tunezja' },
-  { code: '+90', country: 'Turcja' },
-  { code: '+993', country: 'Turkmenistan' },
-  { code: '+688', country: 'Tuvalu' },
-  { code: '+256', country: 'Uganda' },
-  { code: '+380', country: 'Ukraina' },
-  { code: '+598', country: 'Urugwaj' },
-  { code: '+998', country: 'Uzbekistan' },
-  { code: '+678', country: 'Vanuatu' },
-  { code: '+39', country: 'Watykan' },
-  { code: '+58', country: 'Wenezuela' },
-  { code: '+36', country: 'Węgry' },
-  { code: '+44', country: 'Wielka Brytania' },
-  { code: '+84', country: 'Wietnam' },
-  { code: '+39', country: 'Włochy' },
-  { code: '+225', country: 'Wybrzeże Kości Słoniowej' },
-  { code: '+260', country: 'Zambia' },
-  { code: '+263', country: 'Zimbabwe' },
-  { code: '+971', country: 'Zjednoczone Emiraty Arabskie' },
-];
+import { isValidPhoneNumber as isValidPhoneNumberLib, parsePhoneNumber } from 'react-phone-number-input';
 
 /**
- * Format validation only — deliberately not a full E.164/libphonenumber check
- * (would need a new dependency for marginal benefit on a lead-contact form).
- * Accepts digits plus common separators, requires a plausible subscriber
- * number length. An empty string is treated as valid — required-ness is a
- * separate concern the host form controls via the `required` prop.
+ * Poland's reserved 3-digit alarm/emergency short numbers ("numery
+ * alarmowe", per UKE regulation) — never a legitimate personal contact
+ * number, so rejected outright even though they'd otherwise parse as a
+ * technically "possible" number.
  */
-export const isValidPhoneNumber = (phone) => {
-  if (!phone) return true;
-  if (!/^[\d\s\-()]+$/.test(phone)) return false;
-  const digits = phone.replace(/\D/g, '');
-  return digits.length >= 6 && digits.length <= 14;
+export const POLISH_EMERGENCY_NUMBERS = ['112', '985', '986', '987', '991', '992', '993', '994', '996', '997', '998', '999'];
+
+/**
+ * Real per-country format validation (via react-phone-number-input /
+ * libphonenumber-js), plus a Poland-specific block on emergency numbers.
+ * An empty value is treated as valid — required-ness is a separate concern
+ * the host form controls via the `required` prop.
+ *
+ * The emergency-number check runs on a lenient parse (parsePhoneNumber
+ * extracts the national number even for numbers the library considers
+ * "invalid") and is checked independently of, not gated behind, the strict
+ * validity check below — those 3-digit codes would already fail Poland's
+ * 9-digit length rule today, but this rule should keep holding even if that
+ * ever changes, since it's a distinct, deliberate business rule rather than
+ * a side effect of the length check.
+ */
+export const isValidPhoneNumber = (value) => {
+  if (!value) return true;
+
+  const parsed = parsePhoneNumber(value);
+  if (parsed?.country === 'PL' && POLISH_EMERGENCY_NUMBERS.includes(parsed.nationalNumber)) {
+    return false;
+  }
+
+  return isValidPhoneNumberLib(value);
 };

@@ -7,7 +7,6 @@ const PropertyInquiryForm = ({ propertyTitle, propertyUrl }) => {
         name: '',
         email: '',
         phone: '',
-        phoneDialCode: '+48',
         message: '',
         accepted: false,
     });
@@ -37,7 +36,6 @@ const PropertyInquiryForm = ({ propertyTitle, propertyUrl }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
-                    phone: formData.phone ? `${formData.phoneDialCode} ${formData.phone}` : '',
                     source: 'property-inquiry',
                     propertyTitle,
                     propertyUrl,
@@ -89,8 +87,7 @@ const PropertyInquiryForm = ({ propertyTitle, propertyUrl }) => {
             </div>
 
             <PhoneInput
-                dialCode={formData.phoneDialCode}
-                phone={formData.phone}
+                value={formData.phone}
                 onChange={handleChange}
                 onBlur={validatePhone}
                 error={phoneError}

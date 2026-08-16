@@ -1,17 +1,25 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { COUNTRY_DIAL_CODES } from '../utils/phoneValidation';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { getCountries, getCountryCallingCode } from 'react-phone-number-input';
+import flags from 'react-phone-number-input/flags';
+
+const COUNTRIES = getCountries();
 
 /**
- * A native <select> always renders the selected option's full text ("+48
- * Polska") in the closed box — there's no way to show just "+48" collapsed
- * while still listing "+48 Polska" in the open dropdown. This is a small
- * custom listbox instead, giving independent control over both states.
- * Calls onChange with a plain { target: { name, value } } object, matching
- * the shape host forms already destructure from real input change events.
+ * A native <select>'s <option> elements can only render plain text - no
+ * SVG/React content - so a flag icon can never actually show up in a native
+ * dropdown list (regional-indicator flag emoji don't render as flags on
+ * Windows either: Segoe UI Emoji omits them). This is a small custom
+ * listbox instead, so each row can render the same SVG flag component used
+ * in the collapsed cell.
  */
-const DialCodeSelect = ({ id, name, value, onChange, label }) => {
+const DialCodeSelect = ({ id, value, onChange, labels, label }) => {
   const [open, setOpen] = useState(false);
   const rootRef = useRef(null);
+
+  const sortedCountries = useMemo(
+    () => [...COUNTRIES].sort((a, b) => (labels[a] || a).localeCompare(labels[b] || b, 'pl')),
+    [labels]
+  );
 
   useEffect(() => {
     if (!open) return;
@@ -29,13 +37,15 @@ const DialCodeSelect = ({ id, name, value, onChange, label }) => {
     };
   }, [open]);
 
-  const handleSelect = (code) => {
-    onChange({ target: { name, value: code, type: 'text' } });
+  const handleSelect = (country) => {
+    onChange(country);
     setOpen(false);
   };
 
+  const FlagIcon = flags[value];
+
   return (
-    <div ref={rootRef} className="relative w-full">
+    <div ref={rootRef} className="relative inline-block">
       <button
         type="button"
         id={id}
@@ -43,10 +53,14 @@ const DialCodeSelect = ({ id, name, value, onChange, label }) => {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={label}
-        className="w-full flex items-center justify-between gap-1 bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-2 py-3 text-on-surface font-body text-sm outline-none transition-colors duration-300 cursor-pointer"
+        className="flex items-center gap-1 h-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-2 py-3 transition-colors duration-300 cursor-pointer"
       >
-        <span>{value}</span>
-        <span className="material-symbols-outlined text-[16px] text-outline/60">expand_more</span>
+        {FlagIcon && <FlagIcon title={labels[value]} className="w-5 h-auto shrink-0" />}
+        {/* Fixed-width code column, same as the dropdown list, so the cell's
+            footprint stays the same size regardless of which country is
+            selected instead of growing/shrinking with the digit count. */}
+        <span className="w-10 shrink-0 tabular-nums text-on-surface font-body text-sm">+{getCountryCallingCode(value)}</span>
+        <span className="material-symbols-outlined text-[16px] text-outline/60 shrink-0">expand_more</span>
       </button>
       {open && (
         <ul
@@ -54,17 +68,25 @@ const DialCodeSelect = ({ id, name, value, onChange, label }) => {
           aria-label={label}
           className="absolute z-50 mt-1 max-h-64 w-64 overflow-y-auto bg-surface border border-outline/20 shadow-xl font-body text-sm"
         >
-          {COUNTRY_DIAL_CODES.map(({ code, country }) => (
-            <li
-              key={`${code}-${country}`}
-              role="option"
-              aria-selected={code === value}
-              onClick={() => handleSelect(code)}
-              className={`px-3 py-2 cursor-pointer hover:bg-surface-container-low ${code === value ? 'text-primary font-semibold' : 'text-on-surface'}`}
-            >
-              {code} {country}
-            </li>
-          ))}
+          {sortedCountries.map((country) => {
+            const OptionFlag = flags[country];
+            return (
+              <li
+                key={country}
+                role="option"
+                aria-selected={country === value}
+                onClick={() => handleSelect(country)}
+                className={`flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-surface-container-low ${country === value ? 'text-primary font-semibold' : 'text-on-surface'}`}
+              >
+                {OptionFlag && <OptionFlag title={labels[country]} className="w-5 h-auto shrink-0" />}
+                {/* Fixed-width code column (sized for the widest real case,
+                    "+999") so the country name always starts at the same x
+                    position regardless of how many digits the code has. */}
+                <span className="w-10 shrink-0 tabular-nums">+{getCountryCallingCode(country)}</span>
+                <span className="truncate">{labels[country] || country}</span>
+              </li>
+            );
+          })}
         </ul>
       )}
     </div>

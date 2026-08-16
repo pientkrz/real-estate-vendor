@@ -7,7 +7,6 @@ const ContactForm = () => {
         name: '',
         email: '',
         phone: '',
-        phoneDialCode: '+48',
         direction: '',
         purpose: '',
         budget: '',
@@ -41,7 +40,6 @@ const ContactForm = () => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...formData,
-                    phone: formData.phone ? `${formData.phoneDialCode} ${formData.phone}` : '',
                     source: 'contact',
                 }),
             });
@@ -110,8 +108,7 @@ const ContactForm = () => {
                 </div>
 
                 <PhoneInput
-                    dialCode={formData.phoneDialCode}
-                    phone={formData.phone}
+                    value={formData.phone}
                     onChange={handleChange}
                     onBlur={validatePhone}
                     error={phoneError}
