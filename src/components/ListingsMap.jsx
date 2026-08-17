@@ -61,6 +61,28 @@ const WaterTintTileLayer = L.TileLayer.extend({
 // Minimum on-screen pixel distance between pins before they merge into a cluster.
 const CLUSTER_RADIUS = 50;
 
+// Zoom level at/above which a cluster that still hasn't broken apart is
+// treated as geographically coincident (e.g. several units geocoded to the
+// same building) rather than "just needs more zoom". Two genuinely distinct
+// coordinates grow further apart in pixel space every time you zoom in, so
+// if a cluster is still merged this close to max zoom, no further zooming
+// will ever separate it — it needs to be fanned out ("spiderfied") into
+// individually-clickable pins instead. Matches the existing zoom cap already
+// used by the cluster click-to-zoom handler below.
+const SPIDERFY_ZOOM = 18;
+
+// Pixel offsets for `count` pins arranged evenly around a circle, sized so
+// adjacent 36px pins don't touch (bigger counts need a wider ring).
+const spiderfyRingOffsets = (count) => {
+  if (count <= 1) return [{ x: 0, y: 0 }];
+  const minSpacing = 44;
+  const radius = Math.max(40, minSpacing / (2 * Math.sin(Math.PI / count)));
+  return Array.from({ length: count }, (_, i) => {
+    const angle = (2 * Math.PI * i) / count;
+    return { x: Math.cos(angle) * radius, y: Math.sin(angle) * radius };
+  });
+};
+
 // Greedy pixel-space clustering: walks the points once, attaching each one to the
 // nearest existing cluster within CLUSTER_RADIUS (updating that cluster's running
 // centroid), or starting a new cluster otherwise. Recomputed on every zoom/pan since
@@ -100,6 +122,53 @@ const clusterProperties = (map, properties) => {
   return clusters;
 };
 
+// Builds a single property pin (marker + popup). `latLng` is passed
+// separately from `prop.lat`/`prop.lng` so spiderfied pins can be rendered
+// at a fanned-out visual position while the popup content still reflects
+// the real property data.
+const createPropertyPin = (prop, latLng) => {
+  const base = import.meta.env.BASE_URL;
+  const label = formatPrice(prop.price, prop.currency);
+  const title = prop.params?.miasto || 'Estate';
+  const loc = [prop.location?.city, prop.location?.region, prop.location?.country].filter(Boolean).join(', ');
+  const area = prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : '';
+  const photo = prop.params?.zdjecie1;
+
+  const pin = L.marker(latLng, {
+    icon: L.divIcon({
+      className: '',
+      html: `<div style="
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(252,249,248,0.95);
+        border: 1px solid rgba(122,89,12,0.35);
+        border-radius: 9999px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        cursor: pointer;
+      "><span class="material-symbols-outlined" style="font-size:18px;color:#7a590c;">home</span></div>`,
+      iconSize: [36, 36],
+      iconAnchor: [18, 18],
+    }),
+  });
+
+  pin.bindPopup(`
+    <div style="min-width:200px;font-family:'Work Sans',sans-serif;padding:4px;">
+      ${photo ? `<img src="${photo}" alt="${title}" loading="lazy" style="width:100%;height:120px;object-fit:cover;border-radius:2px;display:block;margin:0 0 8px;"/>` : ''}
+      <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;margin:0 0 4px;">${prop.tab || 'Nieruchomość'}</p>
+      <h4 style="font-size:15px;font-weight:700;margin:0 0 2px;color:#1c1b1b;">${title}</h4>
+      <p style="font-size:11px;color:#4e4638;margin:0 0 6px;">${loc}</p>
+      ${area ? `<p style="font-size:11px;color:#807666;margin:0 0 6px;">${area}</p>` : ''}
+      <div style="font-size:13px;font-weight:700;color:#7a590c;margin-bottom:8px;">${label}</div>
+      <a href="${base}property/${prop.id}" style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;font-weight:600;text-decoration:none;border-bottom:1px solid #7a590c;padding-bottom:1px;">Pokaż szczegóły →</a>
+    </div>
+  `, { maxWidth: 260, closeButton: true });
+
+  return pin;
+};
+
 const ListingsMap = ({ properties = [] }) => {
   const containerRef = useRef(null);
   const mapRef = useRef(null);
@@ -114,51 +183,33 @@ const ListingsMap = ({ properties = [] }) => {
     if (!map || !layer) return;
 
     layer.clearLayers();
-    const base = import.meta.env.BASE_URL;
     const clusters = clusterProperties(map, propertiesRef.current);
 
     for (const cluster of clusters) {
       if (cluster.items.length === 1) {
-        const prop = cluster.items[0];
-        const label = formatPrice(prop.price, prop.currency);
-        const title = prop.params?.miasto || 'Estate';
-        const loc = [prop.location?.city, prop.location?.region, prop.location?.country].filter(Boolean).join(', ');
-        const area = prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : '';
-        const photo = prop.params?.zdjecie1;
+        createPropertyPin(cluster.items[0], [cluster.items[0].lat, cluster.items[0].lng]).addTo(layer);
+      } else if (map.getZoom() >= SPIDERFY_ZOOM) {
+        // This close to max zoom, a cluster that's still merged means the
+        // underlying coordinates are effectively coincident (e.g. several
+        // units geocoded to the same building) rather than just needing
+        // more zoom — fan the pins out into a small ring so each one is
+        // still individually visible and clickable.
+        const hubLatLng = map.layerPointToLatLng(cluster.point);
+        const offsets = spiderfyRingOffsets(cluster.items.length);
 
-        const pin = L.marker([prop.lat, prop.lng], {
-          icon: L.divIcon({
-            className: '',
-            html: `<div style="
-              width: 36px;
-              height: 36px;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              background: rgba(252,249,248,0.95);
-              border: 1px solid rgba(122,89,12,0.35);
-              border-radius: 9999px;
-              box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-              cursor: pointer;
-            "><span class="material-symbols-outlined" style="font-size:18px;color:#7a590c;">home</span></div>`,
-            iconSize: [36, 36],
-            iconAnchor: [18, 18],
-          }),
+        cluster.items.forEach((prop, i) => {
+          const spiderPoint = L.point(cluster.point.x + offsets[i].x, cluster.point.y + offsets[i].y);
+          const spiderLatLng = map.layerPointToLatLng(spiderPoint);
+
+          L.polyline([hubLatLng, spiderLatLng], {
+            color: '#7a590c',
+            weight: 1,
+            opacity: 0.5,
+            interactive: false,
+          }).addTo(layer);
+
+          createPropertyPin(prop, spiderLatLng).addTo(layer);
         });
-
-        pin.bindPopup(`
-          <div style="min-width:200px;font-family:'Work Sans',sans-serif;padding:4px;">
-            ${photo ? `<img src="${photo}" alt="${title}" loading="lazy" style="width:100%;height:120px;object-fit:cover;border-radius:2px;display:block;margin:0 0 8px;"/>` : ''}
-            <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;margin:0 0 4px;">${prop.tab || 'Nieruchomość'}</p>
-            <h4 style="font-size:15px;font-weight:700;margin:0 0 2px;color:#1c1b1b;">${title}</h4>
-            <p style="font-size:11px;color:#4e4638;margin:0 0 6px;">${loc}</p>
-            ${area ? `<p style="font-size:11px;color:#807666;margin:0 0 6px;">${area}</p>` : ''}
-            <div style="font-size:13px;font-weight:700;color:#7a590c;margin-bottom:8px;">${label}</div>
-            <a href="${base}property/${prop.id}" style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;font-weight:600;text-decoration:none;border-bottom:1px solid #7a590c;padding-bottom:1px;">Pokaż szczegóły →</a>
-          </div>
-        `, { maxWidth: 260, closeButton: true });
-
-        pin.addTo(layer);
       } else {
         const count = cluster.items.length;
         const avgLat = cluster.items.reduce((sum, p) => sum + p.lat, 0) / count;
