@@ -91,10 +91,6 @@
   .editorial-gradient {
     background: linear-gradient(135deg, #7a590c 0%, #c2994a 100%);
   }
-  .glass-effect {
-    @apply backdrop-blur-md;
-    -webkit-backdrop-filter: blur(12px);
-  }
 }
 
 /* Listings map: water is recoloured to #c2dcff per-pixel on canvas

@@ -1,8 +1,12 @@
 import React from 'react';
 
 const Navbar = () => {
+  // z-[9999], not z-50: Leaflet's own panes/markers/tiles use z-index
+  // values up to ~1300 and aren't isolated into their own stacking
+  // context, so once the page scrolls they can visually paint over a
+  // merely-z-50 fixed header.
   return (
-    <header className="fixed top-0 w-full z-50 bg-surface/80 glass-effect">
+    <header className="fixed top-0 w-full z-[9999] bg-surface">
       <nav className="flex justify-between items-center px-12 py-6 max-w-screen-2xl mx-auto">
         <div className="text-2xl font-bold tracking-tighter text-amber-800 font-headline">
           Global S Home
