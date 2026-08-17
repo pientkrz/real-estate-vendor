@@ -38,41 +38,74 @@ function getTransporter() {
   return transporterPromise;
 }
 
-function buildBusinessBody({ name, email, phone, message, source, propertyTitle, propertyUrl, direction, purpose, budget, propertyType }) {
-  return [
-    `Nowe zapytanie ze strony (źródło: ${source})`,
-    '',
+/**
+ * Business notification (to MAIL_TO). Content differs by source:
+ * - Property inquiry (propertyTitle present): listing + link, then the
+ *   submitter's message under "Treść wiadomości".
+ * - Contact form: the qualifying fields (kierunek/cel/budżet/typ, each
+ *   optional), then the message under "Treść zapytania".
+ * Built as separate line "blocks", each filtered for absent optional
+ * fields before joining - keeps blank-line spacing between blocks
+ * correct regardless of which optional fields are present (a flat
+ * `.filter(Boolean)` over one array would also strip intentional blank
+ * lines, since '' is falsy too).
+ */
+function buildBusinessBody(fields) {
+  const { name, email, phone, message, propertyTitle, propertyUrl, direction, purpose, budget, propertyType } = fields;
+  const isPropertyInquiry = Boolean(propertyTitle);
+
+  const heading = isPropertyInquiry ? 'Nowe zapytanie o nieruchomość' : 'Nowe zapytanie z formularza kontaktowego';
+
+  const contactBlock = [
     `Imię i nazwisko: ${name}`,
     `E-mail: ${email}`,
     phone && `Telefon: ${phone}`,
-    propertyTitle && `Nieruchomość: ${propertyTitle}`,
-    propertyUrl && `Link: ${propertyUrl}`,
-    direction && `Kierunek: ${direction}`,
-    purpose && `Cel zakupu: ${purpose}`,
-    budget && `Budżet: ${budget} PLN`,
-    propertyType && `Preferowany typ nieruchomości: ${propertyType}`,
-    '',
-    'Treść wiadomości:',
+  ].filter(Boolean);
+
+  const detailsBlock = isPropertyInquiry
+    ? [
+        `Nieruchomość: ${propertyTitle}`,
+        propertyUrl && `Link: ${propertyUrl}`,
+      ].filter(Boolean)
+    : [
+        direction && `Kierunek: ${direction}`,
+        purpose && `Cel zakupu: ${purpose}`,
+        budget && `Budżet: ${budget} PLN`,
+        propertyType && `Preferowany typ nieruchomości: ${propertyType}`,
+      ].filter(Boolean);
+
+  const messageBlock = [
+    isPropertyInquiry ? 'Treść wiadomości:' : 'Treść zapytania:',
     message,
-  ].filter(Boolean).join('\n');
+  ];
+
+  return [[heading], contactBlock, detailsBlock, messageBlock]
+    .filter((block) => block.length > 0)
+    .map((block) => block.join('\n'))
+    .join('\n\n');
 }
 
-function buildConfirmationBody({ name, propertyTitle }) {
+/** Confirmation (to the submitter's own email) - acknowledges receipt. */
+function buildConfirmationBody({ name, propertyTitle, propertyUrl }) {
+  const introLines = propertyTitle
+    ? [
+        `Dziękujemy za kontakt z Global S Home. Otrzymaliśmy Twoje zapytanie dotyczące oferty: ${propertyTitle}.`,
+        propertyUrl && `Szczegóły oferty: ${propertyUrl}`,
+      ].filter(Boolean)
+    : ['Dziękujemy za kontakt z Global S Home. Otrzymaliśmy Twoje zapytanie.'];
+
   return [
-    `Dzień dobry ${name},`,
-    '',
-    propertyTitle
-      ? `Dziękujemy za kontakt z Global S Home. Otrzymaliśmy Twoje zapytanie dotyczące oferty: ${propertyTitle}.`
-      : 'Dziękujemy za kontakt z Global S Home. Otrzymaliśmy Twoje zapytanie.',
-    'Nasz przedstawiciel skontaktuje się z Tobą wkrótce.',
-    '',
-    'Pozdrawiamy,',
-    'Zespół Global S Home',
-  ].join('\n');
+    [`Dzień dobry${name ? ` ${name}` : ''},`],
+    introLines,
+    ['Nasz przedstawiciel skontaktuje się z Tobą w ciągu 24 godzin.'],
+    ['Pozdrawiamy,', 'Zespół Global S Home'],
+  ]
+    .map((block) => block.join('\n'))
+    .join('\n\n');
 }
 
 export async function sendContactEmail(fields) {
-  const { name, email, propertyTitle } = fields;
+  const { name, email, propertyTitle, propertyUrl } = fields;
   const transporter = await getTransporter();
   const from = process.env.MAIL_FROM || process.env.SMTP_USER;
   const to = process.env.MAIL_TO || from;
@@ -89,7 +122,7 @@ export async function sendContactEmail(fields) {
     from,
     to: email,
     subject: 'Potwierdzenie otrzymania zapytania — Global S Home',
-    text: buildConfirmationBody({ name, propertyTitle }),
+    text: buildConfirmationBody({ name, propertyTitle, propertyUrl }),
   });
 
   const previewUrls = [businessInfo, confirmationInfo]
