@@ -1,5 +1,6 @@
 ---
 import '../index.css';
+import CookieConsent from '../components/CookieConsent';
 
 interface Props {
 	title: string;
@@ -25,5 +26,6 @@ const { title, description = "Global S Home - Premium Real Estate", lockViewport
 	</head>
 	<body class={`bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container ${lockViewport ? 'overflow-hidden' : 'min-h-screen'}`}>
 		<slot />
+			<CookieConsent client:only="react" />
 	</body>
 </html>

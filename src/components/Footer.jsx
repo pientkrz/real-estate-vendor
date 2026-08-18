@@ -27,7 +27,7 @@ const Footer = () => {
         <p className="text-stone-500">© 2026 Global S Home | Smart Trade Sp. z o.o.</p>
         <div className="flex gap-8">
           <a className="text-stone-500 hover:text-amber-700 transition-all" href={`${import.meta.env.BASE_URL}privacy-policy`}>Polityka Prywatności</a>
-          <a className="text-stone-500 hover:text-amber-700 transition-all" href="#">Ustawienia cookies</a>
+          <a className="text-stone-500 hover:text-amber-700 transition-all" href="#" data-open-cookie-settings>Ustawienia cookies</a>
         </div>
       </div>
     </footer>

@@ -7,6 +7,7 @@ import FeaturedProperties from '../../components/FeaturedProperties';
 import PropertyMap from '../../components/PropertyMap';
 import PropertyDetailsPanel from '../../components/property-details/PropertyDetailsPanel';
 import PropertyInquiryForm from '../../components/PropertyInquiryForm';
+import PropertyVideoEmbed from '../../components/PropertyVideoEmbed';
 import { parseOtoDomXml } from '../../utils/xmlParser';
 import { formatPrice } from '../../utils/formatPrice';
 import { getYouTubeEmbedUrl } from '../../utils/videoUrl';
@@ -189,13 +190,7 @@ const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
                         <h2 class="text-5xl font-headline font-bold text-on-surface tracking-tighter">Visual Journey</h2>
                     </div>
                     <div class="aspect-video w-full rounded-sm overflow-hidden shadow-2xl">
-                        <iframe
-                            src={embedUrl}
-                            title="Property video tour"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen
-                            class="w-full h-full"
-                        />
+                        <PropertyVideoEmbed client:load embedUrl={embedUrl} />
                     </div>
                 </div>
             </section>
