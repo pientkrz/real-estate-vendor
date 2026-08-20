@@ -2,6 +2,14 @@ import { XMLParser } from 'fast-xml-parser';
 import dict from './otodom-dictionary.json';
 import { reverseGeocode } from './reverseGeocode.js';
 import { validateOtoDomXml } from './xmlValidator.js';
+import {
+  NOE_AD_TYPE_TO_TYPE,
+  NOE_BOOLEAN_PARAMS,
+  NOE_CATEGORY_TO_TAB,
+  NOE_CURRENCY_TO_CODE,
+  NOE_DETAILS_TO_POLISH_PARAMS,
+  OFERTY_NET_TABS,
+} from './offerMappings.js';
 
 // ── Otodom XML parser ─────────────────────────────────────────────────────────
 
@@ -18,7 +26,7 @@ import { validateOtoDomXml } from './xmlValidator.js';
  *                                 e.g. "/2026-05-23_13%3A07%3A04/"
  * @returns {Array} Normalised offer objects
  */
-export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
+export const parseOtoDomXml = (xmlString, photoBasePath = '', { includeInactive = false } = {}) => {
   // ── Validate and log any spec violations ──────────────────────────────────
   const validation = validateOtoDomXml(xmlString);
   if (!validation.valid) {
@@ -42,8 +50,33 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
   const offers = [];
 
   for (const ins of nodes) {
-    // Skip deactivations (Action=1) and deletions (Action=2)
-    if (parseInt(ins.Action) !== 0) continue;
+    const action = parseInt(ins.Action);
+    const sourceStatus = action === 2 ? 'deleted' : action === 1 ? 'deactivated' : 'active';
+    const sourceId = String(ins.ID ?? '').trim();
+    if (!sourceId || (sourceStatus !== 'active' && !includeInactive)) continue;
+
+    // A deactivation/deletion carries only an ID in the Otodom format. Keep
+    // that event when requested so the aggregate can surface a lifecycle
+    // conflict instead of silently treating an older provider snapshot as live.
+    if (sourceStatus !== 'active') {
+      offers.push({
+        id: `otodom-${sourceId}`,
+        provider: 'otodom-pl',
+        providerOfferId: sourceId,
+        sourceStatus,
+        sourceData: ins,
+        tab: '',
+        objectName: undefined,
+        rawDetails: null,
+        typ: '',
+        price: 0,
+        currency: '',
+        videoUrl: null,
+        params: {},
+        location: {},
+      });
+      continue;
+    }
 
     // Resolve the details block for this object type
     const objectName = parseInt(ins.ObjectName);
@@ -62,7 +95,11 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
     const { city, country, region } = reverseGeocode(lat, lon);
 
     const offer = {
-      id: `otodom-${ins.ID}`,
+      id: `otodom-${sourceId}`,
+      provider: 'otodom-pl',
+      providerOfferId: sourceId,
+      sourceStatus,
+      sourceData: ins,
       tab: dict.ObjectName[String(ins.ObjectName)] ?? '',
       /** Numeric ObjectName code (0–6); drives PropertyDetailsPanel dispatch */
       objectName,
@@ -99,6 +136,265 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '') => {
       });
 
     offers.push(offer);
+  }
+
+  return offers;
+};
+
+// ── Shared provider helpers ──────────────────────────────────────────────────
+
+const toArray = (value) => value == null ? [] : (Array.isArray(value) ? value : [value]);
+
+const readText = (value) => {
+  if (value == null) return '';
+  if (typeof value !== 'object') return String(value);
+  if ('#text' in value) return readText(value['#text']);
+  if ('linia' in value) return toArray(value.linia).map(readText).join('\n');
+  return '';
+};
+
+const readNumber = (value) => {
+  const text = readText(value).trim().replace(',', '.');
+  if (!text) return undefined;
+  const number = Number(text);
+  return Number.isFinite(number) ? number : undefined;
+};
+
+const readInteger = (value) => {
+  const number = readNumber(value);
+  return number == null ? undefined : Math.trunc(number);
+};
+
+const joinPhotoUrl = (basePath, fileName) => {
+  if (!fileName) return '';
+  if (!basePath) return fileName;
+  return `${basePath.replace(/\/$/, '')}/${fileName.replace(/^\//, '')}`;
+};
+
+const readTypedParam = (param) => {
+  const type = String(param?.['@_typ'] ?? '').toLowerCase();
+  const text = readText(param).trim();
+
+  if (!text && text !== '0') return '';
+  if (type === 'bool' || type === 'boolean') {
+    return ['1', 'true', 't', 'tak'].includes(text.toLowerCase());
+  }
+  if (type === 'int' || type === 'integer') return readInteger(param);
+  if (type === 'real' || type === 'float') return readNumber(param);
+  return readText(param);
+};
+
+const firstDescriptionLine = (description, fallback) => {
+  const firstLine = readText(description).split(/\r?\n/).map((line) => line.trim()).find(Boolean);
+  return (firstLine || fallback || '').slice(0, 160);
+};
+
+const locationFromCoordinates = (lat, lon, explicit = {}) => {
+  const reverseLocation = reverseGeocode(lat, lon);
+  const city = readText(explicit.city).trim() || reverseLocation.city;
+  const region = readText(explicit.region).trim() || reverseLocation.region;
+  const country = readText(explicit.country).trim() || reverseLocation.country;
+  return { city, region, country };
+};
+
+const noeBool = (value) => {
+  const number = readInteger(value);
+  if (number === 1) return true;
+  if (number === 2) return false;
+  return undefined;
+};
+
+// ── Nieruchomosci-online.pl NOE 2.0 parser ───────────────────────────────────
+
+/**
+ * Parses a NOE 2.0 XML export from Nieruchomosci-online.pl.
+ *
+ * @param {string} xmlString Raw NOE 2.0 export
+ * @param {string} photoBasePath Public URL prefix for the provider photo folder
+ * @returns {Array} Normalised offer objects
+ */
+export const parseNieruchomosciOnlineXml = (xmlString, photoBasePath = '', { includeInactive = false } = {}) => {
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    attributeNamePrefix: '@_',
+    allowBooleanAttributes: true,
+  });
+  const root = parser.parse(xmlString).xml;
+  if (!root?.ads?.ad) return [];
+
+  const offers = [];
+  for (const ad of toArray(root.ads.ad)) {
+    const details = ad?.details;
+    const action = readText(details?.action).trim().toLowerCase();
+    const sourceStatus = action === 'delete' ? 'deleted'
+      : ['deactivate', 'deactivated', 'inactive'].includes(action) ? 'deactivated'
+        : 'active';
+    if (!details) continue;
+
+    const sourceId = readText(details.sign).trim() || readText(details.id).trim();
+    if (!sourceId || (sourceStatus !== 'active' && !includeInactive)) continue;
+
+    if (sourceStatus !== 'active') {
+      offers.push({
+        id: `nieruchomosci-online-${sourceId}`,
+        provider: 'nieruchomosci-online-pl',
+        providerOfferId: sourceId,
+        sourceStatus,
+        sourceData: ad,
+        tab: '',
+        typ: '',
+        price: 0,
+        currency: '',
+        videoUrl: null,
+        params: {},
+        location: {},
+      });
+      continue;
+    }
+
+    const lat = readNumber(ad.map?.mapLatitude);
+    const lon = readNumber(ad.map?.mapLongitude);
+    const params = {};
+
+    for (const [sourceField, polishParam] of Object.entries(NOE_DETAILS_TO_POLISH_PARAMS)) {
+      const value = details[sourceField];
+      if (readText(value).trim()) params[polishParam] = value === details.description ? readText(value) : readNumber(value) ?? readText(value);
+    }
+    for (const [sourceField, polishParam] of Object.entries(NOE_BOOLEAN_PARAMS)) {
+      const value = noeBool(details[sourceField]);
+      if (value !== undefined) params[polishParam] = value;
+    }
+
+    const location = locationFromCoordinates(lat, lon, {
+      city: details.cityName,
+      region: details.idRegionName,
+    });
+
+    params.powierzchnia ??= readNumber(details.area) ?? 0;
+    params.liczbapokoi ??= readInteger(details.rooms) ?? 0;
+    params.liczbalazienek ??= readInteger(details.bathRooms) ?? 0;
+    params.miasto = readText(params.miasto).trim() || location.city;
+    params.opis ??= readText(details.description);
+    params.latitude = lat ?? 0;
+    params.longitude = lon ?? 0;
+    params.tytul = firstDescriptionLine(params.opis, sourceId);
+
+    toArray(ad.photos?.photo)
+      .map((photo) => readText(photo?.fileName).trim())
+      .filter(Boolean)
+      .forEach((fileName, index) => {
+        params[`zdjecie${index + 1}`] = joinPhotoUrl(photoBasePath, fileName);
+      });
+
+    offers.push({
+      id: `nieruchomosci-online-${sourceId}`,
+      provider: 'nieruchomosci-online-pl',
+      providerOfferId: sourceId,
+      sourceStatus,
+      sourceData: ad,
+      tab: NOE_CATEGORY_TO_TAB[readInteger(details.idCategory)] ?? 'inne',
+      typ: NOE_AD_TYPE_TO_TYPE[readInteger(details.idAdType)] ?? 'sprzedaz',
+      price: readNumber(details.price) ?? 0,
+      currency: NOE_CURRENCY_TO_CODE[readInteger(details.idCurrency)] ?? 'EUR',
+      videoUrl: readText(details.videoAdLink).trim() || null,
+      params,
+      location,
+    });
+  }
+
+  return offers;
+};
+
+// ── Oferty.net XML 0.4 parser ────────────────────────────────────────────────
+
+/**
+ * Parses the Oferty.net / Domy.pl XML 0.4 export format.
+ *
+ * @param {string} xmlString Raw Oferty.net export
+ * @param {string} photoBasePath Public URL prefix for the provider photo folder
+ * @returns {Array} Normalised offer objects
+ */
+export const parseOfertyNetXml = (xmlString, photoBasePath = '') => {
+  const parser = new XMLParser({
+    ignoreAttributes: false,
+    attributeNamePrefix: '@_',
+    allowBooleanAttributes: true,
+  });
+  const root = parser.parse(xmlString).plik;
+  if (!root?.lista_ofert?.dzial) return [];
+
+  const globalPhotos = new Map();
+  for (const photo of toArray(root.zdjecia?.zdjecie)) {
+    const sourceId = readText(photo?.id).trim();
+    const fileName = readText(photo?.nazwa).trim();
+    if (!sourceId || !fileName || readText(photo?.akcja).toLowerCase() === 'u') continue;
+    const photos = globalPhotos.get(sourceId) ?? [];
+    photos.push({ fileName, order: readNumber(photo?.kolejnosc) ?? photos.length });
+    globalPhotos.set(sourceId, photos);
+  }
+
+  const offers = [];
+  for (const department of toArray(root.lista_ofert.dzial)) {
+    const tab = readText(department?.['@_tab']).trim().toLowerCase();
+    const typ = readText(department?.['@_typ']).trim().toLowerCase();
+    if (!OFERTY_NET_TABS.includes(tab)) continue;
+
+    for (const rawOffer of toArray(department?.oferta)) {
+      const sourceId = readText(rawOffer?.id).trim();
+      if (!sourceId) continue;
+
+      const params = {};
+      for (const param of toArray(rawOffer?.param)) {
+        const name = readText(param?.['@_nazwa']).trim();
+        if (name) params[name] = readTypedParam(param);
+      }
+
+      const explicitPhotoNames = Object.entries(params)
+        .filter(([name, value]) => /^zdjecie\d+$/i.test(name) && readText(value).trim())
+        .sort(([left], [right]) => Number(left.match(/\d+/)?.[0]) - Number(right.match(/\d+/)?.[0]))
+        .map(([, value]) => readText(value).trim());
+      Object.keys(params)
+        .filter((name) => /^zdjecie\d+$/i.test(name))
+        .forEach((name) => delete params[name]);
+
+      const photos = globalPhotos.get(sourceId) ?? explicitPhotoNames.map((fileName, order) => ({ fileName, order }));
+      photos
+        .sort((left, right) => left.order - right.order)
+        .forEach((photo, index) => {
+          params[`zdjecie${index + 1}`] = joinPhotoUrl(photoBasePath, photo.fileName);
+        });
+
+      const lat = readNumber(params.geo_lat) ?? readNumber(params.n_geo_y);
+      const lon = readNumber(params.geo_lng) ?? readNumber(params.n_geo_x);
+      const location = locationFromCoordinates(lat, lon, {
+        city: params.miasto,
+        region: params.wojewodztwo,
+        country: params.kraj,
+      });
+      params.powierzchnia = readNumber(params.powierzchnia) ?? 0;
+      params.liczbapokoi = readInteger(params.liczbapokoi) ?? 0;
+      params.liczbalazienek = readInteger(params.liczbalazienek) ?? 0;
+      params.miasto = readText(params.miasto).trim() || location.city;
+      params.opis = readText(params.opis);
+      params.latitude = lat ?? 0;
+      params.longitude = lon ?? 0;
+      params.tytul = readText(params.advertisement_text).trim() || firstDescriptionLine(params.opis, sourceId);
+
+      offers.push({
+        id: `oferty-net-${sourceId}`,
+        provider: 'oferty-net',
+        providerOfferId: sourceId,
+        sourceStatus: 'active',
+        sourceData: { offer: rawOffer, photos },
+        tab,
+        typ: typ === 'wynajem' ? 'wynajem' : 'sprzedaz',
+        price: readNumber(rawOffer.cena) ?? 0,
+        currency: readText(rawOffer.cena?.['@_waluta']).trim() || 'EUR',
+        videoUrl: readText(params.wideo).trim() || null,
+        params,
+        location,
+      });
+    }
   }
 
   return offers;

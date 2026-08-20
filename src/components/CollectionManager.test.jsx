@@ -61,6 +61,18 @@ describe('parseOtoDomXml — fixture integrity', () => {
     expect(ids).not.toContain('otodom-inactive1');
   });
 
+  it('retains an inactive record with lifecycle metadata when aggregation requests it', () => {
+    const records = parseOtoDomXml(MOCK_XML, '/test/photos/', { includeInactive: true });
+    const inactive = records.find((offer) => offer.id === 'otodom-inactive1');
+
+    expect(records).toHaveLength(7);
+    expect(inactive).toMatchObject({
+      provider: 'otodom-pl',
+      providerOfferId: 'inactive1',
+      sourceStatus: 'deactivated',
+    });
+  });
+
   it('assigns the correct country to each offer via the geocode stub', () => {
     const byCountry = (c) => offers.filter((o) => o.location.country === c);
     expect(byCountry('Spain')).toHaveLength(2);

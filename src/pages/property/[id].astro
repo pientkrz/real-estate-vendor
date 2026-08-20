@@ -8,33 +8,30 @@ import PropertyMap from '../../components/PropertyMap';
 import PropertyDetailsPanel from '../../components/property-details/PropertyDetailsPanel';
 import PropertyInquiryForm from '../../components/PropertyInquiryForm';
 import PropertyVideoEmbed from '../../components/PropertyVideoEmbed';
-import { parseOtoDomXml } from '../../utils/xmlParser';
+import { loadConfiguredPropertyAggregates } from '../../server/offerService.js';
+import { toOfferView } from '../../utils/propertyAggregate.js';
 import { formatPrice } from '../../utils/formatPrice';
 import { getYouTubeEmbedUrl } from '../../utils/videoUrl';
 import { sanitizeOpisHtml, stripHtml } from '../../utils/sanitizeHtml';
 import fs from 'node:fs';
 import path from 'node:path';
 
-export const prerender = true;
+export const prerender = false;
 
-export async function getStaticPaths() {
-    const xmlPath = path.join(process.cwd(), 'public', import.meta.env.XML_COLLECTION_PATH, 'properties_otodom.xml');
-    const xmlString = fs.readFileSync(xmlPath, 'utf-8');
-    const photoBase = import.meta.env.PHOTO_BASE_URL;
-    const allOffers = parseOtoDomXml(xmlString, photoBase);
+const _propertyAggregates = loadConfiguredPropertyAggregates();
+const propertyAggregate = _propertyAggregates.find((candidate) => (
+    candidate.lifecycle.isVisible
+    && (candidate.id === Astro.params.id || Object.values(candidate.sourceRecords).some((record) => record.id === Astro.params.id))
+));
+if (!propertyAggregate) return Astro.redirect('/');
 
-    return allOffers.map(offer => ({
-        params: { id: offer.id },
-        props: { offer }
-    }));
-}
-
-const { offer } = Astro.props;
+const offer = toOfferView(propertyAggregate);
+const _allOffers = _propertyAggregates
+    .filter((candidate) => candidate.lifecycle.isVisible)
+    .map(toOfferView);
 const { params, location, price, currency } = offer;
 
 // Compute 3 most similar properties by price (60%) + area (40%) proximity
-const _xmlPath = path.join(process.cwd(), 'public', import.meta.env.XML_COLLECTION_PATH, 'properties_otodom.xml');
-const _allOffers = parseOtoDomXml(fs.readFileSync(_xmlPath, 'utf-8'), import.meta.env.PHOTO_BASE_URL);
 const _cp = price || 0;
 const _ca = params?.powierzchnia || 0;
 const relatedOffers = _allOffers
