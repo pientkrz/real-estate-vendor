@@ -14,13 +14,13 @@ const PropertyAttributesPanel = ({ params }) => {
       <h3 className="text-3xl font-headline font-bold text-on-surface mb-12">
         Szczegóły nieruchomości
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-12">
+      <div className="flex flex-col gap-12">
         {groups.map((group) => (
           <section key={group.name}>
             <h4 className="text-[10px] font-label uppercase tracking-widest text-outline mb-6">
               {group.name}
             </h4>
-            <ul className="space-y-4">
+            <ul className="grid grid-cols-1 gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
               {group.rows.map((row) => (
                 <DetailRow key={row.key} icon={row.icon} label={row.label} value={row.value} />
               ))}

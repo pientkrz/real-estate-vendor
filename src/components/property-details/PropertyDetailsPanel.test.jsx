@@ -29,6 +29,14 @@ describe('PropertyDetailsPanel', () => {
     expect(screen.getByText('Szczegóły nieruchomości')).toBeInTheDocument();
     expect(screen.getByText('Ilość sypialni')).toBeInTheDocument();
     expect(screen.getByText('Klimatyzacja')).toBeInTheDocument();
+
+    expect(screen.getByText('Ilość sypialni').closest('ul')).toHaveClass(
+      'grid',
+      'grid-cols-1',
+      'sm:grid-cols-2',
+      'lg:grid-cols-3',
+    );
+    expect(screen.getByText('Ilość sypialni').closest('li')).toHaveClass('min-w-0');
   });
 
   // ── Flat (0) ──────────────────────────────────────────────────────────────

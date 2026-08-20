@@ -10,7 +10,7 @@ const DetailRow = ({ icon = 'info', label, value }) => {
   if (value === undefined || value === null || value === '') return null;
 
   return (
-    <li className="flex items-start gap-4 text-on-surface">
+    <li className="flex min-w-0 items-start gap-4 text-on-surface">
       <span className="material-symbols-outlined text-primary text-xl mt-0.5 shrink-0">
         {icon}
       </span>
