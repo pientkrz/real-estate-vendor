@@ -13,7 +13,7 @@ import {
   parseOfertyNetXml,
   parseOtoDomXml,
 } from '../utils/xmlParser.js';
-import { buildPropertyAggregates, toOfferView } from '../utils/propertyAggregate.js';
+import { buildPropertyAggregates, toOfferDetailView, toOfferSummaryView } from '../utils/propertyAggregate.js';
 
 const hasValue = (value) => typeof value === 'string' && value.trim().length > 0;
 const firstConfiguredValue = (...values) => values.find(hasValue) ?? '';
@@ -98,7 +98,7 @@ export const loadConfiguredPropertyAggregates = (env = import.meta.env) => (
 export const loadConfiguredOffers = (env = import.meta.env) => (
   loadConfiguredPropertyAggregates(env)
     .filter((aggregate) => aggregate.lifecycle.isVisible)
-    .map(toOfferView)
+    .map(toOfferSummaryView)
 );
 
 /**
@@ -110,5 +110,5 @@ export const loadConfiguredOfferById = (id, env = import.meta.env) => {
     candidate.lifecycle.isVisible
     && (candidate.id === id || Object.values(candidate.sourceRecords).some((record) => record.id === id))
   ));
-  return aggregate ? toOfferView(aggregate) : undefined;
+  return aggregate ? toOfferDetailView(aggregate) : undefined;
 };

@@ -24,6 +24,7 @@ import RoomDetailsPanel               from './RoomDetailsPanel';
 import CommercialPropertyDetailsPanel from './CommercialPropertyDetailsPanel';
 import HallDetailsPanel               from './HallDetailsPanel';
 import GarageDetailsPanel             from './GarageDetailsPanel';
+import PropertyAttributesPanel        from './PropertyAttributesPanel';
 
 /** Map numeric ObjectName to the matching panel component */
 const PANEL_MAP = {
@@ -45,11 +46,14 @@ const PropertyDetailsPanel = ({ offer }) => {
   const { objectName, rawDetails } = offer;
 
   const Panel = PANEL_MAP[objectName];
-  if (!Panel) return null;
+  const resolvedDetails = Panel ? resolvePropertyDetails(objectName, rawDetails) : null;
 
-  const resolvedDetails = resolvePropertyDetails(objectName, rawDetails);
-
-  return <Panel details={resolvedDetails} />;
+  return (
+    <>
+      {Panel ? <Panel details={resolvedDetails} /> : null}
+      <PropertyAttributesPanel params={offer.params} />
+    </>
+  );
 };
 
 export default PropertyDetailsPanel;

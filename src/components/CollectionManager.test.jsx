@@ -97,6 +97,9 @@ describe('CollectionManager — country filter', () => {
     for (const city of ['Madrid', 'Barcelona', 'Athens', 'Thessaloniki', 'Limassol', 'Paphos']) {
       expect(screen.getByRole('heading', { name: city })).toBeInTheDocument();
     }
+
+    expect(screen.queryByText(/sypialni/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/łazienek/i)).not.toBeInTheDocument();
   });
 
   it('filtering by Spain shows only 2 Spanish offers', async () => {

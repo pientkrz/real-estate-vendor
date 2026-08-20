@@ -14,9 +14,10 @@ describe('parseNieruchomosciOnlineXml', () => {
               <id>123</id><sign>NOE-42</sign><action>insert</action>
               <idCategory>1</idCategory><idAdType>2</idAdType><idCurrency>2</idCurrency>
               <cityName>Chania</cityName><idRegionName>Kreta</idRegionName>
-              <area>52.5</area><rooms>2</rooms><bathRooms>1</bathRooms>
+              <area>52.5</area><areaBalcony>4.5</areaBalcony><areaGarden>15</areaGarden>
+              <rooms>2</rooms><bedRooms>1</bedRooms><bathRooms>1</bathRooms><nrGarageStands>2</nrGarageStands>
               <price>235000</price><description>Apartament blisko plaży\nDruga linia</description>
-              <isElevator>2</isElevator><isGarden>1</isGarden>
+              <isElevator>2</isElevator><isGarden>1</isGarden><isWCSeparated>1</isWCSeparated>
             </details>
             <map><mapLatitude>35.5138</mapLatitude><mapLongitude>24.0180</mapLongitude></map>
             <photos><photo><fileName>first.jpg</fileName></photo><photo><fileName>second.jpg</fileName></photo></photos>
@@ -40,9 +41,14 @@ describe('parseNieruchomosciOnlineXml', () => {
     expect(offer.params).toMatchObject({
       powierzchnia: 52.5,
       liczbapokoi: 2,
+      liczbasypialni: 1,
       liczbalazienek: 1,
+      powierzchnia_balkonu: 4.5,
+      powierzchnia_ogrodka: 15,
+      liczba_miejsc_parkingowych: 2,
       winda: false,
       ogrodek: true,
+      osobne_wc: true,
       tytul: 'Apartament blisko plaży',
       zdjecie1: '/uploads/nieruchomosci-online-pl/first.jpg',
       zdjecie2: '/uploads/nieruchomosci-online-pl/second.jpg',

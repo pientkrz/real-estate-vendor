@@ -126,16 +126,17 @@ const resolveParams = (activeRecords, provenance, conflicts) => {
   const paramNames = new Set(activeRecords.flatMap((record) => Object.keys(record.params ?? {})));
 
   for (const name of paramNames) {
-    const value = setResolvedValue(
-      params,
-      provenance,
-      conflicts,
+    const selected = selectValue(
       activeRecords,
       `attributes.${name}`,
       (record) => record.params?.[name],
       `params.${name}`,
+      conflicts,
     );
-    if (value !== undefined) params[name] = value;
+    if (selected.value !== undefined) {
+      params[name] = selected.value;
+      provenance[`attributes.${name}`] = selected.provenance;
+    }
   }
 
   const usableM2 = setResolvedValue(
@@ -225,6 +226,14 @@ const buildPropertyAggregate = (id, allRecords) => {
       city: setResolvedValue({}, provenance, conflicts, candidates, 'location.city', (record) => record.location?.city, 'location.city'),
     };
     const { params, areas } = resolveParams(candidates, provenance, conflicts);
+    const bedroomKeys = ['liczbasypialni', 'liczba_sypialni', 'sypialnie', 'bedrooms'];
+    const bedroomSourceKey = bedroomKeys.find((key) => params[key] !== undefined);
+    const bedrooms = numericValue(bedroomSourceKey ? params[bedroomSourceKey] : undefined);
+    if (bedrooms !== undefined) {
+      params.liczbasypialni = bedrooms;
+      provenance['attributes.liczbasypialni'] = provenance[`attributes.${bedroomSourceKey}`];
+      bedroomKeys.filter((key) => key !== 'liczbasypialni').forEach((key) => delete params[key]);
+    }
     const media = candidates.flatMap(providerPhotos);
     const lifecycle = resolveLifecycle(records);
 
@@ -249,6 +258,7 @@ const buildPropertyAggregate = (id, allRecords) => {
         title: params.tytul ?? '',
         description: params.opis ?? '',
         rooms: numericValue(params.liczbapokoi),
+        bedrooms,
         bathrooms: numericValue(params.liczbalazienek),
         attributes: params,
         media,
@@ -347,7 +357,7 @@ export const buildPropertyAggregates = (providerOffers = []) => {
  * Compact view sent to the filter React island and used by the current detail UI.
  * It intentionally omits source records/raw XML, which stay server-side.
  */
-export const toOfferView = (aggregate) => ({
+export const toOfferDetailView = (aggregate) => ({
   id: aggregate.id,
   tab: aggregate.tab,
   typ: aggregate.typ,
@@ -360,3 +370,28 @@ export const toOfferView = (aggregate) => ({
   location: aggregate.location,
   lifecycle: aggregate.lifecycle,
 });
+
+/** Compact listing/map contract. Keep the complete detail attributes server-side. */
+export const toOfferSummaryView = (aggregate) => ({
+  id: aggregate.id,
+  tab: aggregate.tab,
+  typ: aggregate.typ,
+  price: aggregate.price,
+  currency: aggregate.currency,
+  location: aggregate.location,
+  lifecycle: aggregate.lifecycle,
+  params: {
+    tytul: aggregate.params.tytul,
+    miasto: aggregate.params.miasto,
+    powierzchnia: aggregate.params.powierzchnia,
+    liczbapokoi: aggregate.params.liczbapokoi,
+    liczbasypialni: aggregate.params.liczbasypialni,
+    liczbalazienek: aggregate.params.liczbalazienek,
+    latitude: aggregate.params.latitude,
+    longitude: aggregate.params.longitude,
+    zdjecie1: aggregate.params.zdjecie1,
+  },
+});
+
+// Kept as an alias while call sites migrate to an explicit projection name.
+export const toOfferView = toOfferDetailView;

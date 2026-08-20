@@ -9,7 +9,7 @@ import PropertyDetailsPanel from '../../components/property-details/PropertyDeta
 import PropertyInquiryForm from '../../components/PropertyInquiryForm';
 import PropertyVideoEmbed from '../../components/PropertyVideoEmbed';
 import { loadConfiguredPropertyAggregates } from '../../server/offerService.js';
-import { toOfferView } from '../../utils/propertyAggregate.js';
+import { toOfferDetailView, toOfferSummaryView } from '../../utils/propertyAggregate.js';
 import { formatPrice } from '../../utils/formatPrice';
 import { getYouTubeEmbedUrl } from '../../utils/videoUrl';
 import { sanitizeOpisHtml, stripHtml } from '../../utils/sanitizeHtml';
@@ -25,10 +25,10 @@ const propertyAggregate = _propertyAggregates.find((candidate) => (
 ));
 if (!propertyAggregate) return Astro.redirect('/');
 
-const offer = toOfferView(propertyAggregate);
+const offer = toOfferDetailView(propertyAggregate);
 const _allOffers = _propertyAggregates
     .filter((candidate) => candidate.lifecycle.isVisible)
-    .map(toOfferView);
+    .map(toOfferSummaryView);
 const { params, location, price, currency } = offer;
 
 // Compute 3 most similar properties by price (60%) + area (40%) proximity
@@ -64,6 +64,8 @@ while (params?.[`zdjecie${_photoIdx}`]) {
 
 const city = params?.miasto || 'The Estate';
 const fullAddress = [location?.city, location?.region, location?.country].filter(Boolean).join(', ');
+const displayCount = (value) => Number(value) > 0 ? value : '—';
+const displayArea = params?.powierzchnia ? `${params.powierzchnia} m²` : '—';
 
 const agentsPath = path.join(process.cwd(), import.meta.env.AGENTS_FILE_PATH);
 const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
@@ -122,23 +124,32 @@ const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
                     </div>
                     <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
                     <div>
-                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Living Space</span>
-                        <span class="text-xl font-headline font-bold whitespace-nowrap">{params?.powierzchnia} m²</span>
+                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Powierzchnia</span>
+                        <span class="flex items-center gap-2 text-xl font-headline font-bold whitespace-nowrap">
+                            <span class="material-symbols-outlined text-primary">square_foot</span>{displayArea}
+                        </span>
                     </div>
                     <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
                     <div>
                         <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Pokoje</span>
-                        <span class="text-xl font-headline font-bold">{params?.liczbapokoi}</span>
+                        <span class="flex items-center gap-2 text-xl font-headline font-bold">
+                            <span class="material-symbols-outlined text-primary">meeting_room</span>{displayCount(params?.liczbapokoi)}
+                        </span>
                     </div>
-                    {params?.liczbalazienek > 0 && (
-                        <>
-                            <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
-                            <div>
-                                <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Baths</span>
-                                <span class="text-xl font-headline font-bold">{params.liczbalazienek}</span>
-                            </div>
-                        </>
-                    )}
+                    <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
+                    <div>
+                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Sypialnie</span>
+                        <span class="flex items-center gap-2 text-xl font-headline font-bold">
+                            <span class="material-symbols-outlined text-primary">bedroom_parent</span>{displayCount(params?.liczbasypialni)}
+                        </span>
+                    </div>
+                    <div class="hidden sm:block w-px h-8 bg-outline/10"></div>
+                    <div>
+                        <span class="block text-[9px] uppercase tracking-widest text-outline mb-1">Łazienki</span>
+                        <span class="flex items-center gap-2 text-xl font-headline font-bold">
+                            <span class="material-symbols-outlined text-primary">bathtub</span>{displayCount(params?.liczbalazienek)}
+                        </span>
+                    </div>
                 </div>
                 
             </div>

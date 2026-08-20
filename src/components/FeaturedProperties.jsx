@@ -2,7 +2,17 @@ import React from 'react';
 import { formatPrice } from '../utils/formatPrice';
 import { convertPrice } from '../utils/exchangeRates';
 
-const PropertyCard = ({ id, title, city, region, country, rooms, baths, area, price, image, status }) => {
+const displayCount = (value) => (Number(value) > 0 ? value : '—');
+const hasCount = (value) => Number(value) > 0;
+
+const PropertyMetric = ({ icon, children }) => (
+  <span className="flex items-center gap-1.5 whitespace-nowrap">
+    <span className="material-symbols-outlined text-base text-primary">{icon}</span>
+    {children}
+  </span>
+);
+
+const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths, area, price, image, status }) => {
   const base = import.meta.env.BASE_URL;
   const loc = [city, region, country].filter(Boolean).join(', ');
 
@@ -27,22 +37,15 @@ const PropertyCard = ({ id, title, city, region, country, rooms, baths, area, pr
           <span className="font-headline text-lg font-bold text-primary shrink-0">{price}</span>
         </div>
         <p className="text-on-surface-variant text-sm font-body">{loc}</p>
-        <div className="flex gap-6 pt-2 font-label text-[10px] uppercase tracking-tighter text-outline">
-          {rooms > 0 && (
-            <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">meeting_room</span> {rooms} Pokoi
-            </span>
-          )}
-          {baths > 0 && (
-            <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">bathtub</span> {baths} Łazienek
-            </span>
-          )}
-          {area && (
-            <span className="flex items-center gap-1">
-              <span className="material-symbols-outlined text-sm">square_foot</span> {area}
-            </span>
-          )}
+        <div className="flex flex-wrap gap-x-5 gap-y-2 pt-2 font-label text-[10px] uppercase tracking-tighter text-outline">
+          <PropertyMetric icon="meeting_room">{displayCount(rooms)} Pokoi</PropertyMetric>
+          {hasCount(bedrooms) ? (
+            <PropertyMetric icon="bedroom_parent">{bedrooms} Sypialni</PropertyMetric>
+          ) : null}
+          {hasCount(baths) ? (
+            <PropertyMetric icon="bathtub">{baths} Łazienek</PropertyMetric>
+          ) : null}
+          <PropertyMetric icon="square_foot">{area || '—'}</PropertyMetric>
         </div>
       </div>
     </a>
@@ -83,6 +86,7 @@ const FeaturedProperties = ({
               region={prop.location?.region}
               country={prop.location?.country}
               rooms={prop.params?.liczbapokoi}
+              bedrooms={prop.params?.liczbasypialni}
               baths={prop.params?.liczbalazienek}
               area={prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : ''}
               price={formatPrice(

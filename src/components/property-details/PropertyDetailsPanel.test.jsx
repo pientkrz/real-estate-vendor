@@ -19,6 +19,18 @@ describe('PropertyDetailsPanel', () => {
     expect(container.firstChild).toBeNull();
   });
 
+  it('renders merged provider attributes even without Otodom type details', () => {
+    const offer = {
+      ...makeOffer(99),
+      params: { liczbasypialni: 2, liczbalazienek: 1, klimatyzacja: true },
+    };
+    render(<PropertyDetailsPanel offer={offer} />);
+
+    expect(screen.getByText('Szczegóły nieruchomości')).toBeInTheDocument();
+    expect(screen.getByText('Ilość sypialni')).toBeInTheDocument();
+    expect(screen.getByText('Klimatyzacja')).toBeInTheDocument();
+  });
+
   // ── Flat (0) ──────────────────────────────────────────────────────────────
 
   it('renders FlatDetailsPanel for objectName=0', () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { buildPropertyAggregates, getCanonicalPropertyId, toOfferView } from './propertyAggregate.js';
+import { buildPropertyAggregates, getCanonicalPropertyId, toOfferSummaryView, toOfferView } from './propertyAggregate.js';
 
 const active = (provider, providerOfferId, values = {}) => ({
   id: `${provider}-${providerOfferId}`,
@@ -43,7 +43,7 @@ describe('buildPropertyAggregates', () => {
       params: { powierzchnia: 52, powierzchnia_uzytkowa: 44, ulica: 'Harbor Road' },
     });
     const oferty = active('oferty-net', '113-6', {
-      params: { powierzchnia: 52, rokbudowy: 2024, zdjecie1: 'https://oferty/1.jpg' },
+      params: { powierzchnia: 52, rokbudowy: 2024, liczba_sypialni: 2, zdjecie1: 'https://oferty/1.jpg' },
     });
 
     const [aggregate] = buildPropertyAggregates([oferty, noe, otodom]);
@@ -60,13 +60,17 @@ describe('buildPropertyAggregates', () => {
       powierzchnia: 44,
       powierzchnia_uzytkowa: 44,
       powierzchnia_calkowita: 52,
+      liczbasypialni: 2,
       ulica: 'Harbor Road',
       rokbudowy: 2024,
     });
     expect(aggregate.provenance['areas.usableM2']).toEqual({ provider: 'otodom-pl', sourceField: 'Area' });
     expect(aggregate.provenance['areas.totalM2']).toEqual({ provider: 'nieruchomosci-online-pl', sourceField: 'details.area' });
     expect(aggregate.property.media).toHaveLength(2);
+    expect(aggregate.property.bedrooms).toBe(2);
     expect(toOfferView(aggregate)).not.toHaveProperty('sourceRecords');
+    expect(toOfferSummaryView(aggregate).params).toMatchObject({ liczbasypialni: 2 });
+    expect(toOfferSummaryView(aggregate).params.rokbudowy).toBeUndefined();
   });
 
   it('does not publish conflicting lifecycle states automatically', () => {
