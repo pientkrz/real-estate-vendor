@@ -43,6 +43,12 @@ allows the current components to continue reading `price`, `params`, and
 `location`. Detail routes are generated from the same aggregate, so a property
 appears once rather than once per provider.
 
+The listing view receives only card/map fields (including rooms, bedrooms,
+bathrooms, usable area, coordinates, and the lead image). The detail route
+receives the complete safe attribute set and renders it in labelled,
+iconographic groups. Provider contact data, source IDs, raw XML, image fields,
+and opaque dictionary codes are intentionally kept server-side.
+
 If a parsed provider record cannot be aggregated, it is logged and omitted from
 that property only. Valid records from the other providers still form and serve
 the aggregate; `skippedSourceRecords` retains the provider reference and error
@@ -132,11 +138,17 @@ tabs: `1` mieszkania, `2` domy, `3` działki, `4` lokale, `5` budynki, and `6`
 pokoje. Transaction IDs map to `1` sprzedaż and `2` wynajem; currencies map to
 `1` PLN, `2` EUR, and `3` USD. Its numeric/English-like field names are copied
 to Polish keys such as `area` → `powierzchnia`, `rooms` → `liczbapokoi`, and
-`description` → `opis`.
+`description` → `opis`. Additional usable/total, balcony, garden, basement,
+parking, availability, utility, accessibility, and separate-WC fields are also
+normalised. A supplied bedroom field (`bedRooms`, `bedrooms`,
+`liczba_sypialni`, or `liczbasypialni`) becomes `liczbasypialni`. When no
+provider supplies this field for an offer, the UI shows `—` rather than
+inferring it from the number of rooms.
 
 `Oferty.net` already sends Polish category and parameter names. Its global
 `<zdjecia>` list is grouped by offer ID and sorted by `<kolejnosc>` before being
 placed in `params.zdjecie1`, `params.zdjecie2`, and so on.
 
-Provider IDs are deliberately prefixed in generated route IDs so offers from
-different feeds with the same source identifier do not overwrite one another.
+Provider IDs remain prefixed in their source records. Public property routes
+use the canonical merged ID, so the same property is shown once regardless of
+how many providers delivered it.
