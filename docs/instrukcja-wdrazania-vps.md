@@ -2,9 +2,9 @@
 
 Kompletny przewodnik: jak połączyć się z serwerem, jak zbudować i wdrożyć aplikację, jak zarządzać procesem Node oraz jak skonfigurować `.htaccess` dla dowolnej domeny lub subdomeny na tym serwerze.
 
-Historia dotychczasowych wdrożeń (co dokładnie zmieniono i kiedy): [vps-deployment-log.md](vps-deployment-log.md).
+Historia dotychczasowych wdrożeń (co dokładnie zmieniono i kiedy): [dziennik-wdrozen-vps.md](dziennik-wdrozen-vps.md).
 Szczegóły i rozwiązywanie problemów z samym połączeniem SSH: [instrukcja-polaczenia-ssh-vps.md](instrukcja-polaczenia-ssh-vps.md).
-Obsługa dostaw FTP, retencja oraz harmonogram procesów: [offer-ingestion-operations.md](offer-ingestion-operations.md).
+Obsługa dostaw FTP, retencja oraz harmonogram procesów: [instrukcja-obslugi-dostaw-ofert.md](instrukcja-obslugi-dostaw-ofert.md).
 
 ## Spis treści
 1. [Architektura hostingu](#1-architektura-hostingu)
@@ -82,11 +82,14 @@ Interaktywna sesja: pominięcie `-batch` i ostatniego argumentu z poleceniem otw
 │   └── new-global-s-home/                    ← aplikacja Astro (ten projekt)
 │       ├── server/                           ← z dist/server (build)
 │       ├── client/                           ← z dist/client (build)
-│       ├── public/                           ← ręcznie utrzymywane dane runtime (XML ofert, zob. uwaga niżej)
+│       ├── data/offer-ingestion/             ← prywatna migawka JSON ofert i blokada `flock`
 │       ├── node_modules/                     ← zainstalowane NA serwerze (nie kopiować z lokalnej maszyny, pnpm robi symlinki)
 │       ├── package.json                      ← kopiowany z repo, potrzebny do `npm install`
+│       ├── .env                              ← prywatna konfiguracja wykonawcza (uprawnienia `600`)
 │       ├── app.log                           ← stdout/stderr procesu Node
 │       └── start.log                         ← log skryptu start.sh (jeśli używany, zob. §6)
+├── dostawa-ofert/                            ← skrzynki FTP dostawców (archiwa ZIP)
+├── aktualne-zdjecia-ofert/                   ← prywatne zdjęcia wypakowane z zaakceptowanych dostaw
 └── domains/
     ├── ixtnzfseqk.cfolks.pl/
     │   └── public_html/
@@ -112,7 +115,7 @@ Na maszynie deweloperskiej, w katalogu projektu:
 pnpm build
 ```
 
-Produkuje `dist/server/` (kod SSR) i `dist/client/` (statyczne assety). `.env` lokalny jest używany podczas builda — zwróć uwagę, że **`import.meta.env.*` jest zapisywane na stałe w buildzie w momencie kompilacji**, nie odczytywane później na serwerze (`process.env` na serwerze nie ma na to wpływu).
+Produkuje `dist/server/` (kod SSR) i `dist/client/` (statyczne assety). Konfiguracja dostaw ofert na VPS jest odczytywana przez Node w czasie działania z prywatnego `.env` przekazanego przez `--env-file`. Należy odróżnić ją od ewentualnych zmiennych `import.meta.env.*`, które Vite zapisuje na stałe podczas kompilacji.
 
 Zalecane: przed wysyłką na serwer uruchom build samodzielnie lokalnie i sprawdź podstawowe trasy:
 
@@ -133,17 +136,19 @@ curl -si http://127.0.0.1:4322/
    ```bash
    plink ... -batch "cd apps/<nazwa-aplikacji> && export PATH=/opt/alt/alt-nodejs22/root/usr/bin:\$PATH && npm install --omit=dev"
    ```
-4. Jeśli aplikacja czyta pliki runtime spoza builda (np. ten projekt czyta XML ofert z `public/<folder>/properties_otodom.xml` przez `fs.readFileSync` z fallbackiem na `process.cwd()/public/...`) — Astro **nie zachowuje folderu `public/` w buildzie `server`** (jego zawartość trafia do `client/`), więc trzeba go odtworzyć ręcznie:
+4. Wyślij także katalog `scripts/`, utwórz prywatny `.env` (uprawnienia `600`), katalog stanu i katalog zdjęć. Ustaw w `.env` katalogi FTP dostawców, `OFFER_STATE_PATH` i `OFFER_PHOTO_ROOT` zgodnie z [instrukcją obsługi dostaw ofert](instrukcja-obslugi-dostaw-ofert.md):
    ```bash
-   mkdir -p apps/<nazwa-aplikacji>/public/<folder>/
-   cp apps/<nazwa-aplikacji>/client/<folder>/plik.xml apps/<nazwa-aplikacji>/public/<folder>/
+   mkdir -p apps/<nazwa-aplikacji>/data/offer-ingestion
+   mkdir -p ~/aktualne-zdjecia-ofert
+   chmod 600 apps/<nazwa-aplikacji>/.env
    ```
-5. Uruchom proces — zob. [§5](#5-uruchamianie-zatrzymywanie-i-restart-procesu-node).
-6. Skonfiguruj `.htaccess` dla docelowej domeny/subdomeny — zob. [§7](#7-konfiguracja-htaccess-dla-domeny-lub-subdomeny).
+5. Jednorazowo zainicjuj stan pełnym eksportem Otodom i zainstaluj wpisy cron zgodnie z instrukcją dostaw.
+6. Uruchom proces — zob. [§5](#5-uruchamianie-zatrzymywanie-i-restart-procesu-node).
+7. Skonfiguruj `.htaccess` dla docelowej domeny/subdomeny — zob. [§7](#7-konfiguracja-htaccess-dla-domeny-lub-subdomeny).
 
 ### 4.3 Kolejne wdrożenia (aktualizacja istniejącej aplikacji)
 
-`node_modules` i `public/` (dane runtime) zwykle nie zmieniają się między wdrożeniami — wysyłaj tylko nowy build:
+`node_modules`, prywatna migawka ofert i katalog zdjęć zwykle nie zmieniają się między wdrożeniami — wysyłaj tylko nowy build. Gdy zmieniły się zależności lub skrypty, wyślij odpowiednio `package.json` albo `scripts/` i uruchom ponownie `npm install --omit=dev` lub `setup-cron.sh`:
 
 ```bash
 pscp -P 222 -pw "$cyberfolks_server_password" -r dist/server dist/client \
@@ -177,7 +182,7 @@ pkill -f '[e]ntry.mjs'
 
 ```bash
 cd apps/<nazwa-aplikacji>
-PORT=<PORT> HOST=127.0.0.1 nohup /opt/alt/alt-nodejs22/root/usr/bin/node server/entry.mjs > app.log 2>&1 &
+PORT=<PORT> HOST=127.0.0.1 nohup /opt/alt/alt-nodejs22/root/usr/bin/node --env-file=.env server/entry.mjs > app.log 2>&1 &
 ```
 
 Jeśli kilka aplikacji działa na serwerze, każda musi mieć **unikalny port** (zob. tabela w [§1](#1-architektura-hostingu)) — kolejny wolny port to zwykle poprzedni + 1.
@@ -190,7 +195,7 @@ Dwa osobne wywołania `plink`:
 
 ```bash
 plink ... -batch "pkill -f '[e]ntry.mjs' && echo killed || echo 'nothing to kill'"
-plink ... -batch "cd apps/<nazwa-aplikacji> && PORT=<PORT> HOST=127.0.0.1 nohup /opt/alt/alt-nodejs22/root/usr/bin/node server/entry.mjs > app.log 2>&1 &"
+plink ... -batch "cd apps/<nazwa-aplikacji> && PORT=<PORT> HOST=127.0.0.1 nohup /opt/alt/alt-nodejs22/root/usr/bin/node --env-file=.env server/entry.mjs > app.log 2>&1 &"
 ```
 
 ### Podgląd logów
@@ -262,7 +267,7 @@ RewriteRule ^(.*)$ http://127.0.0.1:54322/$1 [P,L]
    (albo edytuj plik lokalnie i wyślij `pscp`).
 5. **Zweryfikuj** — zob. [§9](#9-weryfikacja-wdrożenia).
 6. Jeśli chcesz, by aplikacja przetrwała restart VPS — dodaj ją do automatycznego startu ([§6](#6-automatyczny-start-po-restarcie-serwera)).
-7. Zapisz zmianę w [vps-deployment-log.md](vps-deployment-log.md) — jaki port, jaka domena, kiedy.
+7. Zapisz zmianę w [dzienniku wdrożeń VPS](dziennik-wdrozen-vps.md) — jaki port, jaka domena, kiedy.
 
 ---
 

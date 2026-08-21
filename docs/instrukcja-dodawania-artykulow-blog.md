@@ -20,7 +20,7 @@ Strona bloga dostępna pod adresem `/blog` wyświetla siatkę kart z istniejący
 - kategorię artykułu (np. ARCHITEKTURA, INVESTMENT)
 - tytuł
 - krótki opis (zajawkę)
-- przycisk „Read Full Inquiry"
+- przycisk prowadzący do pełnej treści („Read Full Inquiry")
 
 Jeśli nie ma żadnych artykułów, strona wyświetla komunikat o pustym archiwum.
 

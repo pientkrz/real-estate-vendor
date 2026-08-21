@@ -1,6 +1,6 @@
 # Łączenie się z VPS (cyberfolks) przez SSH
 
-Instrukcja połączenia z serwerem VPS hostującym aplikację (test: `http://test.ixtnzfseqk.cfolks.pl/`). Historia zmian wykonanych na serwerze: [vps-deployment-log.md](vps-deployment-log.md). Pełny przewodnik po budowaniu, wdrażaniu, zarządzaniu procesem Node i konfiguracji `.htaccess`: [instrukcja-wdrazania-vps.md](instrukcja-wdrazania-vps.md).
+Instrukcja połączenia z serwerem VPS hostującym aplikację (test: `http://test.ixtnzfseqk.cfolks.pl/`). Historia zmian wykonanych na serwerze: [dziennik-wdrozen-vps.md](dziennik-wdrozen-vps.md). Pełny przewodnik po budowaniu, wdrażaniu, zarządzaniu procesem Node i konfiguracji `.htaccess`: [instrukcja-wdrazania-vps.md](instrukcja-wdrazania-vps.md).
 
 ## Dane dostępowe
 

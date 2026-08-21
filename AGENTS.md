@@ -30,7 +30,7 @@ After every code change, **always validate in the browser before reporting the t
 
 ## Architecture
 
-This is an **Astro SSR app** (`output: 'server'`, `@astrojs/node` standalone adapter) hosted on a self-managed VPS — no GitHub Pages, no static export. The site is served from the domain root (`base: '/'`); see `docs/vps-deployment-log.md` for the hosting setup. `site` in `astro.config.mjs` defaults to the test domain and is overridden via the `SITE_URL` env var for production once that domain exists.
+This is an **Astro SSR app** (`output: 'server'`, `@astrojs/node` standalone adapter) hosted on a self-managed VPS — no GitHub Pages, no static export. The site is served from the domain root (`base: '/'`); see `docs/dziennik-wdrozen-vps.md` for the hosting setup. `site` in `astro.config.mjs` defaults to the test domain and is overridden via the `SITE_URL` env var for production once that domain exists.
 
 ### Data Flow: Otodom XML export
 
