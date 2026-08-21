@@ -4,18 +4,14 @@ import AgentGrid from './AgentGrid';
 
 const mockAgents = [
   {
+    id: '174162',
     name: 'Anna Nowak',
-    role: 'Dyrektor Sprzedaży',
-    image: 'https://example.com/anna.jpg',
-    languages: ['PL', 'EN'],
     phone: '+48 500 100 200',
     email: 'anna@globalshome.com',
   },
   {
+    id: '189360',
     name: 'Piotr Wiśniewski',
-    role: 'Doradca ds. Inwestycji',
-    image: 'https://example.com/piotr.jpg',
-    languages: ['PL', 'DE'],
     email: 'piotr@globalshome.com',
   },
 ];
@@ -62,20 +58,19 @@ describe('AgentGrid — karty agentów', () => {
     expect(screen.getByText('Piotr Wiśniewski')).toBeInTheDocument();
   });
 
-  it('renders each agent role', () => {
+  it('uses a clear fallback role when the provider does not supply one', () => {
     render(<AgentGrid agents={mockAgents} />);
-    expect(screen.getByText('Dyrektor Sprzedaży')).toBeInTheDocument();
-    expect(screen.getByText('Doradca ds. Inwestycji')).toBeInTheDocument();
+    expect(screen.getAllByText('Doradca nieruchomości')).toHaveLength(mockAgents.length);
   });
 
-  it('renders agent photo with correct alt text', () => {
+  it('renders initials instead of a broken image when the provider sends no photo', () => {
     render(<AgentGrid agents={mockAgents} />);
-    expect(screen.getByAltText('Anna Nowak')).toBeInTheDocument();
-    expect(screen.getByAltText('Piotr Wiśniewski')).toBeInTheDocument();
+    expect(screen.getByText('AN')).toBeInTheDocument();
+    expect(screen.getByText('PW')).toBeInTheDocument();
   });
 
-  it('renders agent photo with correct src', () => {
-    render(<AgentGrid agents={mockAgents} />);
+  it('renders a provider photo when one is supplied', () => {
+    render(<AgentGrid agents={[{ ...mockAgents[0], image: 'https://example.com/anna.jpg' }]} />);
     expect(screen.getByAltText('Anna Nowak')).toHaveAttribute('src', 'https://example.com/anna.jpg');
   });
 });
@@ -94,36 +89,9 @@ describe('AgentGrid — linki kontaktowe', () => {
     expect(screen.getByRole('link', { name: /\+48 500 100 200/ })).toHaveAttribute('href', 'tel:+48 500 100 200');
   });
 
-  it('renders a tel link even when agent has no phone number', () => {
+  it('does not render an invalid tel link when the provider omits a phone number', () => {
     const { container } = render(<AgentGrid agents={[mockAgents[1]]} />);
     const telLink = container.querySelector('a[href="tel:undefined"]');
-    expect(telLink).toBeInTheDocument();
-  });
-});
-
-// ── language badges ────────────────────────────────────────────────────────────
-
-describe('AgentGrid — odznaki języków', () => {
-  it('renders all language badges for an agent', () => {
-    render(<AgentGrid agents={[mockAgents[0]]} />);
-    expect(screen.getByText('PL')).toBeInTheDocument();
-    expect(screen.getByText('EN')).toBeInTheDocument();
-  });
-
-  it('renders only the correct language badges for each agent', () => {
-    render(<AgentGrid agents={mockAgents} />);
-    // Anna has PL+EN, Piotr has PL+DE — PL appears twice, EN and DE once each
-    expect(screen.getAllByText('PL')).toHaveLength(2);
-    expect(screen.getAllByText('EN')).toHaveLength(1);
-    expect(screen.getAllByText('DE')).toHaveLength(1);
-  });
-});
-
-// ── action button ──────────────────────────────────────────────────────────────
-
-describe('AgentGrid — przycisk akcji', () => {
-  it('renders an "Umów spotkanie" button for each agent', () => {
-    render(<AgentGrid agents={mockAgents} />);
-    expect(screen.getAllByRole('button', { name: /umów spotkanie/i })).toHaveLength(mockAgents.length);
+    expect(telLink).not.toBeInTheDocument();
   });
 });

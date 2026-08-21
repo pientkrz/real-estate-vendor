@@ -11,7 +11,7 @@ import {
   OFERTY_NET_TABS,
 } from './offerMappings.js';
 
-const normaliseAgent = ({ id, name, email, phone } = {}) => {
+const normaliseAgent = ({ id, name, email, phone, image, licenseNumber } = {}) => {
   const phoneValue = String(phone ?? '').trim().replace(/[;,\s]+$/, '');
   const normalised = {
     id: String(id ?? '').trim(),
@@ -21,6 +21,11 @@ const normaliseAgent = ({ id, name, email, phone } = {}) => {
     // country prefix for the Polish international format used by the feeds.
     phone: /^48\d{9}$/.test(phoneValue) ? `+${phoneValue}` : phoneValue,
   };
+
+  const imageValue = String(image ?? '').trim();
+  const licenseNumberValue = String(licenseNumber ?? '').trim();
+  if (imageValue) normalised.image = imageValue;
+  if (licenseNumberValue) normalised.licenseNumber = licenseNumberValue;
 
   return normalised.name || normalised.email || normalised.phone
     ? Object.fromEntries(Object.entries(normalised).filter(([, value]) => value))
@@ -227,6 +232,38 @@ const noeBool = (value) => {
 
 // ── Nieruchomosci-online.pl NOE 2.0 parser ───────────────────────────────────
 
+const createNieruchomosciOnlineParser = () => new XMLParser({
+  ignoreAttributes: false,
+  attributeNamePrefix: '@_',
+  allowBooleanAttributes: true,
+});
+
+const parseNieruchomosciOnlineAgents = (root) => (
+  toArray(root?.agents?.agent)
+    .map((agent) => normaliseAgent({
+      id: readText(agent?.idAgent).trim(),
+      name: [readText(agent?.name), readText(agent?.surname)].filter(Boolean).join(' '),
+      email: agent?.email,
+      phone: agent?.phone2 ?? agent?.phone1,
+      image: agent?.photo,
+      licenseNumber: agent?.licenseNr,
+    }))
+    .filter(Boolean)
+);
+
+/**
+ * Parses the NOE 2.0 agent directory independently from property listings.
+ * The provider can therefore supply the carousel even when a delivery contains
+ * no active ads.
+ *
+ * @param {string} xmlString Raw NOE 2.0 export
+ * @returns {Array} Normalised agents
+ */
+export const parseNieruchomosciOnlineAgentsXml = (xmlString) => {
+  const root = createNieruchomosciOnlineParser().parse(xmlString).xml;
+  return parseNieruchomosciOnlineAgents(root);
+};
+
 /**
  * Parses a NOE 2.0 XML export from Nieruchomosci-online.pl.
  *
@@ -235,26 +272,13 @@ const noeBool = (value) => {
  * @returns {Array} Normalised offer objects
  */
 export const parseNieruchomosciOnlineXml = (xmlString, photoBasePath = '', { includeInactive = false } = {}) => {
-  const parser = new XMLParser({
-    ignoreAttributes: false,
-    attributeNamePrefix: '@_',
-    allowBooleanAttributes: true,
-  });
-  const root = parser.parse(xmlString).xml;
+  const root = createNieruchomosciOnlineParser().parse(xmlString).xml;
   if (!root?.ads?.ad) return [];
 
   const agentsById = new Map(
-    toArray(root.agents?.agent)
-      .map((agent) => {
-        const id = readText(agent?.idAgent).trim();
-        return [id, normaliseAgent({
-          id,
-          name: [readText(agent?.name), readText(agent?.surname)].filter(Boolean).join(' '),
-          email: agent?.email,
-          phone: agent?.phone2 ?? agent?.phone1,
-        })];
-      })
-      .filter(([id, agent]) => id && agent),
+    parseNieruchomosciOnlineAgents(root)
+      .map((agent) => [agent.id, agent])
+      .filter(([id]) => id),
   );
 
   const offers = [];

@@ -9,6 +9,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import {
+  parseNieruchomosciOnlineAgentsXml,
   parseNieruchomosciOnlineXml,
   parseOfertyNetXml,
   parseOtoDomXml,
@@ -79,6 +80,25 @@ export const loadConfiguredProviderOffers = (env = import.meta.env) => {
   }
 
   return offers;
+};
+
+/**
+ * Load the Nieruchomosci-online.pl agent directory for the offer-detail
+ * carousel. Agents are optional: a missing or malformed provider feed must
+ * not prevent the property page from rendering.
+ */
+export const loadConfiguredNieruchomosciOnlineAgents = (env = import.meta.env) => {
+  const xmlPath = env.NIERUCHOMOSCI_ONLINE_XML_PATH;
+  if (!hasValue(xmlPath)) return [];
+
+  try {
+    return parseNieruchomosciOnlineAgentsXml(fs.readFileSync(xmlPath, 'utf-8'));
+  } catch (error) {
+    console.warn(
+      `[agents] Skipping nieruchomosci-online-pl: ${error instanceof Error ? error.message : String(error)}`,
+    );
+    return [];
+  }
 };
 
 /**

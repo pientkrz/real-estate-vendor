@@ -10,8 +10,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest",
-    "test:ui": "vitest --ui",
-    "validate:agents": "node scripts/validate-agents.mjs"
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "@astrojs/node": "^10.1.4",

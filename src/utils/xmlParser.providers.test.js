@@ -1,10 +1,32 @@
 import { describe, expect, it } from 'vitest';
 import {
+  parseNieruchomosciOnlineAgentsXml,
   parseNieruchomosciOnlineXml,
   parseOfertyNetXml,
 } from './xmlParser.js';
 
 describe('parseNieruchomosciOnlineXml', () => {
+  it('parses the NOE agent directory without requiring any active ads', () => {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+      <xml>
+        <agents>
+          <agent><idAgent>174162</idAgent><name>Wojciech</name><surname>Danielak</surname><phone2>48690048888</phone2><email>wojtek@globalshome.com</email><licenseNr>42</licenseNr><photo/></agent>
+          <agent><idAgent>189360</idAgent><name>Piotr</name><surname>Danielak</surname><email>piotr@globalshome.com</email></agent>
+        </agents>
+      </xml>`;
+
+    expect(parseNieruchomosciOnlineAgentsXml(xml)).toEqual([
+      {
+        id: '174162',
+        name: 'Wojciech Danielak',
+        phone: '+48690048888',
+        email: 'wojtek@globalshome.com',
+        licenseNumber: '42',
+      },
+      { id: '189360', name: 'Piotr Danielak', email: 'piotr@globalshome.com' },
+    ]);
+  });
+
   it('normalises NOE 2.0 data, maps vocabulary, and keeps photo order', () => {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
       <xml>

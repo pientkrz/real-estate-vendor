@@ -116,6 +116,15 @@ incremental sample exports. Obtain those current attachments through the
 [Nieruchomosci-online.pl support contact](https://www.nieruchomosci-online.pl/integracja-z-nieruchomosci-online.html)
 when adding mappings not covered by `src/utils/offerMappings.js`.
 
+## Agent carousel
+
+The offer-detail agent carousel is supplied exclusively by the NOE 2.0
+`<agents>` directory in the Nieruchomosci-online.pl XML delivery. The parser
+uses `idAgent`, `name`, `surname`, `phone2` (falling back to `phone1`), `email`,
+and optional `licenseNr` and `photo` fields. An empty or unavailable provider
+feed simply hides the carousel; it never prevents a property page from
+rendering.
+
 ## VPS configuration
 
 Set these in the deployment environment. The FTP process writes the XML and

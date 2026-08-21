@@ -9,13 +9,14 @@ import PropertyDetailsPanel from '../../components/property-details/PropertyDeta
 import PropertyInquiryForm from '../../components/PropertyInquiryForm';
 import PropertyAgentCard from '../../components/PropertyAgentCard.astro';
 import PropertyVideoEmbed from '../../components/PropertyVideoEmbed';
-import { loadConfiguredPropertyAggregates } from '../../server/offerService.js';
+import {
+    loadConfiguredNieruchomosciOnlineAgents,
+    loadConfiguredPropertyAggregates,
+} from '../../server/offerService.js';
 import { toOfferDetailView, toOfferSummaryView } from '../../utils/propertyAggregate.js';
 import { formatPrice } from '../../utils/formatPrice';
 import { getYouTubeEmbedUrl } from '../../utils/videoUrl';
 import { sanitizeOpisHtml, stripHtml } from '../../utils/sanitizeHtml';
-import fs from 'node:fs';
-import path from 'node:path';
 
 export const prerender = false;
 
@@ -69,8 +70,7 @@ const fullAddress = [location?.city, location?.region, location?.country].filter
 const displayCount = (value) => Number(value) > 0 ? value : '—';
 const displayArea = params?.powierzchnia ? `${params.powierzchnia} m²` : '—';
 
-const agentsPath = path.join(process.cwd(), import.meta.env.AGENTS_FILE_PATH);
-const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
+const agents = loadConfiguredNieruchomosciOnlineAgents();
 ---
 
 <Layout title={`${city} | Global S Home`} description={opisExcerpt}>
@@ -229,8 +229,8 @@ const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
             </section>
         )}
 
-        <!-- Integrated Agent Grid -->
-        <AgentGrid agents={agents} />
+        <!-- Agent directory supplied by the Nieruchomosci-online.pl XML feed -->
+        {agents.length > 0 ? <AgentGrid client:load agents={agents} /> : null}
     </main>
 
     <Footer />
