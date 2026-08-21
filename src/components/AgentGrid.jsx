@@ -4,14 +4,6 @@ import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 const AgentGrid = ({ agents = [] }) => {
   const scrollRef = useRef(null);
 
-  const initials = (name) => String(name ?? '')
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join('')
-    .toUpperCase() || '?';
-
   const scroll = (direction) => {
     if (!scrollRef.current) return;
     const { scrollLeft, clientWidth } = scrollRef.current;
@@ -66,21 +58,12 @@ const AgentGrid = ({ agents = [] }) => {
               style={{ minWidth: '260px' }}
             >
               <div className="aspect-[4/5] overflow-hidden relative bg-primary/10">
-                {agent.image ? (
-                  <img
-                    src={agent.image}
-                    alt={agent.name}
-                    loading="lazy"
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
-                  />
-                ) : (
-                  <div
-                    aria-hidden="true"
-                    className="w-full h-full flex items-center justify-center bg-[radial-gradient(circle_at_30%_20%,rgba(194,153,74,0.45),transparent_40%),linear-gradient(135deg,#1c1b1b,#7a590c)] text-bone"
-                  >
-                    <span className="font-headline text-7xl font-bold tracking-tight">{initials(agent.name)}</span>
-                  </div>
-                )}
+                <img
+                  src={agent.image || '/assets/agent-placeholder.svg'}
+                  alt={agent.image ? agent.name : `Domyślne zdjęcie agenta: ${agent.name}`}
+                  loading="lazy"
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                />
                 <div className="absolute top-4 left-4">
                   <span className="bg-black/40 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-xs border border-white/20">
                     Nieruchomości Online

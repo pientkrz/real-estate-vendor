@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" role="img" aria-label="Domyślne zdjęcie agenta">
+  <defs>
+    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#e7dcc8" />
+      <stop offset="1" stop-color="#b38b3f" />
+    </linearGradient>
+  </defs>
+  <rect width="480" height="600" fill="url(#background)" />
+  <circle cx="240" cy="212" r="96" fill="#fcf9f8" opacity=".88" />
+  <path d="M82 534c19-123 89-192 158-192s139 69 158 192" fill="#fcf9f8" opacity=".88" />
+  <circle cx="240" cy="212" r="67" fill="#7a590c" opacity=".75" />
+  <path d="M126 512c20-85 67-132 114-132s94 47 114 132" fill="#7a590c" opacity=".75" />
+</svg>

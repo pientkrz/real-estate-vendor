@@ -63,10 +63,10 @@ describe('AgentGrid — karty agentów', () => {
     expect(screen.getAllByText('Doradca nieruchomości')).toHaveLength(mockAgents.length);
   });
 
-  it('renders initials instead of a broken image when the provider sends no photo', () => {
+  it('renders the placeholder image when the provider sends no photo', () => {
     render(<AgentGrid agents={mockAgents} />);
-    expect(screen.getByText('AN')).toBeInTheDocument();
-    expect(screen.getByText('PW')).toBeInTheDocument();
+    expect(screen.getByAltText('Domyślne zdjęcie agenta: Anna Nowak')).toHaveAttribute('src', '/assets/agent-placeholder.svg');
+    expect(screen.getByAltText('Domyślne zdjęcie agenta: Piotr Wiśniewski')).toHaveAttribute('src', '/assets/agent-placeholder.svg');
   });
 
   it('renders a provider photo when one is supplied', () => {
