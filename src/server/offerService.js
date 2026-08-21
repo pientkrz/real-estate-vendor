@@ -1,9 +1,9 @@
 /**
- * Server-only loader for the independent FTP provider feeds.
+ * Server-only loader for processed provider offer state.
  *
- * A provider is optional until its first upload arrives. A read/parse failure
- * for one feed is logged and does not prevent the remaining providers from
- * being shown.
+ * The normal path reads the atomic JSON state created by the FTP ingestion
+ * worker. The former XML path remains solely as a bootstrap fallback before
+ * the first processed snapshot exists.
  */
 
 import fs from 'node:fs';
@@ -15,16 +15,21 @@ import {
   parseOtoDomXml,
 } from '../utils/xmlParser.js';
 import { buildPropertyAggregates, toOfferDetailView, toOfferSummaryView } from '../utils/propertyAggregate.js';
+import { getOfferRuntimeConfig, readOfferState } from './offerState.js';
 
 const hasValue = (value) => typeof value === 'string' && value.trim().length > 0;
 const firstConfiguredValue = (...values) => values.find(hasValue) ?? '';
 
-const fallbackOtoDomPath = () => path.join(
+const fallbackOtoDomPath = (env) => path.join(
   process.cwd(),
   'public',
-  import.meta.env.XML_COLLECTION_PATH ?? '',
+  env.XML_COLLECTION_PATH ?? '',
   'properties_otodom.xml',
 );
+
+// `process.env` is read by the Node SSR runtime. It must take precedence over
+// Vite's build-time `import.meta.env` for VPS paths such as OFFER_STATE_PATH.
+const runtimeEnv = (env = import.meta.env) => ({ ...env, ...process.env });
 
 const providerDefinitions = (env) => [
   {
@@ -32,7 +37,7 @@ const providerDefinitions = (env) => [
     xmlPath: firstConfiguredValue(
       env.OTODOM_XML_PATH,
       env.OFFERS_XML_PATH,
-      fallbackOtoDomPath(),
+      fallbackOtoDomPath(env),
     ),
     photoBaseUrl: firstConfiguredValue(env.OTODOM_PHOTO_BASE_URL, env.PHOTO_BASE_URL),
     // Preserve Otodom deactivations/deletions for lifecycle reconciliation.
@@ -62,9 +67,16 @@ const providerDefinitions = (env) => [
  * @returns {Array} Provider-specific offers, including lifecycle events
  */
 export const loadConfiguredProviderOffers = (env = import.meta.env) => {
+  const resolvedEnv = runtimeEnv(env);
+  const processedState = readOfferState(getOfferRuntimeConfig(resolvedEnv).statePath);
+  if (processedState) {
+    return Object.values(processedState.providerStates)
+      .flatMap((providerState) => Object.values(providerState.records ?? {}));
+  }
+
   const offers = [];
 
-  for (const provider of providerDefinitions(env)) {
+  for (const provider of providerDefinitions(resolvedEnv)) {
     if (!hasValue(provider.xmlPath)) continue;
 
     try {
@@ -88,7 +100,11 @@ export const loadConfiguredProviderOffers = (env = import.meta.env) => {
  * not prevent the property page from rendering.
  */
 export const loadConfiguredNieruchomosciOnlineAgents = (env = import.meta.env) => {
-  const xmlPath = env.NIERUCHOMOSCI_ONLINE_XML_PATH;
+  const resolvedEnv = runtimeEnv(env);
+  const processedState = readOfferState(getOfferRuntimeConfig(resolvedEnv).statePath);
+  if (processedState) return processedState.agents;
+
+  const xmlPath = resolvedEnv.NIERUCHOMOSCI_ONLINE_XML_PATH;
   if (!hasValue(xmlPath)) return [];
 
   try {
@@ -107,7 +123,8 @@ export const loadConfiguredNieruchomosciOnlineAgents = (env = import.meta.env) =
  * enrichment, audits, and future persistence.
  */
 export const loadConfiguredPropertyAggregates = (env = import.meta.env) => (
-  buildPropertyAggregates(loadConfiguredProviderOffers(env))
+  readOfferState(getOfferRuntimeConfig(runtimeEnv(env)).statePath)?.aggregates
+  ?? buildPropertyAggregates(loadConfiguredProviderOffers(env))
 );
 
 /**

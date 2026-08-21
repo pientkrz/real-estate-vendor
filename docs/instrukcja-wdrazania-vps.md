@@ -4,6 +4,7 @@ Kompletny przewodnik: jak połączyć się z serwerem, jak zbudować i wdrożyć
 
 Historia dotychczasowych wdrożeń (co dokładnie zmieniono i kiedy): [vps-deployment-log.md](vps-deployment-log.md).
 Szczegóły i rozwiązywanie problemów z samym połączeniem SSH: [instrukcja-polaczenia-ssh-vps.md](instrukcja-polaczenia-ssh-vps.md).
+Obsługa dostaw FTP, retencja oraz harmonogram procesów: [offer-ingestion-operations.md](offer-ingestion-operations.md).
 
 ## Spis treści
 1. [Architektura hostingu](#1-architektura-hostingu)
@@ -205,14 +206,15 @@ plink ... -batch "tail -n 50 apps/<nazwa-aplikacji>/app.log"
 `nohup` **nie przetrwa** restartu VPS — proces trzeba by uruchomić ręcznie ponownie. W repo są gotowe skrypty do tego (`scripts/vps/`), jeszcze nieużyte na produkcji:
 
 - **`scripts/vps/start.sh`** — idempotentny: uruchamia serwer tylko jeśli nic jeszcze nie nasłuchuje na jego porcie (sprawdza przez `curl`). Bezpieczny do wielokrotnego uruchomienia.
-- **`scripts/vps/setup-cron.sh`** — instaluje wpis `@reboot` w crontabie użytkownika wskazujący na `start.sh`. Idempotentny — nie dubluje wpisu przy ponownym uruchomieniu.
+- **`scripts/vps/ingest-offers.sh`** — uruchamia krótkie przetwarzanie dostaw FTP, z blokadą `flock`.
+- **`scripts/vps/setup-cron.sh`** — instaluje wpis `@reboot` dla aplikacji oraz wpis `*/30` dla dostaw ofert. Idempotentny — nie dubluje wpisów.
 
 Wdrożenie (raz, po przesłaniu skryptów na serwer obok aplikacji):
 
 ```bash
-pscp -P 222 -pw "$cyberfolks_server_password" -r scripts/vps/*.sh \
+pscp -P 222 -pw "$cyberfolks_server_password" -r scripts \
   "$cyberfolks_server_username@$cyberfolks_server_url:apps/<nazwa-aplikacji>/"
-plink ... -batch "cd apps/<nazwa-aplikacji> && bash setup-cron.sh"
+plink ... -batch "cd apps/<nazwa-aplikacji> && bash scripts/vps/setup-cron.sh"
 ```
 
 Skrypty zakładają domyślny port `54322` i katalog `~/apps/new-global-s-home` — przy wdrażaniu dla innej aplikacji dostosuj `APP_DIR`/`PORT` na górze `start.sh` przed wysłaniem.

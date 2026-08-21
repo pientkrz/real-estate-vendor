@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750" role="img" aria-labelledby="title description">
+  <title id="title">Zdjęcie nieruchomości niedostępne</title>
+  <desc id="description">Neutralna grafika zastępcza przedstawiająca dom</desc>
+  <rect width="1200" height="750" fill="#f3efea"/>
+  <path d="M350 560V365l250-190 250 190v195H690V420H510v140Z" fill="#c9b17c"/>
+  <path d="M300 365 600 125l300 240" fill="none" stroke="#7a590c" stroke-linecap="round" stroke-linejoin="round" stroke-width="34"/>
+  <text x="600" y="665" text-anchor="middle" fill="#6f665f" font-family="Arial, sans-serif" font-size="34" letter-spacing="3">ZDJĘCIE WKRÓTCE</text>
+</svg>

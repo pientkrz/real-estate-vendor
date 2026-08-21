@@ -1,5 +1,5 @@
 import { XMLParser } from 'fast-xml-parser';
-import dict from './otodom-dictionary.json';
+import dict from './otodom-dictionary.json' with { type: 'json' };
 import { reverseGeocode } from './reverseGeocode.js';
 import { validateOtoDomXml } from './xmlValidator.js';
 import {
@@ -372,9 +372,10 @@ export const parseNieruchomosciOnlineXml = (xmlString, photoBasePath = '', { inc
  *
  * @param {string} xmlString Raw Oferty.net export
  * @param {string} photoBasePath Public URL prefix for the provider photo folder
+ * @param {{ includeInactive?: boolean }} options Keep differential deletions for lifecycle reconciliation
  * @returns {Array} Normalised offer objects
  */
-export const parseOfertyNetXml = (xmlString, photoBasePath = '') => {
+export const parseOfertyNetXml = (xmlString, photoBasePath = '', { includeInactive = false } = {}) => {
   const parser = new XMLParser({
     ignoreAttributes: false,
     attributeNamePrefix: '@_',
@@ -402,6 +403,34 @@ export const parseOfertyNetXml = (xmlString, photoBasePath = '') => {
     for (const rawOffer of toArray(department?.oferta)) {
       const sourceId = readText(rawOffer?.id).trim();
       if (!sourceId) continue;
+      // The Oferty.net differential protocol uses an offer-level action when
+      // an insertion is removed. `u` (usuń) is documented alongside textual
+      // delete/remove variants used by some exporter versions.
+      const action = readText(rawOffer?.akcja ?? rawOffer?.action ?? rawOffer?.['@_akcja']).trim().toLowerCase();
+      const sourceStatus = ['u', 'usun', 'usuń', 'delete', 'deleted', 'remove', 'removed', 'deactivate', 'deactivated']
+        .includes(action)
+        ? (['deactivate', 'deactivated'].includes(action) ? 'deactivated' : 'deleted')
+        : 'active';
+      if (sourceStatus !== 'active' && !includeInactive) continue;
+
+      if (sourceStatus !== 'active') {
+        offers.push({
+          id: `oferty-net-${sourceId}`,
+          provider: 'oferty-net',
+          providerOfferId: sourceId,
+          sourceStatus,
+          sourceData: { offer: rawOffer },
+          tab: '',
+          typ: '',
+          price: 0,
+          currency: '',
+          videoUrl: null,
+          agent: null,
+          params: {},
+          location: {},
+        });
+        continue;
+      }
 
       const params = {};
       for (const param of toArray(rawOffer?.param)) {
@@ -444,7 +473,7 @@ export const parseOfertyNetXml = (xmlString, photoBasePath = '') => {
         id: `oferty-net-${sourceId}`,
         provider: 'oferty-net',
         providerOfferId: sourceId,
-        sourceStatus: 'active',
+        sourceStatus,
         sourceData: { offer: rawOffer, photos },
         tab,
         typ: typ === 'wynajem' ? 'wynajem' : 'sprzedaz',

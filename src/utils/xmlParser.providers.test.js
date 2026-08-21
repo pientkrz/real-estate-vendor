@@ -135,4 +135,23 @@ describe('parseOfertyNetXml', () => {
     });
     expect(offer.params.zdjecie3).toBeUndefined();
   });
+
+  it('keeps a differential deletion when requested by the ingestion worker', () => {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+      <plik>
+        <lista_ofert>
+          <dzial tab="mieszkania" typ="sprzedaz">
+            <oferta><id>OF-7</id><akcja>u</akcja></oferta>
+          </dzial>
+        </lista_ofert>
+      </plik>`;
+
+    expect(parseOfertyNetXml(xml, '', { includeInactive: true })).toEqual([
+      expect.objectContaining({
+        providerOfferId: 'OF-7',
+        sourceStatus: 'deleted',
+        params: {},
+      }),
+    ]);
+  });
 });

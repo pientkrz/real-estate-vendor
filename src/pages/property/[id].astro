@@ -55,7 +55,7 @@ const embedUrl = getYouTubeEmbedUrl(offer.videoUrl);
 const safeOpis = sanitizeOpisHtml(params?.opis);
 const opisExcerpt = stripHtml(params?.opis)?.substring(0, 160);
 
-const mainImage = params?.zdjecie1 || '/assets/placeholder.jpg';
+const mainImage = params?.zdjecie1 || '/assets/placeholder.svg';
 
 // Dynamically collect all gallery photos (zdjecie2 onwards)
 const galleryImages = [];

@@ -9,6 +9,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "offers:ingest": "node --env-file=.env scripts/ingest-offers.mjs",
+    "offers:status": "node --env-file=.env scripts/ingest-offers.mjs --status",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },

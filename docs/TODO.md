@@ -1,5 +1,3 @@
 # TODO
 
-- [ ] Handle offer parsing from cyclic FTP deliveries: use a staged upload / completion marker, detect the complete delivery set, parse it once, and retain delivery metadata so incomplete or repeated uploads cannot overwrite the current published offers.
-
-- [ ] Set up restorative processes and configure env variables on the VPS
+- [ ] Deploy the offer-ingestion build to the VPS, create the documented runtime `.env`, bootstrap the existing Otodom full export, and enable the cron entries. See [offer-ingestion-operations.md](offer-ingestion-operations.md).

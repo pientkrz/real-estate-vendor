@@ -10,7 +10,7 @@
  * Based on Otodom Import specification v170130.
  */
 
-import dict from './otodom-dictionary.json';
+import dict from './otodom-dictionary.json' with { type: 'json' };
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 

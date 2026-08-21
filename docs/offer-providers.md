@@ -1,10 +1,11 @@
 # Offer providers
 
-The SSR app loads every configured provider feed on each request. Provider
-parsers are adapters: each produces a normalised provider record while keeping
-its provider ID, lifecycle status, and parsed source data. The server then
-builds one **Property Aggregate** per real estate property before the data is
-used by the listing filter or detail page.
+Provider parsers are adapters used by the FTP ingestion command. Each produces
+a normalised provider record while keeping its provider ID and lifecycle status.
+The command persists one atomic JSON snapshot; the SSR app reads that snapshot
+instead of reading XML or FTP ZIP files during a web request. The server then
+uses its stored **Property Aggregate** records for the listing filter and detail
+page.
 
 ## Canonical property aggregate
 
@@ -119,26 +120,37 @@ when adding mappings not covered by `src/utils/offerMappings.js`.
 ## Agent carousel
 
 The offer-detail agent carousel is supplied exclusively by the NOE 2.0
-`<agents>` directory in the Nieruchomosci-online.pl XML delivery. The parser
+`<agents>` directory in the Nieruchomosci-online.pl XML delivery. The ingestion
+worker stores the directory in the same state snapshot as offers. The parser
 uses `idAgent`, `name`, `surname`, `phone2` (falling back to `phone1`), `email`,
 and optional `licenseNr` and `photo` fields. An empty or unavailable provider
 feed simply hides the carousel; it never prevents a property page from
 rendering.
 
-## VPS configuration
+## FTP delivery protocol
 
-Set these in the deployment environment. The FTP process writes the XML and
-referenced photo files into the same provider directory.
+The VPS receives ZIP archives, not loose XML files, in
+`/home/ixtnzfseqk/dostawa-ofert/<provider>/`. The cron worker runs every 30
+minutes and only accepts an archive after it is at least 15 minutes old, passes
+`unzip -t`, contains the expected XML entry, and declares a known delivery type:
 
-```dotenv
-OTODOM_XML_PATH=/dostawa-ofert/otodom-pl/properties_otodom.xml
-NIERUCHOMOSCI_ONLINE_XML_PATH=/dostawa-ofert/nieruchomosci-online-pl/properties_noe2.xml
-OFERTY_NET_XML_PATH=/dostawa-ofert/oferty-net/oferty.xml
-```
+| Provider | XML entry | Full/differential marker |
+| --- | --- | --- |
+| Otodom | `properties_otodom.xml` | `<otoDom><ImportType>` |
+| Nieruchomosci-online.pl | `properties_noe2.xml` | `<xml><export><type>` |
+| Oferty.net | `oferty.xml` | `<plik><header><zawartosc_pliku>` |
 
-Photo URLs are independent from disk locations: configure the matching
-`*_PHOTO_BASE_URL` variables to the public HTTP path served for each directory.
-If omitted, the legacy `PHOTO_BASE_URL` is used for all providers.
+A full feed replaces that provider baseline; later differentials update it.
+Differentials received before a provider's first full baseline are recorded and
+ignored. A delete/deactivate event from any provider hides the aggregate
+immediately. An invalid archive never changes the published state.
+
+Images referenced by accepted offers are extracted directly from their ZIP into
+the private configurable photo root and served through `/offer-photos/...` by
+Astro. External/GitHub image URLs are not used after the processed state exists.
+
+See [offer-ingestion-operations.md](offer-ingestion-operations.md) for setup,
+retention, recovery, and VPS process details.
 
 ## Provider mappings
 
