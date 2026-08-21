@@ -11,6 +11,22 @@ import {
   OFERTY_NET_TABS,
 } from './offerMappings.js';
 
+const normaliseAgent = ({ id, name, email, phone } = {}) => {
+  const phoneValue = String(phone ?? '').trim().replace(/[;,\s]+$/, '');
+  const normalised = {
+    id: String(id ?? '').trim(),
+    name: String(name ?? '').trim(),
+    email: String(email ?? '').trim(),
+    // fast-xml-parser coerces `+48…` XML values to numbers; restore the
+    // country prefix for the Polish international format used by the feeds.
+    phone: /^48\d{9}$/.test(phoneValue) ? `+${phoneValue}` : phoneValue,
+  };
+
+  return normalised.name || normalised.email || normalised.phone
+    ? Object.fromEntries(Object.entries(normalised).filter(([, value]) => value))
+    : undefined;
+};
+
 // ── Otodom XML parser ─────────────────────────────────────────────────────────
 
 /**
@@ -110,6 +126,11 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '', { includeInactive 
       currency: dict.PriceCurrency[String(ins.PriceCurrency)] ?? 'EUR',
       /** YouTube watch URL from <Video> tag, if present */
       videoUrl: ins.Video || null,
+      agent: normaliseAgent({
+        name: ins.ContactInfo?.Name,
+        email: ins.ContactInfo?.Email,
+        phone: ins.ContactInfo?.Phone,
+      }),
       params: {
         powierzchnia:   parseFloat(ins.Area || 0),
         liczbapokoi:    parseInt(details?.RoomsNum || 0),
@@ -222,6 +243,20 @@ export const parseNieruchomosciOnlineXml = (xmlString, photoBasePath = '', { inc
   const root = parser.parse(xmlString).xml;
   if (!root?.ads?.ad) return [];
 
+  const agentsById = new Map(
+    toArray(root.agents?.agent)
+      .map((agent) => {
+        const id = readText(agent?.idAgent).trim();
+        return [id, normaliseAgent({
+          id,
+          name: [readText(agent?.name), readText(agent?.surname)].filter(Boolean).join(' '),
+          email: agent?.email,
+          phone: agent?.phone2 ?? agent?.phone1,
+        })];
+      })
+      .filter(([id, agent]) => id && agent),
+  );
+
   const offers = [];
   for (const ad of toArray(root.ads.ad)) {
     const details = ad?.details;
@@ -297,6 +332,7 @@ export const parseNieruchomosciOnlineXml = (xmlString, photoBasePath = '', { inc
       price: readNumber(details.price) ?? 0,
       currency: NOE_CURRENCY_TO_CODE[readInteger(details.idCurrency)] ?? 'EUR',
       videoUrl: readText(details.videoAdLink).trim() || null,
+      agent: agentsById.get(readText(details.idAgent).trim()),
       params,
       location,
     });
@@ -391,6 +427,11 @@ export const parseOfertyNetXml = (xmlString, photoBasePath = '') => {
         price: readNumber(rawOffer.cena) ?? 0,
         currency: readText(rawOffer.cena?.['@_waluta']).trim() || 'EUR',
         videoUrl: readText(params.wideo).trim() || null,
+        agent: normaliseAgent({
+          name: [readText(params.agent_imie), readText(params.agent_nazwisko)].filter(Boolean).join(' '),
+          email: params.agent_email,
+          phone: params.agent_tel_kom ?? params.agent_tel,
+        }),
         params,
         location,
       });

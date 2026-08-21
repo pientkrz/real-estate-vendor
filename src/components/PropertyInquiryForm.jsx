@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PhoneInput from './PhoneInput';
 import { isValidPhoneNumber } from '../utils/phoneValidation';
 
-const PropertyInquiryForm = ({ propertyTitle, propertyUrl }) => {
+const PropertyInquiryForm = ({ propertyTitle, propertyUrl, agentName }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -52,6 +52,11 @@ const PropertyInquiryForm = ({ propertyTitle, propertyUrl }) => {
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
+            {agentName ? (
+                <p className="rounded-sm bg-primary/5 px-4 py-3 text-sm font-body text-on-surface">
+                    Twoje zapytanie trafi bezpośrednio do: <strong>{agentName}</strong>.
+                </p>
+            ) : null}
             <input
                 type="text"
                 name="website"

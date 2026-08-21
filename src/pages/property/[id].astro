@@ -7,6 +7,7 @@ import FeaturedProperties from '../../components/FeaturedProperties';
 import PropertyMap from '../../components/PropertyMap';
 import PropertyDetailsPanel from '../../components/property-details/PropertyDetailsPanel';
 import PropertyInquiryForm from '../../components/PropertyInquiryForm';
+import PropertyAgentCard from '../../components/PropertyAgentCard.astro';
 import PropertyVideoEmbed from '../../components/PropertyVideoEmbed';
 import { loadConfiguredPropertyAggregates } from '../../server/offerService.js';
 import { toOfferDetailView, toOfferSummaryView } from '../../utils/propertyAggregate.js';
@@ -30,6 +31,7 @@ const _allOffers = _propertyAggregates
     .filter((candidate) => candidate.lifecycle.isVisible)
     .map(toOfferSummaryView);
 const { params, location, price, currency } = offer;
+const assignedAgent = offer.agent;
 
 // Compute 3 most similar properties by price (60%) + area (40%) proximity
 const _cp = price || 0;
@@ -178,7 +180,9 @@ const agents = JSON.parse(fs.readFileSync(agentsPath, 'utf-8'));
                             <h3 class="text-2xl font-headline font-bold text-on-surface mb-2">Zapytaj o ofertę</h3>
                             <p class="text-sm text-on-surface-variant font-body mb-8">Otrzymaj kompletną dokumentację i analizę inwestycyjną w ciągu 24 godzin.</p>
 
-                            <PropertyInquiryForm client:load propertyTitle={params?.tytul || city} propertyUrl={Astro.url.href} />
+                            <PropertyInquiryForm client:load propertyTitle={params?.tytul || city} propertyUrl={Astro.url.href} agentName={assignedAgent?.name} />
+
+                            {assignedAgent && <PropertyAgentCard agent={assignedAgent} />}
 
                             <p class="mt-8 text-[10px] text-outline leading-relaxed text-center italic">
                                 Oferta wyłączna Global S Home — <br/>Przesyłając formularz, akceptujesz naszą politykę prywatności.

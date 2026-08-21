@@ -37,6 +37,7 @@ describe('buildPropertyAggregates', () => {
     const otodom = active('otodom-pl', 'ms113-6', {
       objectName: 0,
       rawDetails: { RoomsNum: 2 },
+      agent: { name: 'Wojciech Danielak', email: 'wojtek@globalshome.com', phone: '+48690048888' },
       params: { powierzchnia: 44, zdjecie1: 'https://otodom/1.jpg' },
     });
     const noe = active('nieruchomosci-online-pl', '113-6', {
@@ -68,6 +69,8 @@ describe('buildPropertyAggregates', () => {
     expect(aggregate.provenance['areas.totalM2']).toEqual({ provider: 'nieruchomosci-online-pl', sourceField: 'details.area' });
     expect(aggregate.property.media).toHaveLength(2);
     expect(aggregate.property.bedrooms).toBe(2);
+    expect(aggregate.agent).toMatchObject({ name: 'Wojciech Danielak', email: 'wojtek@globalshome.com' });
+    expect(toOfferView(aggregate).agent).toMatchObject({ name: 'Wojciech Danielak' });
     expect(toOfferView(aggregate)).not.toHaveProperty('sourceRecords');
     expect(toOfferSummaryView(aggregate).params).toMatchObject({ liczbasypialni: 2 });
     expect(toOfferSummaryView(aggregate).params.rokbudowy).toBeUndefined();

@@ -1,0 +1,39 @@
+---
+const { agent } = Astro.props;
+const initials = agent.name
+  .split(/\s+/)
+  .filter(Boolean)
+  .slice(0, 2)
+  .map((part) => part[0]?.toUpperCase())
+  .join('');
+const phoneHref = agent.phone?.replace(/[^+\d]/g, '');
+---
+
+<section class="mt-8 bg-surface p-6" aria-label="Opiekun oferty">
+  <span class="text-primary font-label text-[10px] tracking-[0.22em] uppercase mb-4 block">
+    Twój opiekun oferty
+  </span>
+  <div class="flex gap-4">
+    <div class="w-14 h-14 shrink-0 rounded-full bg-primary/10 text-primary font-headline font-bold flex items-center justify-center" aria-hidden="true">
+      {initials || 'GH'}
+    </div>
+    <div class="min-w-0">
+      <h4 class="font-headline text-xl font-bold text-on-surface leading-tight">{agent.name || 'Global S Home'}</h4>
+      <p class="mt-1 text-xs font-label uppercase tracking-wider text-outline">Opiekun tej oferty</p>
+      <div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm font-body">
+        {agent.phone && (
+          <a href={`tel:${phoneHref}`} class="inline-flex items-center gap-1.5 text-on-surface hover:text-primary transition-colors">
+            <span class="material-symbols-outlined text-base text-primary" aria-hidden="true">call</span>
+            {agent.phone}
+          </a>
+        )}
+        {agent.email && (
+          <a href={`mailto:${agent.email}`} class="inline-flex items-center gap-1.5 text-on-surface hover:text-primary transition-colors break-all">
+            <span class="material-symbols-outlined text-base text-primary" aria-hidden="true">mail</span>
+            {agent.email}
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+</section>

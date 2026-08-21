@@ -218,6 +218,7 @@ const buildPropertyAggregate = (id, allRecords) => {
     const price = setResolvedValue(scalar, provenance, conflicts, candidates, 'price.amount', (record) => numericValue(record.price), 'price');
     const currency = setResolvedValue(scalar, provenance, conflicts, candidates, 'price.currency', (record) => record.currency, 'currency');
     const videoUrl = setResolvedValue(scalar, provenance, conflicts, candidates, 'videoUrl', (record) => record.videoUrl, 'videoUrl');
+    const agent = setResolvedValue(scalar, provenance, conflicts, candidates, 'agent', (record) => record.agent, 'agent');
     const objectName = setResolvedValue(scalar, provenance, conflicts, candidates, 'otodom.objectName', (record) => record.objectName, 'ObjectName');
     const rawDetails = setResolvedValue(scalar, provenance, conflicts, candidates, 'otodom.rawDetails', (record) => record.rawDetails, 'ObjectName details');
     const location = {
@@ -263,6 +264,7 @@ const buildPropertyAggregate = (id, allRecords) => {
         attributes: params,
         media,
         videoUrl: videoUrl ?? null,
+        agent: agent ?? null,
       },
       provenance,
       conflicts,
@@ -274,6 +276,7 @@ const buildPropertyAggregate = (id, allRecords) => {
       price,
       currency,
       videoUrl: videoUrl ?? null,
+      agent: agent ?? null,
       objectName,
       rawDetails,
       params,
@@ -364,6 +367,7 @@ export const toOfferDetailView = (aggregate) => ({
   price: aggregate.price,
   currency: aggregate.currency,
   videoUrl: aggregate.videoUrl,
+  agent: aggregate.agent,
   objectName: aggregate.objectName,
   rawDetails: aggregate.rawDetails,
   params: aggregate.params,

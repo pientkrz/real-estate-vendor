@@ -8,10 +8,12 @@ describe('parseNieruchomosciOnlineXml', () => {
   it('normalises NOE 2.0 data, maps vocabulary, and keeps photo order', () => {
     const xml = `<?xml version="1.0" encoding="UTF-8"?>
       <xml>
+        <agents><agent><idAgent>174162</idAgent><name>Wojciech</name><surname>Danielak</surname><phone2>+48690048888</phone2><email>wojtek@globalshome.com</email></agent></agents>
         <ads>
           <ad>
             <details>
               <id>123</id><sign>NOE-42</sign><action>insert</action>
+              <idAgent>174162</idAgent>
               <idCategory>1</idCategory><idAdType>2</idAdType><idCurrency>2</idCurrency>
               <cityName>Chania</cityName><idRegionName>Kreta</idRegionName>
               <area>52.5</area><areaBalcony>4.5</areaBalcony><areaGarden>15</areaGarden>
@@ -37,6 +39,7 @@ describe('parseNieruchomosciOnlineXml', () => {
       price: 235000,
       currency: 'EUR',
       location: { city: 'Chania', region: 'Kreta' },
+      agent: { id: '174162', name: 'Wojciech Danielak', phone: '+48690048888', email: 'wojtek@globalshome.com' },
     });
     expect(offer.params).toMatchObject({
       powierzchnia: 52.5,
@@ -72,6 +75,9 @@ describe('parseOfertyNetXml', () => {
               <param nazwa="geo_lat" typ="real">37.9838</param>
               <param nazwa="geo_lng" typ="real">23.7275</param>
               <param nazwa="advertisement_text" typ="text">Penthouse w Atenach</param>
+              <param nazwa="agent_nazwisko" typ="text">Wojciech Danielak</param>
+              <param nazwa="agent_email" typ="text">wojtek@globalshome.com</param>
+              <param nazwa="agent_tel_kom" typ="text">+48 690 048 888</param>
               <param nazwa="opis" typ="text"><linia>Pierwsza linia</linia><linia>Druga linia</linia></param>
             </oferta>
           </dzial>
@@ -94,6 +100,7 @@ describe('parseOfertyNetXml', () => {
       price: 325000,
       currency: 'EUR',
       location: { city: 'Ateny', country: 'Grecja' },
+      agent: { name: 'Wojciech Danielak', email: 'wojtek@globalshome.com', phone: '+48 690 048 888' },
     });
     expect(offer.params).toMatchObject({
       powierzchnia: 72.5,
