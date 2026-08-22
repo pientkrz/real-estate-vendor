@@ -64,11 +64,6 @@ const AgentGrid = ({ agents = [] }) => {
                   loading="lazy"
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
                 />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-black/40 backdrop-blur-md text-white text-[10px] font-bold px-2 py-1 rounded-xs border border-white/20">
-                    Nieruchomości Online
-                  </span>
-                </div>
               </div>
 
               <div className="p-8">

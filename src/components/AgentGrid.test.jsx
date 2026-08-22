@@ -73,6 +73,11 @@ describe('AgentGrid — karty agentów', () => {
     render(<AgentGrid agents={[{ ...mockAgents[0], image: 'https://example.com/anna.jpg' }]} />);
     expect(screen.getByAltText('Anna Nowak')).toHaveAttribute('src', 'https://example.com/anna.jpg');
   });
+
+  it('does not overlay provider branding on the agent photo', () => {
+    render(<AgentGrid agents={mockAgents} />);
+    expect(screen.queryByText('Nieruchomości Online')).not.toBeInTheDocument();
+  });
 });
 
 // ── contact links ──────────────────────────────────────────────────────────────
