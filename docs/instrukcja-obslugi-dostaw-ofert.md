@@ -79,13 +79,17 @@ plik wykonywalny Node znajduje się pod adresem
    mając Node 22 na `PATH`.
 2. Utwórz katalog nadrzędny pliku stanu i `OFFER_PHOTO_ROOT`; oba muszą
    znajdować się poza `public_html`.
-3. Jednorazowo zainicjuj stan z istniejącego pełnego eksportu Otodom, kopiując
-   sąsiadujące zdjęcia do prywatnego katalogu zdjęć:
+3. Uruchom jednokrotnie proces przetwarzania. Wybierze on wyłącznie ustabilizowane
+   archiwa ZIP z trzech skrzynek dostawców, sprawdzi ich poprawność i opublikuje
+   pierwszą migawkę dopiero po zaakceptowaniu pełnych baz:
 
    ```bash
-   /opt/alt/alt-nodejs22/root/usr/bin/node --env-file=.env \
-     scripts/ingest-offers.mjs --bootstrap-otodom public/<collection>/properties_otodom.xml
+   bash scripts/vps/ingest-offers.sh
    ```
+
+   Aplikacja nie używa już eksportu XML ani zdjęć z katalogu `public/`. Jeżeli
+   w skrzynce są wyłącznie dostawy różnicowe, proces czeka na następną poprawną
+   dostawę pełną danego dostawcy.
 
 4. Zainstaluj wpisy cron uruchamiające aplikację po restarcie i przetwarzanie
    dostaw:

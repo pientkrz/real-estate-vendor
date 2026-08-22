@@ -61,16 +61,16 @@ Tylko komponenty interaktywne są hydratowane w przeglądarce:
 ### 3.3 Przepływ Danych
 
 ```
-[plik XML na serwerze, spoza projektu]
-        │ ścieżka: OFFERS_XML_PATH (lub fallback: public/XML_COLLECTION_PATH/)
-        ▼ (każde żądanie SSR, Node fs.readFileSync)
-src/utils/xmlParser.js → parseOtoDomXml()
-        │  ├─ validateOtoDomXml()   (xmlValidator.js)
-        │  ├─ reverseGeocode()      (reverseGeocode.js, offline, all-the-cities)
-        │  └─ wstrzykiwany prefiks photoBasePath (PHOTO_BASE_URL)
+[ZIP-y w trzech skrzynkach FTP dostawców]
+        │ co 30 minut: scripts/ingest-offers.mjs + flock
+        ▼ (walidacja ZIP/XML, parsowanie, agregacja, ekstrakcja zdjęć)
+[OFFER_STATE_PATH — atomowo zapisany JSON]    [OFFER_PHOTO_ROOT]
+        │                                           │
+        ▼ (każde żądanie SSR, tylko odczyt stanu)    └─▶ /offer-photos/...
+src/server/offerService.js
         │
         ├─▶ index.astro (SSR) → initialOffers[] + initialRates{} → CollectionManager
-        └─▶ [id].astro (statyczna) → getStaticPaths() czyta XML raz przy buildzie
+        └─▶ [id].astro (SSR, `prerender = false`) → szczegóły zagregowanej oferty
 
 [src/server/rateService.js — singleton Node.js]
         │ uruchamia się przy starcie serwera
@@ -100,31 +100,29 @@ Layout.astro
 
 ---
 
-## 4. Źródło Danych: Otodom XML
+## 4. Źródło Danych: dostawy dostawców
 
-### 4.1 Lokalizacja Pliku
+### 4.1 Dostawy, stan i zdjęcia
 
-W środowisku produkcyjnym plik XML i zdjęcia znajdują się **poza katalogiem projektu Astro**, w lokalizacji konfigurowanej przez zmienną środowiskową `OFFERS_XML_PATH`:
-
-```
-/srv/data/properties/properties_otodom.xml   ← przykład ścieżki produkcyjnej
-/srv/data/properties/[pliki zdjęć]
-```
-
-W środowisku deweloperskim (gdy `OFFERS_XML_PATH` nie jest ustawiona), plik XML czytany jest ze struktury lokalnego folderu `public/`:
+Trzech dostawców przesyła archiwa ZIP do osobnych skrzynek FTP poza katalogiem
+aplikacji Astro:
 
 ```
-public/2026-05-23_13%3A07%3A04/properties_otodom.xml
-public/2026-05-23_13%3A07%3A04/[pliki zdjęć]
+/home/ixtnzfseqk/dostawa-ofert/otodom-pl
+/home/ixtnzfseqk/dostawa-ofert/nieruchomosci-online-pl
+/home/ixtnzfseqk/dostawa-ofert/oferty-net
 ```
 
-Logika wyboru ścieżki w `index.astro`:
-```js
-const xmlPath = import.meta.env.OFFERS_XML_PATH
-  ?? path.join(process.cwd(), 'public', import.meta.env.XML_COLLECTION_PATH ?? '', 'properties_otodom.xml');
-```
+Co 30 minut krótko działający proces `scripts/ingest-offers.mjs` wybiera wyłącznie
+ustabilizowane archiwa, waliduje ich format oraz XML, a następnie atomowo zapisuje
+wspólny stan ofert do `OFFER_STATE_PATH`. Aplikacja SSR czyta wyłącznie ten plik
+stanu; **nie** odczytuje XML ani zdjęć z `public/` i nie przetwarza archiwów w
+trakcie żądania HTTP.
 
-### 4.2 Struktura XML
+Zdjęcia wskazane przez zaakceptowane dostawy są wypakowywane do
+`OFFER_PHOTO_ROOT` i serwowane spod `OFFER_PHOTO_PUBLIC_BASE_PATH`.
+
+### 4.2 Struktura XML Otodom
 
 ```
 <otoDom>
@@ -137,7 +135,8 @@ const xmlPath = import.meta.env.OFFERS_XML_PATH
 </otoDom>
 ```
 
-Wpisy z `Action !== 0` (dezaktywacja/usunięcie) są pomijane.
+Wpisy z `Action !== 0` (dezaktywacja/usunięcie) są zachowywane jako zdarzenia
+cyklu życia, aby mogły ukryć ofertę w zagregowanym stanie.
 
 ### 4.3 Mapowanie Pól
 
@@ -335,43 +334,44 @@ Pełny system kolorów Material Design 3 (kontenery, stałe, warianty odwrócone
 
 ## 7. Infrastruktura Techniczna
 
-### 7.1 Zmienne Środowiskowe
+### 7.1 Zmienne środowiskowe
 
 Wszystkie wartości zależne od środowiska konfigurowane są przez plik `.env` w katalogu głównym projektu (skopiuj `.env.example` na start). Serwer deweloperski musi zostać **zrestartowany** po każdej zmianie `.env` — Vite odczytuje je przy uruchomieniu, nie przy hot-reload.
 
 | Zmienna | Wymagana | Opis |
 | :--- | :--- | :--- |
-| `OFFERS_XML_PATH` | Produkcja | Bezwzględna ścieżka do pliku XML Otodom na serwerze, poza katalogiem projektu. Przykład: `/srv/data/properties/properties_otodom.xml`. Gdy ustawiona, `XML_COLLECTION_PATH` jest ignorowana. |
-| `XML_COLLECTION_PATH` | Dev (fallback) | Folder z znacznikiem czasu w `public/` zawierający XML Otodom i zdjęcia. Używany gdy `OFFERS_XML_PATH` nie jest ustawiona. Przykład: `2026-05-23_13%3A07%3A04` |
-| `PHOTO_BASE_URL` | Nie | Prefiks URL dodawany do każdej nazwy pliku zdjęcia parsowanego z XML. Jeśli pominięty, zdjęcia rozwiązywane są względem lokalnego folderu `public/`. Dla produkcji ustaw na URL serwera lub CDN skąd serwowane są zdjęcia. |
+| `OTODOM_DELIVERY_DIR` | VPS | Katalog ZIP-ów Otodom, np. `/home/ixtnzfseqk/dostawa-ofert/otodom-pl`. |
+| `NIERUCHOMOSCI_ONLINE_DELIVERY_DIR` | VPS | Katalog ZIP-ów Nieruchomości Online. |
+| `OFERTY_NET_DELIVERY_DIR` | VPS | Katalog ZIP-ów Oferty.net. |
+| `OFFER_STATE_PATH` | VPS | Prywatny, atomowo zapisywany plik JSON z bieżącym stanem ofert. |
+| `OFFER_PHOTO_ROOT` | VPS | Prywatny katalog wypakowanych zdjęć z zaakceptowanych dostaw. |
+| `OFFER_PHOTO_PUBLIC_BASE_PATH` | VPS | Publiczny prefiks URL wskazujący na `OFFER_PHOTO_ROOT`, obecnie `/offer-photos`. |
+| `OFFER_SETTLE_MINUTES` | Nie | Minimalny wiek ZIP-a przed przetwarzaniem; domyślnie 15 minut. |
 | `BLOG_CONTENT_PATH` | Nie | Katalog (względem katalogu głównego projektu) zawierający pliki Markdown bloga. Domyślnie `./src/content/blog` jeśli nie ustawiono. |
 
-### 7.2 Protokół Aktualizacji XML
+### 7.2 Protokół aktualizacji dostaw
 
-Ponieważ strona główna jest renderowana SSR, **nowy eksport XML jest widoczny natychmiast po zapisaniu pliku** — bez przebudowania serwisu. Strony szczegółów nieruchomości (`/property/[id]`) są prerenderowane statycznie i wymagają przebudowania.
+Proces przetwarzania działa z crona co 30 minut i jest blokowany przez `flock`,
+więc dwa uruchomienia nie mogą się na siebie nałożyć. Dopuszcza wyłącznie ZIP-y
+starsze niż `OFFER_SETTLE_MINUTES`, poprawne według `unzip -t`, z oczekiwanym
+plikiem XML i właściwym typem dostawy w XML.
 
-**Środowisko produkcyjne (XML poza projektem):**
-1. Wyeksportuj `properties_otodom.xml` z Otodom.
-2. Wgraj plik XML na serwer pod ścieżkę wskazaną przez `OFFERS_XML_PATH`.
-3. Wgraj powiązane zdjęcia pod ścieżkę wskazywaną przez `PHOTO_BASE_URL`.
-4. Następne żądanie do strony głównej automatycznie wczyta nowe dane.
-5. Aby zaktualizować strony szczegółów — uruchom `pnpm build && node dist/server/entry.mjs`.
+Pełna dostawa zastępuje stan jednego dostawcy, a różnicowa aktualizuje lub usuwa
+jedynie objęte nią rekordy. Różnice są ignorowane, dopóki dany dostawca nie
+dostarczy pierwszej poprawnej pełnej bazy. Po udanym opublikowaniu nowszej pełnej
+bazy zachowywany jest jeden cykl: najnowszy pełny ZIP wraz z późniejszymi
+różnicami. Błędne ZIP-y pozostają przez trzy dni diagnostycznie.
 
-**Środowisko deweloperskie (XML w `public/`):**
-1. Wyeksportuj `properties_otodom.xml` z Otodom.
-2. Wgraj XML i zdjęcia do nowego folderu z znacznikiem czasu w `public/`.
-3. Ustaw `XML_COLLECTION_PATH` w `.env` na nazwę nowego folderu.
-4. Zaktualizuj `PHOTO_BASE_URL` jeśli potrzebne.
-5. Zrestartuj serwer deweloperski.
+Po atomowym zapisaniu stanu zarówno lista, jak i dynamiczne strony szczegółów
+widzą nowe dane przy kolejnym żądaniu — bez przebudowania lub restartu aplikacji.
 
-### 7.3 Walidacja XML
+### 7.3 Walidacja dostaw XML
 
-`xmlValidator.js` uruchamiany jest w czasie parsowania i sprawdza:
-- Strukturę główną (`otoDom`, `Agency`, `Date`, `ImportType`)
-- Wymagane pola dla każdego `ObjectName` (ID, Price, Description, MarketType, lokalizacja)
-- Wymaganie pola Area; bloki Details dla danego typu; obecność RoomsNum
-- Oferty `Room` muszą mieć `OfferType=1` (tylko wynajem)
-- Dodatkowe/nieznane pola są dozwolone (kompatybilność w przód)
+Walidator uruchamiany przez proces przetwarzania sprawdza archiwum, oczekiwany
+plik XML, korzeń XML i typ dostawy: `ImportType` dla Otodom, `export.type` dla
+Nieruchomości Online oraz `zawartosc_pliku` dla Oferty.net. Następnie parsery
+walidują wymagane pola ofert. Błędna dostawa nie zmienia opublikowanego stanu;
+jest zapisywana w dzienniku jako odrzucona.
 
 ### 7.4 Testowanie
 

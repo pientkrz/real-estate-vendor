@@ -6,6 +6,7 @@ import { createEmptyOfferState, writeOfferStateAtomic } from './offerState.js';
 import {
   loadConfiguredNieruchomosciOnlineAgents,
   loadConfiguredOffers,
+  loadConfiguredProviderOffers,
   loadConfiguredPropertyAggregates,
 } from './offerService.js';
 
@@ -47,5 +48,16 @@ describe('processed offer state loader', () => {
       expect.objectContaining({ id: '191-2', params: expect.objectContaining({ tytul: 'Willa' }) }),
     ]);
     expect(loadConfiguredNieruchomosciOnlineAgents()).toEqual(state.agents);
+  });
+
+  it('does not fall back to public or direct XML files before ingestion', () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'offer-service-empty-'));
+    temporaryDirectories.push(directory);
+    process.env.OFFER_STATE_PATH = path.join(directory, 'offers-state.json');
+
+    expect(loadConfiguredProviderOffers()).toEqual([]);
+    expect(loadConfiguredPropertyAggregates()).toEqual([]);
+    expect(loadConfiguredOffers()).toEqual([]);
+    expect(loadConfiguredNieruchomosciOnlineAgents()).toEqual([]);
   });
 });

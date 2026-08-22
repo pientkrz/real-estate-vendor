@@ -136,13 +136,18 @@ curl -si http://127.0.0.1:4322/
    ```bash
    plink ... -batch "cd apps/<nazwa-aplikacji> && export PATH=/opt/alt/alt-nodejs22/root/usr/bin:\$PATH && npm install --omit=dev"
    ```
-4. Wyślij także katalog `scripts/`, utwórz prywatny `.env` (uprawnienia `600`), katalog stanu i katalog zdjęć. Ustaw w `.env` katalogi FTP dostawców, `OFFER_STATE_PATH` i `OFFER_PHOTO_ROOT` zgodnie z [instrukcją obsługi dostaw ofert](instrukcja-obslugi-dostaw-ofert.md):
+4. Wyślij także katalogi `src/` i `scripts/`. `src/` jest potrzebny wyłącznie
+   krótkotrwałemu procesowi przetwarzania (moduły `src/ingestion`, `src/server`
+   i `src/utils`); aplikacja SSR nadal uruchamia wyłącznie gotowy build. Utwórz
+   prywatny `.env` (uprawnienia `600`), katalog stanu i katalog zdjęć. Ustaw w
+   `.env` katalogi FTP dostawców, `OFFER_STATE_PATH` i `OFFER_PHOTO_ROOT`
+   zgodnie z [instrukcją obsługi dostaw ofert](instrukcja-obslugi-dostaw-ofert.md):
    ```bash
    mkdir -p apps/<nazwa-aplikacji>/data/offer-ingestion
    mkdir -p ~/aktualne-zdjecia-ofert
    chmod 600 apps/<nazwa-aplikacji>/.env
    ```
-5. Jednorazowo zainicjuj stan pełnym eksportem Otodom i zainstaluj wpisy cron zgodnie z instrukcją dostaw.
+5. Przetwórz dostępne dostawy ZIP i zainstaluj wpisy cron zgodnie z instrukcją dostaw. Nie kopiuj ani nie odtwarzaj historycznego XML z katalogu `public/`.
 6. Uruchom proces — zob. [§5](#5-uruchamianie-zatrzymywanie-i-restart-procesu-node).
 7. Skonfiguruj `.htaccess` dla docelowej domeny/subdomeny — zob. [§7](#7-konfiguracja-htaccess-dla-domeny-lub-subdomeny).
 
@@ -296,7 +301,7 @@ Zawsze po wdrożeniu/restarcie:
 | `esbuild`/skrypt postinstall zgłasza `node: command not found` | `/opt/alt/alt-nodejs22/.../bin` nie jest na domyślnym `PATH` powłoki logowania | `export PATH=/opt/alt/alt-nodejs22/root/usr/bin:$PATH` przed `npm install` |
 | Zmienna z `.env` (`import.meta.env.X`) ustawiona na serwerze przy starcie procesu nie ma efektu | `import.meta.env.*` jest zapisywane na stałe w buildzie w momencie `pnpm build`, nie czytane z `process.env` w runtime | Ustaw zmienną **przed buildem lokalnym**, nie przy starcie procesu na serwerze |
 | Strona z `getStaticPaths()` (np. szczegóły oferty, wpis bloga) zwraca 500 na serwerze mimo że działa lokalnie | `output: 'server'` nie prerenderuje automatycznie tras z `getStaticPaths()` | Dodaj `export const prerender = true` w danym pliku `.astro` |
-| Plik odczytywany przez `fs` w runtime (np. XML ofert) nie jest znajdowany na serwerze | Build `server` nie zachowuje folderu `public/` (trafia do `client/`) | Odtwórz oczekiwaną ścieżkę ręcznie pod `~/apps/<app>/public/...` (zob. [§4.2](#42-pierwsze-wdrożenie-nowa-aplikacja) pkt 4) |
+| Lista ofert jest pusta po wdrożeniu | Nie ma jeszcze poprawnej migawki `OFFER_STATE_PATH`, albo dostawca przesłał tylko różnice przed pierwszą pełną bazą | Sprawdź `node --env-file=.env scripts/ingest-offers.mjs --status`, a następnie poczekaj na lub uruchom przetwarzanie poprawnego pełnego ZIP-a; nie przywracaj XML do `public/` |
 | Sesja `plink` z `pkill -f '<wzorzec>'` kończy się natychmiast bez efektu | Wzorzec w tej samej komendzie pasuje też do własnej powłoki wywołującej `pkill` i zabija samą siebie | Użyj `pkill -f '[p]attern'` (nawias na pierwszej literze) i uruchamiaj kill/start jako osobne wywołania `plink` |
 | SSH connection refused / timeout | SSH bywa wyłączony na serwerze poza godzinami prac | Włącz w panelu cyberfolks (cyber_Admin/DirectAdmin) |
 | „Nieautoryzowany dostęp” / blokada IP przy próbie SSH | Firewall cyberfolks czasem blokuje IP tymczasowo | Odblokować przez reCAPTCHA na stronie blokady (`https://s68.cyber-folks.pl:18887`) — wymaga ręcznego kliknięcia, nieskryptowalne |

@@ -43,8 +43,8 @@ const normaliseAgent = ({ id, name, email, phone, image, licenseNumber } = {}) =
  * valid insertions are still returned).
  *
  * @param {string} xmlString       Raw XML content of the Otodom export file
- * @param {string} photoBasePath   URL prefix for photo files,
- *                                 e.g. "/2026-05-23_13%3A07%3A04/"
+ * @param {string} photoBasePath   URL prefix for photos extracted on the VPS,
+ *                                 e.g. "/offer-photos/otodom-pl/<delivery>/"
  * @returns {Array} Normalised offer objects
  */
 export const parseOtoDomXml = (xmlString, photoBasePath = '', { includeInactive = false } = {}) => {

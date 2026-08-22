@@ -32,15 +32,19 @@ After every code change, **always validate in the browser before reporting the t
 
 This is an **Astro SSR app** (`output: 'server'`, `@astrojs/node` standalone adapter) hosted on a self-managed VPS — no GitHub Pages, no static export. The site is served from the domain root (`base: '/'`); see `docs/dziennik-wdrozen-vps.md` for the hosting setup. `site` in `astro.config.mjs` defaults to the test domain and is overridden via the `SITE_URL` env var for production once that domain exists.
 
-### Data Flow: Otodom XML export
+### Data flow: provider deliveries
 
-All property listings come from an Otodom-format XML export at `public/2026-05-23_13%3A07%3A04/properties_otodom.xml`. Photos are co-located in the same timestamped folder. The XML structure is:
+The three provider inboxes on the VPS are `/home/ixtnzfseqk/dostawa-ofert/{otodom-pl,nieruchomosci-online-pl,oferty-net}`. The short-lived `scripts/ingest-offers.mjs` worker, scheduled every 30 minutes with `flock`, validates settled ZIP deliveries, extracts referenced photos to `OFFER_PHOTO_ROOT`, and atomically publishes the normalised state JSON at `OFFER_STATE_PATH`.
+
+The Astro SSR app reads **only** that state through `src/server/offerService.js`; it never parses ZIP/XML files during a request and has no fallback to a timestamped `public/` collection. Runtime paths are read through Node's runtime environment, loaded with `node --env-file=.env`, so VPS configuration is not baked into a local build. Photos are served from the VPS under `OFFER_PHOTO_PUBLIC_BASE_PATH` (currently `/offer-photos`).
+
+Otodom is one of the XML sources processed by the worker. Its core structure is:
 
 ```
 <otoDom> → <Insertions> → <Insertion>
 ```
 
-`src/utils/xmlParser.js` exports two parsers — **`parseOtoDomXml`** (active) and the legacy `parseOffersXml` (unused, kept for reference). `parseOtoDomXml` takes the raw XML string and a `photoBasePath` prefix (e.g. `${import.meta.env.BASE_URL}2026-05-23_13%3A07%3A04/`) and returns normalised offer objects.
+`src/utils/xmlParser.js` exports the provider parsers used by ingestion. `parseOtoDomXml` takes the raw XML string and a photo-base URL (for example `/offer-photos/otodom-pl/<delivery>/`) and returns normalised offer objects.
 
 Key Otodom XML fields and how they map to offer objects:
 
@@ -62,9 +66,9 @@ Key Otodom XML fields and how they map to offer objects:
 
 **Insertions with `Action !== 0`** (deactivations/deletions) are skipped during parsing.
 
-**Index page**: XML is parsed server-side on every request (SSR) in `src/pages/index.astro` using Node `fs`, then passed as `initialOffers` props to the `CollectionManager` React island — no client-side fetch, and listing updates need no rebuild since the file is re-read per request.
+**Index page**: the atomically published state is read server-side on every request (SSR) in `src/pages/index.astro`, then passed as `initialOffers` props to the `CollectionManager` React island. A successful ingestion is therefore visible without rebuilding the site.
 
-**Property detail pages** (`src/pages/property/[id].astro`): Fully static via `getStaticPaths()`, which reads the same XML to generate one page per offer.
+**Property detail pages** (`src/pages/property/[id].astro`): server-rendered (`prerender = false`) from the same published state.
 
 `src/hooks/useOffers.js` is **stale** — it still fetches the old `/offers.xml` via `parseOffersXml` and is not used by any page.
 
