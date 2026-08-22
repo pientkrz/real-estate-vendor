@@ -38,11 +38,10 @@ const PropertyMap = ({ location = {}, city = "", params = {} }) => {
                 zoomControl: false
             });
 
-            // Add Premium Tile Layer (CartoDB Positron - Minimal Grayscale)
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-                subdomains: 'abcd',
-                maxZoom: 20
+            // Satellite imagery keeps the property surroundings immediately legible.
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri — Source: Esri, Maxar, Earthstar Geographics, and the GIS User Community',
+                maxZoom: 19
             }).addTo(mapInstance.current);
 
             // Add Custom Marker
@@ -90,7 +89,7 @@ const PropertyMap = ({ location = {}, city = "", params = {} }) => {
             {hasCoords ? (
                 <div 
                     ref={mapContainer} 
-                    className="w-full h-full z-0 grayscale-[0.5] group-hover:grayscale-0 transition-all duration-1000 bg-surface-container-low" 
+                    className="w-full h-full z-0 bg-surface-container-low"
                 />
             ) : (
                 <div className="w-full h-full bg-surface-container-low flex flex-col items-center justify-center relative">
