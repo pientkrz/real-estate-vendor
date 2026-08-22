@@ -1,9 +1,11 @@
 import cron from 'node-cron';
 import { FALLBACK_RATES } from '../utils/exchangeRates';
+import { getLogger } from './logger.js';
 
 let currentRates = { ...FALLBACK_RATES };
 let ratesTimestamp = null;
 let ratesSource = 'fallback';
+const logger = getLogger('astro');
 
 async function fromFrankfurter() {
   const res = await fetch('https://api.frankfurter.app/latest?from=EUR&to=PLN,GBP,USD,AED,EGP');
@@ -26,17 +28,34 @@ async function fromECB() {
 }
 
 async function refresh() {
+  const startedAt = Date.now();
+  logger.info('currency_refresh_started', { component: 'currency' });
   for (const fetcher of [fromFrankfurter, fromECB]) {
     try {
       const { rates, source } = await fetcher();
       currentRates = rates;
       ratesTimestamp = new Date().toISOString();
       ratesSource = source;
+      logger.info('currency_refresh_succeeded', {
+        component: 'currency',
+        source,
+        rateCount: Object.keys(rates).length,
+        durationMs: Date.now() - startedAt,
+      });
       return;
     } catch (err) {
-      console.info(`[rateService] ${fetcher.name} failed: ${err.message}`);
+      logger.warn('currency_source_failed', {
+        component: 'currency',
+        source: fetcher.name.replace(/^from/, '').toLowerCase(),
+        error: err,
+      });
     }
   }
+  logger.error('currency_refresh_failed', {
+    component: 'currency',
+    durationMs: Date.now() - startedAt,
+    fallbackInUse: true,
+  });
 }
 
 // Guard against duplicate initialisation during HMR in dev

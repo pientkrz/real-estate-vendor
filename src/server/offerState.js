@@ -8,6 +8,7 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { getLogger } from './logger.js';
 
 export const OFFER_STATE_VERSION = 1;
 
@@ -68,7 +69,7 @@ export const readOfferState = (statePath) => {
     return isOfferState(value) ? value : undefined;
   } catch (error) {
     if (error?.code !== 'ENOENT') {
-      console.warn(`[offers] Unable to read processed offer state: ${error.message}`);
+      getLogger().error('offer_state_read_failed', { component: 'offer-state', error });
     }
     return undefined;
   }

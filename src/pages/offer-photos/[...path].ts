@@ -2,6 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import type { APIRoute } from 'astro';
 import { getOfferRuntimeConfig } from '../../server/offerState.js';
+import { getLogger } from '../../server/logger.js';
 
 const MIME_TYPES: Record<string, string> = {
   '.avif': 'image/avif',
@@ -13,6 +14,7 @@ const MIME_TYPES: Record<string, string> = {
 };
 
 export const prerender = false;
+const logger = getLogger('astro');
 
 /** Serve only images that the ingestion worker previously extracted. */
 export const GET: APIRoute = async ({ params }) => {
@@ -38,7 +40,10 @@ export const GET: APIRoute = async ({ params }) => {
         'Cache-Control': 'public, max-age=3600',
       },
     });
-  } catch {
+  } catch (error: any) {
+    if (error?.code !== 'ENOENT') {
+      logger.error('offer_photo_read_failed', { component: 'photos', extension, error });
+    }
     return new Response('Not found', { status: 404 });
   }
 };

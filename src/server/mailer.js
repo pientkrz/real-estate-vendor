@@ -1,4 +1,7 @@
 import nodemailer from 'nodemailer';
+import { getLogger } from './logger.js';
+
+const logger = getLogger('astro');
 
 if (!process.env.SMTP_HOST) {
   try {
@@ -26,7 +29,7 @@ function getTransporter() {
     }
 
     const testAccount = await nodemailer.createTestAccount();
-    console.info(`[mailer] SMTP_HOST not set - using an Ethereal test account (${testAccount.user})`);
+    logger.warn('mailer_test_account_in_use', { component: 'mailer' });
     return nodemailer.createTransport({
       host: testAccount.smtp.host,
       port: testAccount.smtp.port,
@@ -125,11 +128,12 @@ export async function sendContactEmail(fields) {
     text: buildConfirmationBody({ name, propertyTitle, propertyUrl }),
   });
 
-  const previewUrls = [businessInfo, confirmationInfo]
+  const previewCount = [businessInfo, confirmationInfo]
     .map((info) => nodemailer.getTestMessageUrl(info))
-    .filter(Boolean);
-  if (previewUrls.length) {
-    console.info('[mailer] Ethereal preview URLs:', previewUrls.join(' | '));
+    .filter(Boolean)
+    .length;
+  if (previewCount) {
+    logger.info('mailer_test_preview_created', { component: 'mailer', previewCount });
   }
 
   return { businessInfo, confirmationInfo };

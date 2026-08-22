@@ -13,12 +13,42 @@ const CSP = [
   "frame-ancestors 'self'",
 ].join('; ');
 
-export const onRequest = async (_context, next) => {
-  const response = await next();
-  response.headers.set('Content-Security-Policy', CSP);
-  response.headers.set('X-Frame-Options', 'SAMEORIGIN');
-  response.headers.set('X-Content-Type-Options', 'nosniff');
-  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
-  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
-  return response;
+export const onRequest = async (context, next) => {
+  const startedAt = Date.now();
+  const requestId = crypto.randomUUID();
+  context.locals.requestId = requestId;
+
+  try {
+    const response = await next();
+    response.headers.set('Content-Security-Policy', CSP);
+    response.headers.set('X-Frame-Options', 'SAMEORIGIN');
+    response.headers.set('X-Content-Type-Options', 'nosniff');
+    response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+    response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=()');
+    if (response.status >= 500) {
+      logger.error('http_server_error_response', {
+        component: 'http',
+        requestId,
+        method: context.request.method,
+        route: context.url.pathname,
+        statusCode: response.status,
+        durationMs: Date.now() - startedAt,
+      });
+    }
+    return response;
+  } catch (error) {
+    logger.error('http_request_exception', {
+      component: 'http',
+      requestId,
+      method: context.request.method,
+      route: context.url.pathname,
+      durationMs: Date.now() - startedAt,
+      error,
+    });
+    throw error;
+  }
 };
+import crypto from 'node:crypto';
+import { getLogger } from './server/logger.js';
+
+const logger = getLogger('astro');

@@ -38,24 +38,18 @@ const normaliseAgent = ({ id, name, email, phone, image, licenseNumber } = {}) =
  * Parses an Otodom-format XML file into the normalised offer shape that the
  * existing filter / display components expect.
  *
- * Runs XML validation on every parse and logs warnings to the console when
- * required fields are missing (validation failures do NOT abort parsing —
- * valid insertions are still returned).
+ * Runs XML validation on every parse. The optional callback lets the
+ * ingestion worker record a structured summary without exposing XML content.
  *
  * @param {string} xmlString       Raw XML content of the Otodom export file
  * @param {string} photoBasePath   URL prefix for photos extracted on the VPS,
  *                                 e.g. "/offer-photos/otodom-pl/<delivery>/"
  * @returns {Array} Normalised offer objects
  */
-export const parseOtoDomXml = (xmlString, photoBasePath = '', { includeInactive = false } = {}) => {
-  // ── Validate and log any spec violations ──────────────────────────────────
+export const parseOtoDomXml = (xmlString, photoBasePath = '', { includeInactive = false, onValidation } = {}) => {
+  // ── Validate, while leaving the caller in control of structured logging. ──
   const validation = validateOtoDomXml(xmlString);
-  if (!validation.valid) {
-    console.warn(
-      `[otodom-parser] XML validation found ${validation.errors.length} issue(s):`,
-    );
-    validation.errors.forEach((err) => console.warn(`  ✗ ${err}`));
-  }
+  if (!validation.valid) onValidation?.(validation);
 
   const parser = new XMLParser({
     ignoreAttributes: false,

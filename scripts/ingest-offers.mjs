@@ -3,6 +3,11 @@
 import process from 'node:process';
 import { getOfferRuntimeConfig, readOfferState } from '../src/server/offerState.js';
 import { bootstrapOtoDomState, processAvailableDeliveries } from '../src/ingestion/offerIngestion.js';
+import { getLogger, registerProcessErrorLogging } from '../src/server/logger.js';
+
+process.env.LOG_PROCESS = 'ingestion';
+const logger = getLogger('ingestion');
+registerProcessErrorLogging(logger, 'ingestion');
 
 // pnpm forwards a leading `--` on some Windows versions; it is a separator,
 // not an ingestion argument.
@@ -12,11 +17,10 @@ const config = getOfferRuntimeConfig(process.env);
 const printStatus = () => {
   const state = readOfferState(config.statePath);
   if (!state) {
-    console.info(`No processed offer state at ${config.statePath}`);
+    process.stdout.write('No processed offer state is available yet.\n');
     return;
   }
-  console.info(JSON.stringify({
-    statePath: config.statePath,
+  process.stdout.write(`${JSON.stringify({
     generatedAt: state.generatedAt,
     providers: Object.fromEntries(Object.entries(state.providerStates).map(([provider, value]) => [provider, {
       hasFullBaseline: value.hasFullBaseline,
@@ -26,7 +30,7 @@ const printStatus = () => {
     agents: state.agents.length,
     publishedProperties: state.aggregates.filter((aggregate) => aggregate.lifecycle?.isVisible).length,
     recentDeliveries: state.deliveries.slice(-10),
-  }, null, 2));
+  }, null, 2)}\n`);
 };
 
 try {
@@ -35,16 +39,15 @@ try {
   } else if (args[0] === '--bootstrap-otodom') {
     const xmlPath = args[1];
     if (!xmlPath) throw new Error('Usage: --bootstrap-otodom <properties_otodom.xml path>');
-    const state = bootstrapOtoDomState({ config, xmlPath });
-    console.info(`Bootstrapped ${state.aggregates.length} Otodom property aggregates into ${config.statePath}`);
+    const state = bootstrapOtoDomState({ config, xmlPath, logger });
+    process.stdout.write(`Bootstrapped ${state.aggregates.length} Otodom property aggregates.\n`);
   } else if (args.length === 0) {
-    const report = await processAvailableDeliveries({ config });
-    console.info(`[offer-ingestion] applied=${report.applied.length} ignored=${report.ignored.length} rejected=${report.rejected.length} skipped=${report.skipped.length}`);
-    report.rejected.forEach(({ archivePath, reason }) => console.warn(`[offer-ingestion] ${archivePath}: ${reason}`));
+    const report = await processAvailableDeliveries({ config, logger });
+    process.stdout.write(`applied=${report.applied.length} ignored=${report.ignored.length} rejected=${report.rejected.length} skipped=${report.skipped.length}\n`);
   } else {
     throw new Error('Usage: ingest-offers.mjs [--status | --bootstrap-otodom <xml path>]');
   }
 } catch (error) {
-  console.error(`[offer-ingestion] ${error instanceof Error ? error.message : String(error)}`);
+  logger.error('ingestion_command_failed', { component: 'ingestion', error });
   process.exitCode = 1;
 }

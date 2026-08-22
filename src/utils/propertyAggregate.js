@@ -293,7 +293,11 @@ const buildPropertyAggregateSafely = (id, records) => {
   try {
     return buildPropertyAggregate(id, records);
   } catch (error) {
-    console.warn(`[offer-aggregate] Rebuilding ${id} after an aggregation failure: ${error instanceof Error ? error.message : String(error)}`);
+    getLogger().warn('offer_aggregate_recovery_started', {
+      component: 'aggregation',
+      aggregateId: id,
+      error,
+    });
   }
 
   const accepted = [];
@@ -305,7 +309,13 @@ const buildPropertyAggregateSafely = (id, records) => {
     } catch (error) {
       skippedSourceRecords.push(aggregationFailure(record, error));
       const reference = recordReference(record);
-      console.warn(`[offer-aggregate] Skipping ${reference.provider}:${reference.providerOfferId} for ${id}: ${skippedSourceRecords.at(-1).reason}`);
+      getLogger().warn('offer_aggregate_source_skipped', {
+        component: 'aggregation',
+        aggregateId: id,
+        provider: reference.provider,
+        providerOfferId: reference.providerOfferId,
+        reason: skippedSourceRecords.at(-1).reason,
+      });
     }
   }
 
@@ -347,7 +357,12 @@ export const buildPropertyAggregates = (providerOffers = []) => {
       grouped.set(canonicalId, records);
     } catch (error) {
       const reference = recordReference(offer);
-      console.warn(`[offer-aggregate] Skipping unreadable ${reference.provider}:${reference.providerOfferId}: ${error instanceof Error ? error.message : String(error)}`);
+      getLogger().warn('offer_aggregate_record_unreadable', {
+        component: 'aggregation',
+        provider: reference.provider,
+        providerOfferId: reference.providerOfferId,
+        error,
+      });
     }
   }
 
@@ -399,3 +414,4 @@ export const toOfferSummaryView = (aggregate) => ({
 
 // Kept as an alias while call sites migrate to an explicit projection name.
 export const toOfferView = toOfferDetailView;
+import { getLogger } from '../server/logger.js';

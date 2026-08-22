@@ -9,6 +9,7 @@ interface Props {
 }
 
 const { title, description = "Global S Home - Premium Real Estate", lockViewport = false } = Astro.props;
+const requestId = Astro.locals.requestId ?? '';
 ---
 
 <!doctype html>
@@ -18,6 +19,7 @@ const { title, description = "Global S Home - Premium Real Estate", lockViewport
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
 		<meta name="generator" content={Astro.generator} />
+		{requestId && <meta name="global-s-home-request-id" content={requestId} />}
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		
@@ -27,5 +29,39 @@ const { title, description = "Global S Home - Premium Real Estate", lockViewport
 	<body class={`bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container ${lockViewport ? 'overflow-hidden' : 'min-h-screen'}`}>
 		<slot />
 			<CookieConsent client:only="react" />
+		<script is:inline define:vars={{ requestId }}>
+			(() => {
+				let reportCount = 0;
+				const MAX_REPORTS = 3;
+				const report = (kind, value) => {
+					if (reportCount >= MAX_REPORTS) return;
+					reportCount += 1;
+					const error = value instanceof Error ? value : new Error(String(value || 'Unknown client error'));
+					const payload = {
+						kind,
+						requestId: requestId || undefined,
+						errorName: String(error.name || 'Error').slice(0, 120),
+						// Do not transmit browser error text or stacks: either may contain
+						// a value the visitor supplied to an interactive component.
+						message: 'browser-runtime-error',
+						route: window.location.pathname,
+					};
+					const data = JSON.stringify(payload);
+					if (navigator.sendBeacon) {
+						navigator.sendBeacon('/api/client-errors', new Blob([data], { type: 'application/json' }));
+						return;
+					}
+					void fetch('/api/client-errors', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: data,
+						keepalive: true,
+					}).catch(() => {});
+				};
+				window.__globalSHomeReportClientError = report;
+				window.addEventListener('error', (event) => report('error', event.error || event.message), true);
+				window.addEventListener('unhandledrejection', (event) => report('unhandledrejection', event.reason));
+			})();
+		</script>
 	</body>
 </html>

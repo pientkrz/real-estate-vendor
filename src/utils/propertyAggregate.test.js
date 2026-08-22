@@ -1,4 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
+
+const logger = vi.hoisted(() => ({ warn: vi.fn() }));
+
+vi.mock('../server/logger.js', () => ({ getLogger: () => logger }));
+
 import { buildPropertyAggregates, getCanonicalPropertyId, toOfferSummaryView, toOfferView } from './propertyAggregate.js';
 
 const active = (provider, providerOfferId, values = {}) => ({
@@ -106,7 +111,7 @@ describe('buildPropertyAggregates', () => {
     Object.defineProperty(invalidOferty, 'params', {
       get: () => { throw new Error('invalid provider parameters'); },
     });
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    logger.warn.mockClear();
 
     const aggregates = buildPropertyAggregates([otodom, noe, invalidOferty]);
 
@@ -119,7 +124,9 @@ describe('buildPropertyAggregates', () => {
     expect(aggregates[0].skippedSourceRecords).toEqual([
       expect.objectContaining({ provider: 'oferty-net', providerOfferId: '113-6' }),
     ]);
-    expect(warn).toHaveBeenCalled();
-    warn.mockRestore();
+    expect(logger.warn).toHaveBeenCalledWith('offer_aggregate_source_skipped', expect.objectContaining({
+      provider: 'oferty-net',
+      providerOfferId: '113-6',
+    }));
   });
 });

@@ -83,11 +83,10 @@ Interaktywna sesja: pominięcie `-batch` i ostatniego argumentu z poleceniem otw
 │       ├── server/                           ← z dist/server (build)
 │       ├── client/                           ← z dist/client (build)
 │       ├── data/offer-ingestion/             ← prywatna migawka JSON ofert i blokada `flock`
+│       ├── logs/                              ← dzienne logi JSONL aplikacji (prywatne)
 │       ├── node_modules/                     ← zainstalowane NA serwerze (nie kopiować z lokalnej maszyny, pnpm robi symlinki)
 │       ├── package.json                      ← kopiowany z repo, potrzebny do `npm install`
-│       ├── .env                              ← prywatna konfiguracja wykonawcza (uprawnienia `600`)
-│       ├── app.log                           ← stdout/stderr procesu Node
-│       └── start.log                         ← log skryptu start.sh (jeśli używany, zob. §6)
+│       └── .env                              ← prywatna konfiguracja wykonawcza i logowania (`600`)
 ├── dostawa-ofert/                            ← skrzynki FTP dostawców (archiwa ZIP)
 ├── aktualne-zdjecia-ofert/                   ← prywatne zdjęcia wypakowane z zaakceptowanych dostaw
 └── domains/
@@ -153,7 +152,7 @@ curl -si http://127.0.0.1:4322/
 
 ### 4.3 Kolejne wdrożenia (aktualizacja istniejącej aplikacji)
 
-`node_modules`, prywatna migawka ofert i katalog zdjęć zwykle nie zmieniają się między wdrożeniami — wysyłaj tylko nowy build. Gdy zmieniły się zależności lub skrypty, wyślij odpowiednio `package.json` albo `scripts/` i uruchom ponownie `npm install --omit=dev` lub `setup-cron.sh`:
+`node_modules`, prywatna migawka ofert, katalog zdjęć i katalog logów zwykle nie zmieniają się między wdrożeniami — wysyłaj tylko nowy build. Gdy zmieniły się zależności lub skrypty, wyślij odpowiednio `package.json` albo `scripts/` i uruchom ponownie `npm install --omit=dev` lub `setup-cron.sh`:
 
 ```bash
 pscp -P 222 -pw "$cyberfolks_server_password" -r dist/server dist/client \
@@ -187,7 +186,7 @@ pkill -f '[e]ntry.mjs'
 
 ```bash
 cd apps/<nazwa-aplikacji>
-PORT=<PORT> HOST=127.0.0.1 nohup /opt/alt/alt-nodejs22/root/usr/bin/node --env-file=.env server/entry.mjs > app.log 2>&1 &
+bash scripts/vps/start.sh
 ```
 
 Jeśli kilka aplikacji działa na serwerze, każda musi mieć **unikalny port** (zob. tabela w [§1](#1-architektura-hostingu)) — kolejny wolny port to zwykle poprzedni + 1.
@@ -200,13 +199,15 @@ Dwa osobne wywołania `plink`:
 
 ```bash
 plink ... -batch "pkill -f '[e]ntry.mjs' && echo killed || echo 'nothing to kill'"
-plink ... -batch "cd apps/<nazwa-aplikacji> && PORT=<PORT> HOST=127.0.0.1 nohup /opt/alt/alt-nodejs22/root/usr/bin/node --env-file=.env server/entry.mjs > app.log 2>&1 &"
+plink ... -batch "cd apps/<nazwa-aplikacji> && bash scripts/vps/start.sh"
 ```
 
 ### Podgląd logów
 
+Zob. [instrukcja logowania](instrukcja-logowania.md). Przykład ostatnich błędów:
+
 ```bash
-plink ... -batch "tail -n 50 apps/<nazwa-aplikacji>/app.log"
+plink ... -batch "jq -c 'select(.level == \"error\")' apps/<nazwa-aplikacji>/logs/astro-\$(date -u +%F).jsonl | tail -n 50"
 ```
 
 ---
@@ -217,7 +218,8 @@ plink ... -batch "tail -n 50 apps/<nazwa-aplikacji>/app.log"
 
 - **`scripts/vps/start.sh`** — idempotentny: uruchamia serwer tylko jeśli nic jeszcze nie nasłuchuje na jego porcie (sprawdza przez `curl`). Bezpieczny do wielokrotnego uruchomienia.
 - **`scripts/vps/ingest-offers.sh`** — uruchamia krótkie przetwarzanie dostaw FTP, z blokadą `flock`.
-- **`scripts/vps/setup-cron.sh`** — instaluje wpis `@reboot` dla aplikacji oraz wpis `*/30` dla dostaw ofert. Idempotentny — nie dubluje wpisów.
+- **`scripts/vps/setup-cron.sh`** — instaluje wpis `@reboot` dla aplikacji oraz wpis `*/30` dla dostaw ofert. Idempotentny — zastępuje wyłącznie wcześniejsze wpisy tej aplikacji, bez dublowania.
+- **`scripts/vps/run-astro.mjs`** i **`log-process-event.mjs`** — uruchamiają SSR przez rejestrację błędów procesu i zapisują zdarzenia supervisor do JSONL; nie uruchamiaj ich ręcznie poza `start.sh`.
 
 Wdrożenie (raz, po przesłaniu skryptów na serwer obok aplikacji):
 

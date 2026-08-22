@@ -10,8 +10,17 @@ set -u
 APP_DIR="$HOME/apps/new-global-s-home"
 START_SCRIPT="$APP_DIR/scripts/vps/start.sh"
 INGEST_SCRIPT="$APP_DIR/scripts/vps/ingest-offers.sh"
-CRON_ENTRY="@reboot /bin/bash $START_SCRIPT >> $APP_DIR/cron.log 2>&1"
-INGEST_CRON_ENTRY="*/30 * * * * /bin/bash $INGEST_SCRIPT >> $APP_DIR/offer-ingestion.log 2>&1"
+CRON_ENTRY="@reboot /bin/bash $START_SCRIPT > /dev/null 2>&1"
+INGEST_CRON_ENTRY="*/30 * * * * /bin/bash $INGEST_SCRIPT > /dev/null 2>&1"
+
+log_event() {
+  level="$1"
+  event="$2"
+  shift 2
+  if [ -f "$APP_DIR/.env" ]; then
+    /opt/alt/alt-nodejs22/root/usr/bin/node --env-file="$APP_DIR/.env" "$APP_DIR/scripts/vps/log-process-event.mjs" "$level" "$event" "$@" > /dev/null 2>&1 || true
+  fi
+}
 
 if [ ! -f "$START_SCRIPT" ]; then
   echo "ERROR: $START_SCRIPT not found. Deploy start.sh to $APP_DIR first." >&2
@@ -23,25 +32,21 @@ if [ ! -f "$INGEST_SCRIPT" ]; then
   exit 1
 fi
 
-chmod +x "$START_SCRIPT" "$INGEST_SCRIPT"
+chmod +x "$START_SCRIPT" "$INGEST_SCRIPT" "$APP_DIR/scripts/vps/run-astro.mjs" "$APP_DIR/scripts/vps/log-process-event.mjs"
 
 existing="$(crontab -l 2>/dev/null || true)"
-if echo "$existing" | grep -qF "$START_SCRIPT"; then
-  echo "Cron @reboot entry already present, leaving crontab unchanged."
-else
-  { echo "$existing"; echo "$CRON_ENTRY"; } | crontab -
-  echo "Installed cron @reboot entry:"
-  echo "  $CRON_ENTRY"
-fi
+without_app_entries="$(printf '%s\n' "$existing" | grep -vF "$START_SCRIPT" | grep -vF "$INGEST_SCRIPT" || true)"
+{
+  printf '%s\n' "$without_app_entries"
+  printf '%s\n' "$CRON_ENTRY"
+  printf '%s\n' "$INGEST_CRON_ENTRY"
+} | crontab -
+log_event info cron_entries_configured "rebootSchedule=@reboot" "ingestionSchedule=every-30-minutes"
 
-existing="$(crontab -l 2>/dev/null || true)"
-if echo "$existing" | grep -qF "$INGEST_SCRIPT"; then
-  echo "Ingestion schedule already installed, leaving crontab unchanged."
-else
-  { echo "$existing"; echo "$INGEST_CRON_ENTRY"; } | crontab -
-  echo "Installed ingestion cron entry:"
-  echo "  $INGEST_CRON_ENTRY"
-fi
+echo "Configured cron @reboot entry:"
+echo "  $CRON_ENTRY"
+echo "Configured ingestion schedule:"
+echo "  $INGEST_CRON_ENTRY"
 
 echo "Current crontab:"
 crontab -l

@@ -12,13 +12,25 @@ ENV_FILE="${OFFER_RUNTIME_ENV_FILE:-$APP_DIR/.env}"
 
 cd "$APP_DIR" || exit 1
 
+log_event() {
+  level="$1"
+  event="$2"
+  shift 2
+  if [ -f "$ENV_FILE" ]; then
+    "$NODE_BIN" --env-file="$ENV_FILE" "$APP_DIR/scripts/vps/log-process-event.mjs" "$level" "$event" "$@" > /dev/null 2>&1 || true
+  else
+    "$NODE_BIN" "$APP_DIR/scripts/vps/log-process-event.mjs" "$level" "$event" "$@" > /dev/null 2>&1 || true
+  fi
+}
+
 if curl -s --max-time 2 "http://$HOST:$PORT/" > /dev/null 2>&1; then
-  echo "$(date -Iseconds) already running on port $PORT, skipping" >> start.log
+  log_event info process_already_running "port=$PORT"
 else
   if [ -f "$ENV_FILE" ]; then
-    PORT=$PORT HOST=$HOST nohup "$NODE_BIN" --env-file="$ENV_FILE" server/entry.mjs >> app.log 2>&1 &
+    LOG_PROCESS=astro PORT=$PORT HOST=$HOST nohup "$NODE_BIN" --env-file="$ENV_FILE" scripts/vps/run-astro.mjs > /dev/null 2>&1 &
   else
-    PORT=$PORT HOST=$HOST nohup "$NODE_BIN" server/entry.mjs >> app.log 2>&1 &
+    log_event error process_start_skipped "reason=missing-runtime-environment"
+    exit 1
   fi
-  echo "$(date -Iseconds) started (pid $!)" >> start.log
+  log_event info process_started "port=$PORT" "pid=$!"
 fi

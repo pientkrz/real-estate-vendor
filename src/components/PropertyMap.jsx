@@ -73,7 +73,7 @@ const PropertyMap = ({ location = {}, city = "", params = {} }) => {
             }, 500);
 
         } catch (error) {
-            console.error("Leaflet initialization failed:", error);
+          window.__globalSHomeReportClientError?.('error', error);
         }
 
         return () => {

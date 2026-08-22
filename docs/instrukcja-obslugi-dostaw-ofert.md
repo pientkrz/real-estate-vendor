@@ -103,14 +103,15 @@ plik wykonywalny Node znajduje się pod adresem
    żądaniu SSR.
 
 Polecenie `node --env-file=.env scripts/ingest-offers.mjs --status` pokazuje
-ostatnie bazy i dostawy. Logi `app.log`, `start.log` oraz `offer-ingestion.log`
-znajdują się w katalogu aplikacji.
+ostatnie bazy i dostawy. Szczegóły walidacji, parsowania i retencji są w
+`logs/ingestion-YYYY-MM-DD.jsonl`; zob.
+[instrukcję logowania](instrukcja-logowania.md).
 
 ## Odtwarzanie po błędzie
 
 Gdy wysyłka jest niekompletna lub nieprawidłowa, strona nadal korzysta z
-poprzedniej migawki. Aby znaleźć przyczynę, sprawdź odrzucony ZIP oraz
-`offer-ingestion.log`. Zachowany pełny ZIP wraz z późniejszymi różnicami
+poprzedniej migawki. Aby znaleźć przyczynę, sprawdź odrzucony ZIP oraz wpis
+`delivery_rejected` w logu ingestii. Zachowany pełny ZIP wraz z późniejszymi różnicami
 wystarcza do odtworzenia bieżącego stanu dostawcy: usuń wyłącznie wygenerowany
 plik stanu i ponownie uruchom polecenie przetwarzające. Nigdy nie usuwaj
 archiwum FTP przed potwierdzeniem opublikowania nowszego pełnego cyklu.
