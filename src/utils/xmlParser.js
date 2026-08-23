@@ -1,6 +1,6 @@
 import { XMLParser } from 'fast-xml-parser';
 import dict from './otodom-dictionary.json' with { type: 'json' };
-import { reverseGeocode } from './reverseGeocode.js';
+import { resolveProviderLocation } from './locationResolver.js';
 import { validateOtoDomXml } from './xmlValidator.js';
 import {
   NOE_AD_TYPE_TO_TYPE,
@@ -116,7 +116,24 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '', {
 
     const lat = parseFloat(ins.GeoMarker?.Latitude || 0);
     const lon = parseFloat(ins.GeoMarker?.Longitude || 0);
-    const { city, country, region } = reverseGeocode(lat, lon);
+    const xmlCity = readText(ins.City).trim();
+    const xmlRegion = dict.Province?.[readText(ins.Province).trim()] ?? readText(ins.Province).trim();
+    const rawCountry = readText(ins.Country).trim();
+    const xmlCountry = dict.Country?.[rawCountry] ?? rawCountry;
+    const legacyCountryOnly = rawCountry === '1' && !xmlCity && !xmlRegion;
+    const { location, locationSources } = resolveProviderLocation({
+      latitude: lat,
+      longitude: lon,
+      fields: {
+        country: {
+          value: legacyCountryOnly ? '' : xmlCountry,
+          xmlField: 'Country',
+          ...(legacyCountryOnly ? { legacy: rawCountry } : {}),
+        },
+        region: { value: xmlRegion, xmlField: 'Province' },
+        city: { value: xmlCity, xmlField: 'City' },
+      },
+    });
 
     const offer = {
       id: `otodom-${sourceId}`,
@@ -143,13 +160,14 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '', {
         powierzchnia:   parseFloat(ins.Area || 0),
         liczbapokoi:    parseInt(details?.RoomsNum || 0),
         liczbalazienek: 0,
-        miasto:         city,
+        miasto:         location.city ?? '',
         opis:           ins.Description || '',
         latitude:       lat,
         longitude:      lon,
         tytul:          ins.Title || '',
       },
-      location: { country, city, region },
+      location,
+      locationSources,
     };
 
     // Sort photos by Position (ascending) and assign as zdjecie1…N
@@ -216,14 +234,6 @@ const readTypedParam = (param) => {
 const firstDescriptionLine = (description, fallback) => {
   const firstLine = readText(description).split(/\r?\n/).map((line) => line.trim()).find(Boolean);
   return (firstLine || fallback || '').slice(0, 160);
-};
-
-const locationFromCoordinates = (lat, lon, explicit = {}) => {
-  const reverseLocation = reverseGeocode(lat, lon);
-  const city = readText(explicit.city).trim() || reverseLocation.city;
-  const region = readText(explicit.region).trim() || reverseLocation.region;
-  const country = readText(explicit.country).trim() || reverseLocation.country;
-  return { city, region, country };
 };
 
 const noeBool = (value) => {
@@ -327,9 +337,15 @@ export const parseNieruchomosciOnlineXml = (xmlString, photoBasePath = '', { inc
       if (value !== undefined) params[polishParam] = value;
     }
 
-    const location = locationFromCoordinates(lat, lon, {
-      city: details.cityName,
-      region: details.idRegionName,
+    const xmlRegion = readText(details.idRegionName).trim() || readText(details.districtName).trim();
+    const regionField = readText(details.idRegionName).trim() ? 'idRegionName' : 'districtName';
+    const { location, locationSources } = resolveProviderLocation({
+      latitude: lat,
+      longitude: lon,
+      fields: {
+        city: { value: readText(details.cityName), xmlField: 'cityName' },
+        region: { value: xmlRegion, xmlField: regionField },
+      },
     });
 
     params.powierzchnia ??= readNumber(details.area) ?? 0;
@@ -362,6 +378,7 @@ export const parseNieruchomosciOnlineXml = (xmlString, photoBasePath = '', { inc
       agent: agentsById.get(readText(details.idAgent).trim()),
       params,
       location,
+      locationSources,
     });
   }
 
@@ -457,10 +474,14 @@ export const parseOfertyNetXml = (xmlString, photoBasePath = '', { includeInacti
 
       const lat = readNumber(params.geo_lat) ?? readNumber(params.n_geo_y);
       const lon = readNumber(params.geo_lng) ?? readNumber(params.n_geo_x);
-      const location = locationFromCoordinates(lat, lon, {
-        city: params.miasto,
-        region: params.wojewodztwo,
-        country: params.kraj,
+      const { location, locationSources } = resolveProviderLocation({
+        latitude: lat,
+        longitude: lon,
+        fields: {
+          city: { value: readText(params.miasto), xmlField: 'param.miasto' },
+          region: { value: readText(params.wojewodztwo), xmlField: 'param.wojewodztwo' },
+          country: { value: readText(params.kraj), xmlField: 'param.kraj' },
+        },
       });
       params.powierzchnia = readNumber(params.powierzchnia) ?? 0;
       params.liczbapokoi = readInteger(params.liczbapokoi) ?? 0;
@@ -489,6 +510,7 @@ export const parseOfertyNetXml = (xmlString, photoBasePath = '', { includeInacti
         }),
         params,
         location,
+        locationSources,
       });
     }
   }

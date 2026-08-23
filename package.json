@@ -11,6 +11,7 @@
     "astro": "astro",
     "offers:ingest": "node --env-file=.env scripts/ingest-offers.mjs",
     "offers:status": "node --env-file=.env scripts/ingest-offers.mjs --status",
+    "offers:replay": "node --env-file=.env scripts/ingest-offers.mjs --replay-retained",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },

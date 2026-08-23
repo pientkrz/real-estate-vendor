@@ -62,6 +62,34 @@ preferencji to Otodom → Nieruchomosci-online.pl → Oferty.net; brakujące war
 są uzupełniane przez kolejnego dostawcę. Wybrany dostawca jest zapisywany dla
 każdego pola w `provenance`.
 
+### Lokalizacja: XML przed współrzędnymi
+
+Lokalizacja jest wyjątkiem od zwykłej kolejności dostawców. Parser najpierw
+zachowuje niepuste nazwy dokładnie w pisowni dostawcy; lokalny, offline'owy
+reverse geocoder jest wywoływany tylko dla brakujących pól `kraj`–`region`–`miasto`.
+Nie tłumaczy ani nie normalizuje nazw z XML.
+
+| Dostawca | Kraj | Region | Miasto |
+| --- | --- | --- | --- |
+| Otodom | `Country`, przez słownik | `Province`, przez słownik albo tekst | `City` |
+| Nieruchomosci-online.pl (NOE) | brak — współrzędne | `idRegionName`, a gdy puste `districtName` | `cityName` |
+| Oferty.net | parametr `kraj` | parametr `wojewodztwo` | parametr `miasto` |
+
+W agregacie wygrywa XML rekordu zawierającego najwięcej użytecznych pól
+lokalizacji. Remis rozstrzyga kolejność Otodom → NOE → Oferty.net. Dopiero gdy
+żaden dostawca nie poda danego pola w XML, używana jest wartość wyprowadzona ze
+współrzędnych. Decyzja i ewentualny konflikt są widoczne w `provenance` oraz
+`conflicts`; `params.miasto` jest zawsze synchronizowane z końcowym
+`location.city`.
+
+Każdy zapisany rekord dostawcy zawiera prywatne `locationSources` dla trzech
+pól (`source: xml | coordinates`, nazwa pola XML). Historyczne samotne
+`Otodom Country=1` jest oznaczone dodatkowo jako `legacy` i **nie** jest
+traktowane jako pełna lokalizacja — kraj, region i miasto są wtedy uzupełniane
+ze współrzędnych. Te metadane pozostają w stanie JSON po stronie serwera i nie
+trafiają do przeglądarki. Rekordy zapisane przed wprowadzeniem metadanych są
+bezpiecznie traktowane jak wartości z fallbacku współrzędnych.
+
 Wartości powierzchni nie są traktowane jako równoważne: `Area` z Otodom i
 `areaUse` z NOE trafiają do `usableM2`; `area` z NOE i `powierzchnia` z
 Oferty.net trafiają do `totalM2`. Dotychczasowe pole wyświetlania

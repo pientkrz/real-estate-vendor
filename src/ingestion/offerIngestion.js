@@ -145,6 +145,7 @@ const tombstoneFor = (provider, providerOfferId, priorRecord, sourceStatus = 'de
   agent: null,
   params: {},
   location: {},
+  locationSources: {},
   rawDetails: null,
 });
 
@@ -386,6 +387,174 @@ const pruneDeliveries = (state, config, now, logger) => {
     }
   }
   return changed;
+};
+
+const readRetainedDelivery = ({ provider, archivePath, deliveryId, expectedKind, config, logger }) => {
+  validateZip(archivePath, config.unzipBin);
+  const entries = listZipEntries(archivePath, config.unzipBin);
+  const xmlEntry = XML_ENTRIES[provider];
+  if (!entries.includes(xmlEntry)) throw new Error(`Missing expected XML entry: ${xmlEntry}`);
+  const xml = readXmlFromZip(archivePath, xmlEntry, config.unzipBin);
+  const kind = classifyDeliveryType(provider, xml);
+  if (kind !== expectedKind) throw new Error(`Retained ZIP type ${kind} does not match recorded ${expectedKind} delivery`);
+  const { offers, agents } = parseProviderRecords(provider, xml, {
+    onValidation: (validation) => {
+      logger.warn('delivery_xml_validation_warning', {
+        component: 'validation',
+        provider,
+        deliveryId,
+        issueCount: validation.errors.length,
+      });
+    },
+    onUnknownObjectName: ({ objectName, providerOfferId }) => {
+      logger.warn('otodom_unknown_object_name', {
+        component: 'parsing',
+        provider,
+        deliveryId,
+        providerOfferId,
+        objectName,
+      });
+    },
+  });
+  if (kind === 'full' && offers.length === 0) throw new Error('Full delivery contains no offers');
+  return { kind, offers, agents, entries };
+};
+
+const locationSourceCounts = (offers) => offers.reduce((counts, offer) => {
+  for (const field of ['country', 'region', 'city']) {
+    const source = offer.locationSources?.[field]?.source;
+    if (source && Object.hasOwn(counts, source)) counts[source] += 1;
+    if (offer.locationSources?.[field]?.legacy) counts.legacy += 1;
+  }
+  return counts;
+}, { xml: 0, coordinates: 0, legacy: 0 });
+
+const retainedCycle = (state, provider) => {
+  const deliveries = state.deliveries
+    .filter((delivery) => (
+      delivery.provider === provider
+      && delivery.status === 'applied'
+      && !delivery.bootstrap
+      && !delivery.purged
+      && ['full', 'differential'].includes(delivery.kind)
+      && delivery.archivePath
+    ))
+    .sort((left, right) => Date.parse(left.receivedAt) - Date.parse(right.receivedAt));
+  const fullIndex = deliveries.map((delivery) => delivery.kind).lastIndexOf('full');
+  return fullIndex === -1 ? [] : deliveries.slice(fullIndex);
+};
+
+/**
+ * Rebuild provider snapshots from the single retained full delivery and its
+ * later differentials. A provider failure leaves its current records intact;
+ * the combined replacement remains a single atomic state-file publish.
+ */
+export const replayRetainedDeliveries = async ({
+  config,
+  logger = getLogger('ingestion'),
+  readDelivery = readRetainedDelivery,
+  materialise = materialisePhotos,
+} = {}) => {
+  const current = readOfferState(config?.statePath);
+  const report = { applied: [], skipped: [], failed: [], statePublished: false };
+  if (!current) {
+    logger.warn('location_replay_skipped', { component: 'location-replay', reason: 'missing-state' });
+    return report;
+  }
+
+  const candidate = cloneState(current);
+  const providers = Object.keys(config.providerDirectories);
+  logger.info('location_replay_started', {
+    component: 'location-replay',
+    providerCount: providers.length,
+  });
+
+  for (const provider of providers) {
+    const cycle = retainedCycle(current, provider);
+    if (cycle.length === 0) {
+      report.skipped.push(provider);
+      logger.warn('location_replay_provider_skipped', {
+        component: 'location-replay',
+        provider,
+        reason: 'no-retained-full-cycle',
+      });
+      continue;
+    }
+
+    try {
+      let restored = createEmptyOfferState();
+      let counts = { xml: 0, coordinates: 0, legacy: 0 };
+      for (const delivery of cycle) {
+        const parsed = await readDelivery({
+          provider,
+          archivePath: delivery.archivePath,
+          deliveryId: delivery.id,
+          expectedKind: delivery.kind,
+          config,
+          logger,
+        });
+        const candidateDelivery = {
+          id: delivery.id,
+          provider,
+          kind: parsed.kind,
+          offers: parsed.offers,
+          agents: parsed.agents,
+          receivedAt: delivery.receivedAt,
+        };
+        const preflight = applyDeliveryToState(restored, candidateDelivery);
+        if (!preflight.applied) throw new Error(`Cannot replay ${delivery.kind}: ${preflight.reason}`);
+        await materialise({
+          offers: parsed.offers,
+          agents: parsed.agents,
+          provider,
+          deliveryId: delivery.id,
+          archivePath: delivery.archivePath,
+          entries: parsed.entries,
+          config,
+        });
+        restored = applyDeliveryToState(restored, candidateDelivery).state;
+        const deliveryCounts = locationSourceCounts(parsed.offers);
+        counts = Object.fromEntries(Object.keys(counts).map((key) => [key, counts[key] + deliveryCounts[key]]));
+      }
+
+      candidate.providerStates[provider] = restored.providerStates[provider];
+      if (provider === 'nieruchomosci-online-pl') candidate.agents = restored.agents;
+      report.applied.push(provider);
+      logger.info('location_replay_provider_applied', {
+        component: 'location-replay',
+        provider,
+        fullDeliveryId: cycle[0].id,
+        deliveryCount: cycle.length,
+        offerCount: Object.keys(restored.providerStates[provider]?.records || {}).length,
+        locationSources: counts,
+      });
+    } catch (error) {
+      report.failed.push(provider);
+      logger.error('location_replay_provider_failed', {
+        component: 'location-replay',
+        provider,
+        fullDeliveryId: cycle[0].id,
+        error,
+      });
+    }
+  }
+
+  if (report.applied.length > 0) {
+    candidate.aggregates = buildPropertyAggregates(
+      Object.values(candidate.providerStates).flatMap((providerState) => Object.values(providerState.records || {})),
+    );
+    candidate.generatedAt = new Date().toISOString();
+    writeOfferStateAtomic(config.statePath, candidate);
+    report.statePublished = true;
+  }
+  logger.info('location_replay_completed', {
+    component: 'location-replay',
+    appliedProviderCount: report.applied.length,
+    skippedProviderCount: report.skipped.length,
+    failedProviderCount: report.failed.length,
+    statePublished: report.statePublished,
+  });
+  return report;
 };
 
 /**

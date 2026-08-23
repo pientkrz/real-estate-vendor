@@ -111,7 +111,26 @@ ostatnie bazy i dostawy. Szczegóły walidacji, parsowania i retencji są w
 
 Gdy wysyłka jest niekompletna lub nieprawidłowa, strona nadal korzysta z
 poprzedniej migawki. Aby znaleźć przyczynę, sprawdź odrzucony ZIP oraz wpis
-`delivery_rejected` w logu ingestii. Zachowany pełny ZIP wraz z późniejszymi różnicami
-wystarcza do odtworzenia bieżącego stanu dostawcy: usuń wyłącznie wygenerowany
-plik stanu i ponownie uruchom polecenie przetwarzające. Nigdy nie usuwaj
-archiwum FTP przed potwierdzeniem opublikowania nowszego pełnego cyklu.
+`delivery_rejected` w logu ingestii. Nigdy nie usuwaj archiwum FTP przed
+potwierdzeniem opublikowania nowszego pełnego cyklu.
+
+### Jednorazowe odtworzenie zachowanych dostaw
+
+Po zmianie parsera (np. reguł lokalizacji) nie usuwaj pliku stanu. Zamiast tego
+uruchom jednorazowo ten sam wrapper z blokadą `flock` co cron:
+
+```bash
+bash scripts/vps/ingest-offers.sh --replay-retained
+```
+
+Polecenie dla każdego dostawcy odczytuje najnowszy zachowany pełny ZIP i jego
+późniejsze różnice, ponownie waliduje i parsuje XML oraz publikuje wynik
+atomowo. Błąd ZIP-a jednego dostawcy nie zmienia jego dotychczasowych rekordów;
+pozostałe poprawne źródła mogą zostać odtworzone. Historia dostaw i retencja
+pozostają bez zmian. Śledź zdarzenia `location_replay_started`,
+`location_replay_provider_applied`, `location_replay_provider_failed` oraz
+`location_replay_completed` w logu ingestii.
+
+Replay wykonuj najpierw wyłącznie w aplikacji testowej
+`~/apps/new-global-s-home`. Nie uruchamiaj go dla
+`~/domains/globalshome.com`; produkcja wymaga osobnej zgody.

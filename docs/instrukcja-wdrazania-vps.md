@@ -161,6 +161,20 @@ pscp -P 222 -pw "$cyberfolks_server_password" -r dist/server dist/client \
 
 `pscp -r` scala się z istniejącym katalogiem (stare pliki o zmienionych hashach zostają jako nieużywany, nieszkodliwy balast — do ewentualnego posprzątania osobno). Następnie zrestartuj proces ([§5](#5-uruchamianie-zatrzymywanie-i-restart-procesu-node)).
 
+Gdy wdrożenie zmienia sposób parsowania już zachowanych dostaw (np. lokalizację),
+po restarcie wykonaj **tylko na środowisku testowym** jednorazowy replay pod
+tą samą blokadą co cron:
+
+```bash
+cd ~/apps/new-global-s-home
+bash scripts/vps/ingest-offers.sh --replay-retained
+```
+
+Polecenie nie pobiera nowych ofert i nie modyfikuje retencji: odtwarza z
+zachowanego pełnego ZIP-a i późniejszych różnic prywatną migawkę JSON. Sprawdź
+następnie `logs/ingestion-$(date -u +%F).jsonl` oraz stronę testową. Nie używaj
+tego kroku w `~/domains/globalshome.com` bez osobnej decyzji wdrożeniowej.
+
 ---
 
 ## 5. Uruchamianie, zatrzymywanie i restart procesu Node

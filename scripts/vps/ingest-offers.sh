@@ -28,7 +28,7 @@ fi
 
 if [ -f "$ENV_FILE" ]; then
   log_event info ingestion_process_started
-  LOG_PROCESS=ingestion exec "$NODE_BIN" --env-file="$ENV_FILE" "$APP_DIR/scripts/ingest-offers.mjs" > /dev/null 2>&1
+  LOG_PROCESS=ingestion exec "$NODE_BIN" --env-file="$ENV_FILE" "$APP_DIR/scripts/ingest-offers.mjs" "$@" > /dev/null 2>&1
 else
   log_event error ingestion_process_skipped "reason=missing-runtime-environment"
   exit 1

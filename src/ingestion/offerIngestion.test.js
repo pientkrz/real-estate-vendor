@@ -1,9 +1,9 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { afterEach, describe, expect, it } from 'vitest';
-import { createEmptyOfferState } from '../server/offerState.js';
-import { __private__, applyDeliveryToState } from './offerIngestion.js';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { createEmptyOfferState, readOfferState, writeOfferStateAtomic } from '../server/offerState.js';
+import { __private__, applyDeliveryToState, replayRetainedDeliveries } from './offerIngestion.js';
 
 const temporaryDirectories = [];
 const temporaryDirectory = () => {
@@ -142,5 +142,75 @@ describe('delivery retention', () => {
     }, new Date('2026-08-21T13:00:00.000Z'));
 
     expect(fs.existsSync(actualFull)).toBe(true);
+  });
+});
+
+describe('retained delivery replay', () => {
+  const replayLogger = () => ({ info: vi.fn(), warn: vi.fn(), error: vi.fn() });
+  const replayConfig = (root, providers = { 'otodom-pl': path.join(root, 'otodom-pl') }) => ({
+    statePath: path.join(root, 'offers-state.json'),
+    providerDirectories: providers,
+    photoRoot: path.join(root, 'photos'),
+    photoPublicBasePath: '/offer-photos',
+  });
+
+  it('replays the retained full delivery and later differential without changing other providers', async () => {
+    const root = temporaryDirectory();
+    const config = replayConfig(root, {
+      'otodom-pl': path.join(root, 'otodom-pl'),
+      'oferty-net': path.join(root, 'oferty-net'),
+    });
+    let state = applyDeliveryToState(createEmptyOfferState(), delivery('otodom-pl', 'full', [offer('otodom-pl', 'ms1')], 'old-state')).state;
+    state = applyDeliveryToState(state, delivery('oferty-net', 'full', [offer('oferty-net', '1')], 'oferty-state')).state;
+    state.deliveries = [
+      { id: 'oto-full', provider: 'otodom-pl', archivePath: path.join(root, 'otodom-full.zip'), receivedAt: '2026-08-20T00:00:00.000Z', kind: 'full', status: 'applied' },
+      { id: 'oto-delta', provider: 'otodom-pl', archivePath: path.join(root, 'otodom-delta.zip'), receivedAt: '2026-08-20T01:00:00.000Z', kind: 'differential', status: 'applied' },
+    ];
+    writeOfferStateAtomic(config.statePath, state);
+    const reader = vi.fn(async ({ archivePath }) => {
+      const isDelta = archivePath.endsWith('otodom-delta.zip');
+      return {
+        kind: isDelta ? 'differential' : 'full',
+        offers: [offer('otodom-pl', 'ms1', 'active')],
+        agents: [],
+        entries: [],
+      };
+    });
+    const materialise = vi.fn(async () => 0);
+
+    const report = await replayRetainedDeliveries({
+      config,
+      logger: replayLogger(),
+      readDelivery: reader,
+      materialise,
+    });
+    const replayed = readOfferState(config.statePath);
+
+    expect(report).toMatchObject({ applied: ['otodom-pl'], skipped: ['oferty-net'], failed: [], statePublished: true });
+    expect(reader).toHaveBeenCalledTimes(2);
+    expect(materialise).toHaveBeenCalledTimes(2);
+    expect(replayed.providerStates['otodom-pl'].fullDeliveryId).toBe('oto-full');
+    expect(replayed.providerStates['oferty-net']).toEqual(state.providerStates['oferty-net']);
+    expect(replayed.deliveries).toEqual(state.deliveries);
+  });
+
+  it('does not overwrite a provider when its retained ZIP cannot be read', async () => {
+    const root = temporaryDirectory();
+    const config = replayConfig(root);
+    const state = applyDeliveryToState(createEmptyOfferState(), delivery('otodom-pl', 'full', [offer('otodom-pl', 'ms1')], 'old-state')).state;
+    state.deliveries = [
+      { id: 'broken-full', provider: 'otodom-pl', archivePath: path.join(root, 'missing.zip'), receivedAt: '2026-08-20T00:00:00.000Z', kind: 'full', status: 'applied' },
+    ];
+    writeOfferStateAtomic(config.statePath, state);
+
+    const report = await replayRetainedDeliveries({
+      config,
+      logger: replayLogger(),
+      readDelivery: async () => { throw new Error('corrupt zip'); },
+      materialise: async () => 0,
+    });
+
+    expect(report).toMatchObject({ applied: [], failed: ['otodom-pl'], statePublished: false });
+    expect(readOfferState(config.statePath)).toEqual(state);
   });
 });

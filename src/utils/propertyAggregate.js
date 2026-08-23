@@ -124,6 +124,73 @@ const setResolvedValue = (target, provenance, conflicts, records, field, getValu
   return selected.value;
 };
 
+const providerRank = (provider) => {
+  const rank = PROVIDER_PRIORITY.indexOf(provider);
+  return rank === -1 ? PROVIDER_PRIORITY.length : rank;
+};
+
+const locationXmlFieldCount = (record) => ['country', 'region', 'city']
+  .filter((field) => hasValue(record.location?.[field]) && record.locationSources?.[field]?.source === 'xml')
+  .length;
+
+const resolveLocationField = (records, field, provenance, conflicts) => {
+  const allCandidates = records
+    .map((record) => {
+      const source = record.locationSources?.[field]?.source === 'xml' ? 'xml' : 'coordinates';
+      return {
+        record,
+        value: record.location?.[field],
+        source,
+        sourceField: record.locationSources?.[field]?.xmlField || `location.${field}`,
+        xmlFieldCount: locationXmlFieldCount(record),
+      };
+    })
+    .filter((candidate) => hasValue(candidate.value));
+  const xmlCandidates = allCandidates.filter((candidate) => candidate.source === 'xml');
+  const candidates = (xmlCandidates.length > 0 ? xmlCandidates : allCandidates)
+    .sort((left, right) => {
+      if (xmlCandidates.length > 0 && left.xmlFieldCount !== right.xmlFieldCount) {
+        return right.xmlFieldCount - left.xmlFieldCount;
+      }
+      return providerRank(left.record.provider) - providerRank(right.record.provider);
+    });
+  const selected = candidates[0];
+  if (!selected) return undefined;
+
+  const distinctValues = new Map();
+  for (const candidate of allCandidates) {
+    const fingerprint = normaliseForComparison(candidate.value);
+    if (!distinctValues.has(fingerprint)) {
+      distinctValues.set(fingerprint, {
+        provider: candidate.record.provider,
+        value: candidate.value,
+        sourceField: candidate.sourceField,
+        source: candidate.source,
+      });
+    }
+  }
+  if (distinctValues.size > 1) {
+    conflicts.push({
+      field: `location.${field}`,
+      values: [...distinctValues.values()],
+      resolvedBy: selected.record.provider,
+    });
+  }
+
+  provenance[`location.${field}`] = {
+    provider: selected.record.provider,
+    sourceField: selected.sourceField,
+    source: selected.source,
+  };
+  return selected.value;
+};
+
+const resolveLocation = (records, provenance, conflicts) => ({
+  country: resolveLocationField(records, 'country', provenance, conflicts),
+  region: resolveLocationField(records, 'region', provenance, conflicts),
+  city: resolveLocationField(records, 'city', provenance, conflicts),
+});
+
 const providerPhotos = (record) => Object.entries(record.params ?? {})
   .filter(([key, value]) => /^zdjecie\d+$/i.test(key) && hasValue(value))
   .sort(([left], [right]) => Number(left.match(/\d+/)?.[0]) - Number(right.match(/\d+/)?.[0]))
@@ -237,12 +304,14 @@ const buildPropertyAggregate = (id, allRecords) => {
     const agent = setResolvedValue(scalar, provenance, conflicts, candidates, 'agent', (record) => record.agent, 'agent');
     const objectName = setResolvedValue(scalar, provenance, conflicts, candidates, 'otodom.objectName', (record) => record.objectName, 'ObjectName');
     const rawDetails = setResolvedValue(scalar, provenance, conflicts, candidates, 'otodom.rawDetails', (record) => record.rawDetails, 'ObjectName details');
-    const location = {
-      country: setResolvedValue({}, provenance, conflicts, candidates, 'location.country', (record) => record.location?.country, 'location.country'),
-      region: setResolvedValue({}, provenance, conflicts, candidates, 'location.region', (record) => record.location?.region, 'location.region'),
-      city: setResolvedValue({}, provenance, conflicts, candidates, 'location.city', (record) => record.location?.city, 'location.city'),
-    };
+    const location = resolveLocation(candidates, provenance, conflicts);
     const { params, areas } = resolveParams(candidates, provenance, conflicts);
+    if (hasValue(location.city)) {
+      // The existing cards, detail layout, and map still consume this legacy
+      // parameter. Keep it exactly aligned with the richer location object.
+      params.miasto = location.city;
+      provenance['attributes.miasto'] = provenance['location.city'];
+    }
     const bedroomKeys = ['liczbasypialni', 'liczba_sypialni', 'sypialnie', 'bedrooms'];
     const bedroomSourceKey = bedroomKeys.find((key) => params[key] !== undefined);
     const bedrooms = numericValue(bedroomSourceKey ? params[bedroomSourceKey] : undefined);

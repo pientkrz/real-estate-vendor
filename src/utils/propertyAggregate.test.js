@@ -91,6 +91,45 @@ describe('buildPropertyAggregates', () => {
     expect(toOfferView({ ...aggregate, tab: 'Garaż' }).tab).toBe('garaze');
   });
 
+  it('prefers the most complete XML location, then keeps params.miasto aligned', () => {
+    const otodom = active('otodom-pl', 'ms113-6', {
+      location: { country: 'Greece', region: 'Crete', city: 'Fallback Chania' },
+      locationSources: {
+        country: { source: 'coordinates' },
+        region: { source: 'coordinates' },
+        city: { source: 'coordinates' },
+      },
+    });
+    const oferty = active('oferty-net', '113-6', {
+      location: { country: 'Grecja', region: 'Kreta', city: 'Chania' },
+      params: { miasto: 'Inne miasto' },
+      locationSources: {
+        country: { source: 'xml', xmlField: 'param.kraj' },
+        region: { source: 'xml', xmlField: 'param.wojewodztwo' },
+        city: { source: 'xml', xmlField: 'param.miasto' },
+      },
+    });
+
+    const [aggregate] = buildPropertyAggregates([otodom, oferty]);
+
+    expect(aggregate.location).toEqual({ country: 'Grecja', region: 'Kreta', city: 'Chania' });
+    expect(aggregate.params.miasto).toBe('Chania');
+    expect(aggregate.provenance['location.city']).toEqual({
+      provider: 'oferty-net', sourceField: 'param.miasto', source: 'xml',
+    });
+    expect(aggregate.conflicts).toContainEqual(expect.objectContaining({ field: 'location.city', resolvedBy: 'oferty-net' }));
+  });
+
+  it('treats location values in an old state without metadata as coordinate fallbacks', () => {
+    const [aggregate] = buildPropertyAggregates([
+      active('oferty-net', '113-6', { location: { city: 'Oferty city' } }),
+      active('otodom-pl', 'ms113-6', { location: { city: 'Otodom city' } }),
+    ]);
+
+    expect(aggregate.location.city).toBe('Otodom city');
+    expect(aggregate.provenance['location.city']).toMatchObject({ provider: 'otodom-pl', source: 'coordinates' });
+  });
+
   it('does not publish conflicting lifecycle states automatically', () => {
     const deletedOtodom = {
       ...active('otodom-pl', 'ms113-6'),

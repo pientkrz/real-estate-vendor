@@ -2,7 +2,7 @@
 
 import process from 'node:process';
 import { getOfferRuntimeConfig, readOfferState } from '../src/server/offerState.js';
-import { bootstrapOtoDomState, processAvailableDeliveries } from '../src/ingestion/offerIngestion.js';
+import { bootstrapOtoDomState, processAvailableDeliveries, replayRetainedDeliveries } from '../src/ingestion/offerIngestion.js';
 import { getLogger, registerProcessErrorLogging } from '../src/server/logger.js';
 
 process.env.LOG_PROCESS = 'ingestion';
@@ -41,11 +41,14 @@ try {
     if (!xmlPath) throw new Error('Usage: --bootstrap-otodom <properties_otodom.xml path>');
     const state = bootstrapOtoDomState({ config, xmlPath, logger });
     process.stdout.write(`Bootstrapped ${state.aggregates.length} Otodom property aggregates.\n`);
+  } else if (args[0] === '--replay-retained') {
+    const report = await replayRetainedDeliveries({ config, logger });
+    process.stdout.write(`replayed=${report.applied.length} skipped=${report.skipped.length} failed=${report.failed.length} published=${report.statePublished}\n`);
   } else if (args.length === 0) {
     const report = await processAvailableDeliveries({ config, logger });
     process.stdout.write(`applied=${report.applied.length} ignored=${report.ignored.length} rejected=${report.rejected.length} skipped=${report.skipped.length}\n`);
   } else {
-    throw new Error('Usage: ingest-offers.mjs [--status | --bootstrap-otodom <xml path>]');
+    throw new Error('Usage: ingest-offers.mjs [--status | --bootstrap-otodom <xml path> | --replay-retained]');
   }
 } catch (error) {
   logger.error('ingestion_command_failed', { component: 'ingestion', error });
