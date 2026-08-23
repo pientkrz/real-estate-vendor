@@ -122,10 +122,10 @@ const ListingFilterBar = ({
 
   return (
     <section className="bg-surface px-4 lg:px-8 py-4 border-b border-outline-variant/10 flex-shrink-0">
-      <div className="max-w-screen-2xl mx-auto flex flex-wrap items-end gap-8">
+      <div className="max-w-screen-2xl mx-auto grid grid-cols-1 items-end gap-x-8 gap-y-4 md:grid-cols-2 xl:grid-cols-[minmax(18rem,1fr)_10rem_10rem_5rem_12rem_9rem]">
 
         {/* Price range with histogram */}
-        <div className="flex-1 min-w-[260px]">
+        <div className="min-w-0">
           <div className="flex justify-between items-center mb-1">
             <div className="flex items-center gap-2">
               <span className="font-label text-[10px] uppercase tracking-widest text-primary">Zakres cen</span>
@@ -210,8 +210,6 @@ const ListingFilterBar = ({
             />
           </div>
         </div>
-
-        <div className="h-10 w-px bg-outline-variant/30 hidden md:block mb-1" />
 
         {/* Location — multi-select */}
         <div className="relative" ref={countryRef}>
@@ -316,7 +314,7 @@ const ListingFilterBar = ({
         {/* Reset */}
         <button
           onClick={reset}
-          className="ml-auto mb-1 flex items-center gap-2 text-on-surface-variant hover:text-primary transition-all font-label text-[10px] uppercase tracking-widest"
+          className="justify-self-end mb-1 flex items-center gap-2 whitespace-nowrap text-on-surface-variant hover:text-primary transition-all font-label text-[10px] uppercase tracking-widest"
         >
           <span className="material-symbols-outlined text-sm">tune</span> Reset filtrów
         </button>
