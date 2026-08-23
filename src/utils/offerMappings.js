@@ -5,6 +5,55 @@
  * categorise and display an offer before any provider-specific UI is added.
  */
 
+/**
+ * The shared category vocabulary used by parsed provider records and by the
+ * listing filter.  The first seven values are the complete ObjectName
+ * vocabulary documented for the Otodom Import format v170130.
+ */
+export const PROPERTY_CATEGORIES = Object.freeze([
+  'mieszkania',
+  'domy',
+  'dzialki',
+  'pokoje',
+  'lokale',
+  'hale-magazyny',
+  'garaze',
+]);
+
+export const PROPERTY_CATEGORY_LABELS = Object.freeze({
+  mieszkania: 'Mieszkania',
+  domy: 'Domy',
+  dzialki: 'Działki',
+  pokoje: 'Pokoje',
+  lokale: 'Lokale użytkowe',
+  'hale-magazyny': 'Hale i magazyny',
+  garaze: 'Garaże',
+  budynki: 'Budynki',
+  inne: 'Inne',
+});
+
+/** Exact Otodom ObjectName → normalised category. */
+export const OTODOM_OBJECT_NAME_TO_CATEGORY = Object.freeze({
+  0: 'mieszkania',
+  1: 'domy',
+  2: 'dzialki',
+  3: 'pokoje',
+  4: 'lokale',
+  5: 'hale-magazyny',
+  6: 'garaze',
+});
+
+/** The details block is determined by ObjectName; never infer it from order. */
+export const OTODOM_DETAILS_KEY_BY_OBJECT_NAME = Object.freeze({
+  0: 'FlatDetails',
+  1: 'HouseDetails',
+  2: 'TerrainDetails',
+  3: 'RoomDetails',
+  4: 'CommercialPropertyDetails',
+  5: 'HallDetails',
+  6: 'GarageDetails',
+});
+
 export const NOE_CATEGORY_TO_TAB = Object.freeze({
   1: 'mieszkania',
   2: 'domy',
@@ -80,11 +129,53 @@ export const NOE_BOOLEAN_PARAMS = Object.freeze({
   noAgentProvision: 'bezprowizji',
 });
 
-/** Oferty.net's `tab` values are already Polish; this validates supported types. */
-export const OFERTY_NET_TABS = Object.freeze([
-  'mieszkania',
-  'domy',
-  'dzialki',
-  'lokale',
-  'pokoje',
-]);
+const CATEGORY_ALIASES = Object.freeze({
+  apartament: 'mieszkania',
+  apartamenty: 'mieszkania',
+  flat: 'mieszkania',
+  mieszkanie: 'mieszkania',
+  mieszkania: 'mieszkania',
+  dom: 'domy',
+  house: 'domy',
+  domy: 'domy',
+  terrain: 'dzialki',
+  dzialka: 'dzialki',
+  dzialki: 'dzialki',
+  room: 'pokoje',
+  pokoj: 'pokoje',
+  pokoje: 'pokoje',
+  commercialproperty: 'lokale',
+  commercial: 'lokale',
+  lokal: 'lokale',
+  lokale: 'lokale',
+  hall: 'hale-magazyny',
+  hala: 'hale-magazyny',
+  hale: 'hale-magazyny',
+  halamagazyny: 'hale-magazyny',
+  haleimagazyny: 'hale-magazyny',
+  magazyn: 'hale-magazyny',
+  magazyny: 'hale-magazyny',
+  garaz: 'garaze',
+  garaze: 'garaze',
+  garage: 'garaze',
+  budynek: 'budynki',
+  budynki: 'budynki',
+});
+
+/**
+ * Converts provider vocabulary to a stable category without dropping an offer
+ * when a provider introduces a new category.  The optional `inne` category is
+ * surfaced by the UI only when such a record is actually present.
+ */
+export const normalisePropertyCategory = (value) => {
+  const key = String(value ?? '')
+    .trim()
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/[^a-z0-9-]/g, '')
+    .replace(/-/g, '');
+
+  return CATEGORY_ALIASES[key] ?? 'inne';
+};

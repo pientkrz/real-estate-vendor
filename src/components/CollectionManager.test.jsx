@@ -39,6 +39,22 @@ const offers = parseOtoDomXml(MOCK_XML, '/test/photos/');
 
 const renderApp = () => render(<CollectionManager initialOffers={offers} />);
 
+const categoryOffers = [
+  ['mieszkania', 'Mieszkanie testowe'],
+  ['domy', 'Dom testowy'],
+  ['dzialki', 'Działka testowa'],
+].map(([tab, city], index) => ({
+  id: `category-${tab}`,
+  tab,
+  typ: 'sprzedaz',
+  price: 100000 + index,
+  currency: 'EUR',
+  location: { city, country: 'Polska' },
+  params: { miasto: city, powierzchnia: 50, liczbapokoi: 2 },
+}));
+
+const renderCategoryApp = () => render(<CollectionManager initialOffers={categoryOffers} />);
+
 /** Wait for the listings heading so Suspense / effects have settled. */
 const waitForListings = () =>
   screen.findByRole('heading', { name: 'Wyselekcjonowane oferty' });
@@ -50,6 +66,12 @@ const openCountryDropdown = () =>
   fireEvent.click(screen.getByRole('button', { name: /wszystkie kraje|kraje|spain|greece|cyprus/i }));
 
 const checkCountry = (name) =>
+  fireEvent.click(screen.getByRole('checkbox', { name }));
+
+const openCategoryDropdown = () =>
+  fireEvent.click(screen.getByRole('button', { name: /wszystkie typy|mieszkania|domy|działki|typy|typów/i }));
+
+const checkCategory = (name) =>
   fireEvent.click(screen.getByRole('checkbox', { name }));
 
 // ── Tests ─────────────────────────────────────────────────────────────────────
@@ -205,5 +227,58 @@ describe('CollectionManager — country filter', () => {
 
     await waitFor(() => expect(cardCount()).toBe(6));
     expect(screen.getByRole('button', { name: /wszystkie kraje/i })).toBeInTheDocument();
+  });
+});
+
+describe('CollectionManager — multi-category filter', () => {
+  it('always offers all seven documented Otodom categories', async () => {
+    renderCategoryApp();
+    await waitForListings();
+
+    openCategoryDropdown();
+
+    for (const category of [
+      'Mieszkania',
+      'Domy',
+      'Działki',
+      'Pokoje',
+      'Lokale użytkowe',
+      'Hale i magazyny',
+      'Garaże',
+    ]) {
+      expect(screen.getByRole('checkbox', { name: category })).toBeInTheDocument();
+    }
+  });
+
+  it('shows the union of multiple categories and supports deselection', async () => {
+    renderCategoryApp();
+    await waitForListings();
+
+    openCategoryDropdown();
+    checkCategory('Mieszkania');
+    checkCategory('Domy');
+
+    await waitFor(() => expect(cardCount()).toBe(2));
+    expect(screen.getByRole('button', { name: /2 typy/i })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Działka testowa' })).not.toBeInTheDocument();
+
+    checkCategory('Domy');
+
+    await waitFor(() => expect(cardCount()).toBe(1));
+    expect(screen.getByRole('button', { name: /^mieszkania/i })).toBeInTheDocument();
+  });
+
+  it('reset clears all category selections', async () => {
+    renderCategoryApp();
+    await waitForListings();
+
+    openCategoryDropdown();
+    checkCategory('Mieszkania');
+    await waitFor(() => expect(cardCount()).toBe(1));
+
+    fireEvent.click(screen.getByRole('button', { name: /reset filtrów/i }));
+
+    await waitFor(() => expect(cardCount()).toBe(3));
+    expect(screen.getByRole('button', { name: /wszystkie typy/i })).toBeInTheDocument();
   });
 });

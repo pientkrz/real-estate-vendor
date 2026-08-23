@@ -91,7 +91,7 @@ Każdy parser przed agregacją zwraca znormalizowany rekord dostawcy:
   providerOfferId: 'source-id',
   sourceStatus: 'active | deactivated | deleted',
   sourceData: { /* sparsowane wartości specyficzne dla dostawcy; tylko serwer */ },
-  tab: 'mieszkania | domy | dzialki | lokale | pokoje',
+  tab: 'mieszkania | domy | dzialki | pokoje | lokale | hale-magazyny | garaze | budynki | inne',
   typ: 'sprzedaz | wynajem',
   price: 235000,
   currency: 'EUR',
@@ -103,6 +103,26 @@ Każdy parser przed agregacją zwraca znormalizowany rekord dostawcy:
 
 ## Dokumentacja struktury XML
 
+- **Otodom Import XML v170130:** [opis struktury formatu Otodom](https://zaadresowani.pl/import/dokumentacja)
+  opisuje `<otoDom>` → `<Insertions>` → `<Insertion>` oraz rozróżnienie
+  dostawy pełnej `<ImportType>full</ImportType>` i przyrostowej
+  `<ImportType>incremental</ImportType>`. Używana przez parser referencja
+  słowników wskazuje też historyczny [endpoint słowników Otodom](http://www.otodom.pl/api/lite/dictionaries).
+
+  | `ObjectName` | Kategoria aplikacji | Wymagany blok szczegółów |
+  | --- | --- | --- |
+  | `0` | mieszkania | `FlatDetails` |
+  | `1` | domy | `HouseDetails` |
+  | `2` | działki | `TerrainDetails` |
+  | `3` | pokoje | `RoomDetails` |
+  | `4` | lokale | `CommercialPropertyDetails` |
+  | `5` | hale-magazyny | `HallDetails` |
+  | `6` | garaże | `GarageDetails` |
+
+  Parser odczytuje wyłącznie blok przypisany do wartości `ObjectName`.
+  Zgodnie ze specyfikacją pokój (`ObjectName=3`) może mieć wyłącznie
+  `OfferType=1` (wynajem). Nieznany przyszły kod jest zachowany jako kategoria
+  `inne`, logowany i nie jest łączony z blokiem szczegółów innego typu.
 - **Oferty.net / Domy.pl XML 0.4.x:** [oficjalna specyfikacja eksportu XML](https://domy.pl/eksport).
   Opisuje hierarchię `<plik>` → `<header>` → `<lista_ofert>` → `<dzial>` →
   `<oferta>`, obsługiwane typy parametrów, zdjęcia, lokalizację i kompletne

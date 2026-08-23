@@ -104,11 +104,15 @@ const deliveryIdFor = ({ provider, archivePath, size, mtimeMs }) => {
 
 const photoPrefix = (provider) => `${PHOTO_MARKER}${provider}/`;
 
-const parseProviderRecords = (provider, xml, onValidation) => {
+const parseProviderRecords = (provider, xml, { onValidation, onUnknownObjectName } = {}) => {
   const prefix = photoPrefix(provider);
   if (provider === 'otodom-pl') {
     return {
-      offers: parseOtoDomXml(xml, prefix, { includeInactive: true, onValidation }),
+      offers: parseOtoDomXml(xml, prefix, {
+        includeInactive: true,
+        onValidation,
+        onUnknownObjectName,
+      }),
       agents: [],
     };
   }
@@ -433,13 +437,24 @@ export const processAvailableDeliveries = async ({ config, now = new Date(), log
       if (!entries.includes(xmlEntry)) throw new Error(`Missing expected XML entry: ${xmlEntry}`);
       const xml = readXmlFromZip(archivePath, xmlEntry, config.unzipBin);
       const kind = classifyDeliveryType(provider, xml);
-      const { offers, agents } = parseProviderRecords(provider, xml, (validation) => {
-        logger.warn('delivery_xml_validation_warning', {
-          component: 'validation',
-          provider,
-          deliveryId: id,
-          issueCount: validation.errors.length,
-        });
+      const { offers, agents } = parseProviderRecords(provider, xml, {
+        onValidation: (validation) => {
+          logger.warn('delivery_xml_validation_warning', {
+            component: 'validation',
+            provider,
+            deliveryId: id,
+            issueCount: validation.errors.length,
+          });
+        },
+        onUnknownObjectName: ({ objectName, providerOfferId }) => {
+          logger.warn('otodom_unknown_object_name', {
+            component: 'parsing',
+            provider,
+            deliveryId: id,
+            providerOfferId,
+            objectName,
+          });
+        },
       });
       if (kind === 'full' && offers.length === 0) throw new Error('Full delivery contains no offers');
 
@@ -571,7 +586,17 @@ const materialiseBootstrapPhotos = ({ offers, xmlPath, config }) => {
 /** Bootstrap the established static Otodom full XML into the new state file. */
 export const bootstrapOtoDomState = ({ config, xmlPath, logger = getLogger('ingestion') }) => {
   const xml = fs.readFileSync(xmlPath, 'utf8');
-  const offers = parseOtoDomXml(xml, photoPrefix('otodom-pl'), { includeInactive: true });
+  const offers = parseOtoDomXml(xml, photoPrefix('otodom-pl'), {
+    includeInactive: true,
+    onUnknownObjectName: ({ objectName, providerOfferId }) => {
+      logger.warn('otodom_unknown_object_name', {
+        component: 'parsing',
+        provider: 'otodom-pl',
+        providerOfferId,
+        objectName,
+      });
+    },
+  });
   if (offers.length === 0) throw new Error('Bootstrap Otodom XML contains no offers');
   materialiseBootstrapPhotos({ offers, xmlPath, config });
   const id = 'bootstrap-otodom';

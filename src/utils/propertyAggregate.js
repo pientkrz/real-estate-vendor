@@ -6,6 +6,9 @@
  * field-resolution rules used by the application.
  */
 
+import { getLogger } from '../server/logger.js';
+import { normalisePropertyCategory } from './offerMappings.js';
+
 const PROVIDER_PRIORITY = Object.freeze([
   'otodom-pl',
   'nieruchomosci-online-pl',
@@ -21,6 +24,11 @@ const hasValue = (value) => {
 const numericValue = (value) => {
   const number = Number(value);
   return Number.isFinite(number) && number > 0 ? number : undefined;
+};
+
+const normaliseCategory = (value) => {
+  if (!String(value ?? '').trim()) return '';
+  return normalisePropertyCategory(value);
 };
 
 const normaliseForComparison = (value) => {
@@ -213,7 +221,15 @@ const buildPropertyAggregate = (id, allRecords) => {
     const provenance = {};
     const scalar = {};
 
-    const tab = setResolvedValue(scalar, provenance, conflicts, candidates, 'category', (record) => record.tab, 'category');
+    const tab = setResolvedValue(
+      scalar,
+      provenance,
+      conflicts,
+      candidates,
+      'category',
+      (record) => normaliseCategory(record.tab),
+      'category',
+    );
     const typ = setResolvedValue(scalar, provenance, conflicts, candidates, 'transaction', (record) => record.typ, 'transaction');
     const price = setResolvedValue(scalar, provenance, conflicts, candidates, 'price.amount', (record) => numericValue(record.price), 'price');
     const currency = setResolvedValue(scalar, provenance, conflicts, candidates, 'price.currency', (record) => record.currency, 'currency');
@@ -377,7 +393,7 @@ export const buildPropertyAggregates = (providerOffers = []) => {
  */
 export const toOfferDetailView = (aggregate) => ({
   id: aggregate.id,
-  tab: aggregate.tab,
+  tab: normaliseCategory(aggregate.tab),
   typ: aggregate.typ,
   price: aggregate.price,
   currency: aggregate.currency,
@@ -393,7 +409,7 @@ export const toOfferDetailView = (aggregate) => ({
 /** Compact listing/map contract. Keep the complete detail attributes server-side. */
 export const toOfferSummaryView = (aggregate) => ({
   id: aggregate.id,
-  tab: aggregate.tab,
+  tab: normaliseCategory(aggregate.tab),
   typ: aggregate.typ,
   price: aggregate.price,
   currency: aggregate.currency,
@@ -414,4 +430,3 @@ export const toOfferSummaryView = (aggregate) => ({
 
 // Kept as an alias while call sites migrate to an explicit projection name.
 export const toOfferView = toOfferDetailView;
-import { getLogger } from '../server/logger.js';

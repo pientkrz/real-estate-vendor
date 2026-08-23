@@ -1,5 +1,9 @@
 import React, { useMemo, useEffect, useState, useRef } from 'react';
 import { convertPrice } from '../utils/exchangeRates';
+import {
+  PROPERTY_CATEGORIES,
+  PROPERTY_CATEGORY_LABELS,
+} from '../utils/offerMappings.js';
 
 const DISPLAY_CURRENCIES = ['EUR', 'PLN'];
 
@@ -64,10 +68,13 @@ const ListingFilterBar = ({
 
   const [countryOpen, setCountryOpen] = useState(false);
   const countryRef = useRef(null);
+  const [categoryOpen, setCategoryOpen] = useState(false);
+  const categoryRef = useRef(null);
 
   useEffect(() => {
     const handleClick = (e) => {
       if (countryRef.current && !countryRef.current.contains(e.target)) setCountryOpen(false);
+      if (categoryRef.current && !categoryRef.current.contains(e.target)) setCategoryOpen(false);
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
@@ -85,12 +92,33 @@ const ListingFilterBar = ({
     `${filters.countries.length} kraje`;
 
   const tabs = useMemo(
-    () => ['', ...new Set(offers.map(o => o.tab).filter(Boolean)).values()],
+    () => {
+      const additional = [...new Set(offers.map((offer) => offer.tab).filter(Boolean))]
+        .filter((tab) => !PROPERTY_CATEGORIES.includes(tab));
+      return [...PROPERTY_CATEGORIES, ...additional];
+    },
     [offers],
   );
 
+  const selectedTabs = filters.tabs ?? (filters.tab ? [filters.tab] : []);
+
+  const toggleTab = (tab) =>
+    setFilters((current) => {
+      const currentTabs = current.tabs ?? (current.tab ? [current.tab] : []);
+      const tabs = currentTabs.includes(tab)
+        ? currentTabs.filter((value) => value !== tab)
+        : [...currentTabs, tab];
+      const { tab: legacyTab, ...withoutLegacyTab } = current;
+      return { ...withoutLegacyTab, tabs };
+    });
+
+  const categoryLabel =
+    selectedTabs.length === 0 ? 'Wszystkie typy' :
+    selectedTabs.length === 1 ? (PROPERTY_CATEGORY_LABELS[selectedTabs[0]] ?? selectedTabs[0]) :
+    `${selectedTabs.length} ${selectedTabs.length >= 2 && selectedTabs.length <= 4 ? 'typy' : 'typów'}`;
+
   const reset = () =>
-    setFilters({ priceMin: minPrice, priceMax: maxPrice, countries: [], tab: '', minRooms: '', sortBy: 'price-desc' });
+    setFilters({ priceMin: minPrice, priceMax: maxPrice, countries: [], tabs: [], minRooms: '', sortBy: 'price-desc' });
 
   return (
     <section className="bg-surface px-4 lg:px-8 py-4 border-b border-outline-variant/10 flex-shrink-0">
@@ -218,16 +246,41 @@ const ListingFilterBar = ({
           )}
         </div>
 
-        {/* Property type */}
-        <div>
+        {/* Property type — all documented Otodom categories stay available,
+            even when the current delivery has no matching record. */}
+        <div className="relative" ref={categoryRef}>
           <span className="font-label text-[10px] uppercase tracking-widest text-primary block mb-1">Typ nieruchomości</span>
-          <select
-            className="bg-transparent border-none text-on-surface font-medium focus:ring-0 p-0 text-sm cursor-pointer hover:text-primary transition-colors"
-            value={filters.tab ?? ''}
-            onChange={e => setFilters(f => ({ ...f, tab: e.target.value }))}
+          <button
+            type="button"
+            onClick={() => setCategoryOpen((open) => !open)}
+            className="flex items-center gap-1 text-on-surface font-medium text-sm hover:text-primary transition-colors"
           >
-            {tabs.map(t => <option key={t} value={t}>{t || 'Wszystkie typy'}</option>)}
-          </select>
+            {categoryLabel}
+            <span className="material-symbols-outlined text-sm leading-none">
+              {categoryOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
+            </span>
+          </button>
+
+          {categoryOpen && (
+            <div className="absolute top-full left-0 mt-2 bg-surface border border-outline-variant/20 shadow-xl z-50 min-w-[220px] py-1">
+              {tabs.map((tab) => (
+                <label
+                  key={tab}
+                  className="flex items-center gap-3 px-4 py-2 hover:bg-surface-container-low cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={selectedTabs.includes(tab)}
+                    onChange={() => toggleTab(tab)}
+                    className="accent-primary w-3.5 h-3.5 cursor-pointer"
+                  />
+                  <span className="font-body text-sm text-on-surface">
+                    {PROPERTY_CATEGORY_LABELS[tab] ?? tab}
+                  </span>
+                </label>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Rooms */}

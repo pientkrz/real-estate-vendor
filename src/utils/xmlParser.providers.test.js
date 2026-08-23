@@ -154,4 +154,19 @@ describe('parseOfertyNetXml', () => {
       }),
     ]);
   });
+
+  it('does not drop categories beyond the legacy five-tab list', () => {
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+      <plik>
+        <lista_ofert>
+          <dzial tab="garaże" typ="sprzedaz">
+            <oferta><id>GAR-1</id><cena waluta="EUR">10000</cena></oferta>
+          </dzial>
+        </lista_ofert>
+      </plik>`;
+
+    expect(parseOfertyNetXml(xml)).toEqual([
+      expect.objectContaining({ providerOfferId: 'GAR-1', tab: 'garaze', typ: 'sprzedaz' }),
+    ]);
+  });
 });

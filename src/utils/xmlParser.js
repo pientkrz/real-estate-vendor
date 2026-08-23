@@ -8,7 +8,9 @@ import {
   NOE_CATEGORY_TO_TAB,
   NOE_CURRENCY_TO_CODE,
   NOE_DETAILS_TO_POLISH_PARAMS,
-  OFERTY_NET_TABS,
+  OTODOM_DETAILS_KEY_BY_OBJECT_NAME,
+  OTODOM_OBJECT_NAME_TO_CATEGORY,
+  normalisePropertyCategory,
 } from './offerMappings.js';
 
 const normaliseAgent = ({ id, name, email, phone, image, licenseNumber } = {}) => {
@@ -46,7 +48,11 @@ const normaliseAgent = ({ id, name, email, phone, image, licenseNumber } = {}) =
  *                                 e.g. "/offer-photos/otodom-pl/<delivery>/"
  * @returns {Array} Normalised offer objects
  */
-export const parseOtoDomXml = (xmlString, photoBasePath = '', { includeInactive = false, onValidation } = {}) => {
+export const parseOtoDomXml = (xmlString, photoBasePath = '', {
+  includeInactive = false,
+  onValidation,
+  onUnknownObjectName,
+} = {}) => {
   // ── Validate, while leaving the caller in control of structured logging. ──
   const validation = validateOtoDomXml(xmlString);
   if (!validation.valid) onValidation?.(validation);
@@ -93,17 +99,20 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '', { includeInactive 
       continue;
     }
 
-    // Resolve the details block for this object type
+    // ObjectName deterministically selects its details block. Looking for the
+    // first available block could assign a malformed FlatDetails block to a
+    // garage, producing misleading data on the property page.
     const objectName = parseInt(ins.ObjectName);
-    const details =
-      ins.FlatDetails ??
-      ins.HouseDetails ??
-      ins.TerrainDetails ??
-      ins.RoomDetails ??
-      ins.CommercialPropertyDetails ??
-      ins.GarageDetails ??
-      ins.HallDetails ??
-      null;
+    const detailsKey = OTODOM_DETAILS_KEY_BY_OBJECT_NAME[objectName];
+    const details = detailsKey ? ins[detailsKey] ?? null : null;
+    const tab = OTODOM_OBJECT_NAME_TO_CATEGORY[objectName] ?? 'inne';
+    if (!detailsKey) {
+      onUnknownObjectName?.({
+        provider: 'otodom-pl',
+        providerOfferId: sourceId,
+        objectName: String(ins.ObjectName ?? ''),
+      });
+    }
 
     const lat = parseFloat(ins.GeoMarker?.Latitude || 0);
     const lon = parseFloat(ins.GeoMarker?.Longitude || 0);
@@ -115,7 +124,7 @@ export const parseOtoDomXml = (xmlString, photoBasePath = '', { includeInactive 
       providerOfferId: sourceId,
       sourceStatus,
       sourceData: ins,
-      tab: dict.ObjectName[String(ins.ObjectName)] ?? '',
+      tab,
       /** Numeric ObjectName code (0–6); drives PropertyDetailsPanel dispatch */
       objectName,
       /** Raw details block from the XML; fed into propertyDetailsResolver */
@@ -390,9 +399,8 @@ export const parseOfertyNetXml = (xmlString, photoBasePath = '', { includeInacti
 
   const offers = [];
   for (const department of toArray(root.lista_ofert.dzial)) {
-    const tab = readText(department?.['@_tab']).trim().toLowerCase();
+    const tab = normalisePropertyCategory(department?.['@_tab']);
     const typ = readText(department?.['@_typ']).trim().toLowerCase();
-    if (!OFERTY_NET_TABS.includes(tab)) continue;
 
     for (const rawOffer of toArray(department?.oferta)) {
       const sourceId = readText(rawOffer?.id).trim();

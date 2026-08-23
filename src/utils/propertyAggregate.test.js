@@ -81,6 +81,16 @@ describe('buildPropertyAggregates', () => {
     expect(toOfferSummaryView(aggregate).params.rokbudowy).toBeUndefined();
   });
 
+  it('normalises legacy category labels in aggregates and view projections', () => {
+    const [aggregate] = buildPropertyAggregates([
+      active('otodom-pl', 'ms113-6', { tab: 'Apartament' }),
+    ]);
+
+    expect(aggregate.tab).toBe('mieszkania');
+    expect(toOfferSummaryView({ ...aggregate, tab: 'Dom' }).tab).toBe('domy');
+    expect(toOfferView({ ...aggregate, tab: 'Garaż' }).tab).toBe('garaze');
+  });
+
   it('does not publish conflicting lifecycle states automatically', () => {
     const deletedOtodom = {
       ...active('otodom-pl', 'ms113-6'),
