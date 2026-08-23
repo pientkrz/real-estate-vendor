@@ -151,8 +151,16 @@ const tombstoneFor = (provider, providerOfferId, priorRecord, sourceStatus = 'de
 
 const cloneState = (state) => JSON.parse(JSON.stringify(state));
 
+const rebuildStateAggregates = (state) => {
+  state.aggregates = buildPropertyAggregates(
+    Object.values(state.providerStates).flatMap((providerState) => Object.values(providerState.records || {})),
+  );
+  state.generatedAt = new Date().toISOString();
+  return state;
+};
+
 /** Exported for focused tests: applies a normalised delivery without file I/O. */
-export const applyDeliveryToState = (existingState, delivery) => {
+export const applyDeliveryToState = (existingState, delivery, { rebuildAggregates = true } = {}) => {
   const state = cloneState(existingState || createEmptyOfferState());
   const prior = state.providerStates[delivery.provider] || { records: {}, hasFullBaseline: false };
   const records = { ...(prior.records || {}) };
@@ -192,10 +200,7 @@ export const applyDeliveryToState = (existingState, delivery) => {
     fullDeliveryId: delivery.kind === 'full' ? delivery.id : prior.fullDeliveryId,
     fullReceivedAt: delivery.kind === 'full' ? delivery.receivedAt : prior.fullReceivedAt,
   };
-  state.aggregates = buildPropertyAggregates(
-    Object.values(state.providerStates).flatMap((providerState) => Object.values(providerState.records || {})),
-  );
-  state.generatedAt = new Date().toISOString();
+  if (rebuildAggregates) rebuildStateAggregates(state);
   return { state, applied: true };
 };
 
@@ -501,7 +506,7 @@ export const replayRetainedDeliveries = async ({
           agents: parsed.agents,
           receivedAt: delivery.receivedAt,
         };
-        const preflight = applyDeliveryToState(restored, candidateDelivery);
+        const preflight = applyDeliveryToState(restored, candidateDelivery, { rebuildAggregates: false });
         if (!preflight.applied) throw new Error(`Cannot replay ${delivery.kind}: ${preflight.reason}`);
         await materialise({
           offers: parsed.offers,
@@ -512,7 +517,7 @@ export const replayRetainedDeliveries = async ({
           entries: parsed.entries,
           config,
         });
-        restored = applyDeliveryToState(restored, candidateDelivery).state;
+        restored = applyDeliveryToState(restored, candidateDelivery, { rebuildAggregates: false }).state;
         const deliveryCounts = locationSourceCounts(parsed.offers);
         counts = Object.fromEntries(Object.keys(counts).map((key) => [key, counts[key] + deliveryCounts[key]]));
       }
@@ -540,10 +545,7 @@ export const replayRetainedDeliveries = async ({
   }
 
   if (report.applied.length > 0) {
-    candidate.aggregates = buildPropertyAggregates(
-      Object.values(candidate.providerStates).flatMap((providerState) => Object.values(providerState.records || {})),
-    );
-    candidate.generatedAt = new Date().toISOString();
+    rebuildStateAggregates(candidate);
     writeOfferStateAtomic(config.statePath, candidate);
     report.statePublished = true;
   }
@@ -644,7 +646,7 @@ export const processAvailableDeliveries = async ({ config, now = new Date(), log
         agents,
         receivedAt,
       };
-      const attempt = applyDeliveryToState(state, candidateDelivery);
+      const attempt = applyDeliveryToState(state, candidateDelivery, { rebuildAggregates: false });
       if (!attempt.applied) {
         addDelivery(state, { id, provider, archivePath, receivedAt, kind, status: 'ignored', reason: attempt.reason });
         changed = true;

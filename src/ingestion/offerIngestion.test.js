@@ -65,6 +65,18 @@ describe('applyDeliveryToState', () => {
     expect(result.state.aggregates).toEqual([]);
   });
 
+  it('can update provider records without regenerating aggregates during a preflight', () => {
+    const result = applyDeliveryToState(
+      createEmptyOfferState(),
+      delivery('otodom-pl', 'full', [offer('otodom-pl', 'ms1')]),
+      { rebuildAggregates: false },
+    );
+
+    expect(result).toMatchObject({ applied: true });
+    expect(result.state.providerStates['otodom-pl'].records.ms1).toMatchObject({ sourceStatus: 'active' });
+    expect(result.state.aggregates).toEqual([]);
+  });
+
   it('replaces a provider full state while retaining tombstones for omitted offers', () => {
     const first = applyDeliveryToState(createEmptyOfferState(), delivery('otodom-pl', 'full', [offer('otodom-pl', 'ms1')], 'first')).state;
     const second = applyDeliveryToState(first, delivery('otodom-pl', 'full', [offer('otodom-pl', 'ms2')], 'second')).state;

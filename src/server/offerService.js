@@ -6,7 +6,7 @@
  * returns no offers rather than reading a delivery file during an SSR request.
  */
 
-import { buildPropertyAggregates, toOfferDetailView, toOfferSummaryView } from '../utils/propertyAggregate.js';
+import { toOfferDetailView, toOfferSummaryView } from '../utils/propertyAggregate.js';
 import { getOfferRuntimeConfig, readOfferState } from './offerState.js';
 
 // Vite replaces direct `process.env` references at build time. Going through
@@ -43,13 +43,11 @@ export const loadConfiguredNieruchomosciOnlineAgents = (env = import.meta.env) =
 };
 
 /**
- * Build one provider-independent aggregate per deterministic property ID.
- * Source records and field provenance remain available server-side for detail
- * enrichment, audits, and future persistence.
+ * Read the atomically published aggregate snapshot. Aggregation belongs to the
+ * ingestion worker, never to an SSR request.
  */
 export const loadConfiguredPropertyAggregates = (env = import.meta.env) => (
-  readOfferState(getOfferRuntimeConfig(runtimeEnv(env)).statePath)?.aggregates
-  ?? buildPropertyAggregates(loadConfiguredProviderOffers(env))
+  readOfferState(getOfferRuntimeConfig(runtimeEnv(env)).statePath)?.aggregates ?? []
 );
 
 /**
