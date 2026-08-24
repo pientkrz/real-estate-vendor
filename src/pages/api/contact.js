@@ -1,5 +1,6 @@
 import { sendContactEmail } from '../../server/mailer';
 import { getLogger } from '../../server/logger.js';
+import { loadConfiguredPropertyAgentEmails } from '../../server/offerService.js';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -25,7 +26,7 @@ export async function POST({ request, clientAddress, locals }) {
     return new Response(JSON.stringify({ error: 'Nieprawidłowe dane formularza.' }), { status: 400 });
   }
 
-  const { name, email, message, website } = body;
+  const { name, email, message, website, source, propertyId } = body;
 
   // Honeypot: real users never fill this hidden field.
   if (website) {
@@ -43,13 +44,30 @@ export async function POST({ request, clientAddress, locals }) {
     return new Response(JSON.stringify({ error: 'Zbyt wiele zapytań. Spróbuj ponownie za chwilę.' }), { status: 429 });
   }
 
+  let agentEmails = [];
+  if (source === 'property-inquiry') {
+    const normalizedPropertyId = typeof propertyId === 'string' ? propertyId.trim() : '';
+    if (!normalizedPropertyId) {
+      logger.warn('contact_submission_rejected', { component: 'contact', requestId, reason: 'missing-property-id' });
+      return new Response(JSON.stringify({ error: 'Nie znaleziono wskazanej oferty.' }), { status: 400 });
+    }
+
+    const configuredAgentEmails = loadConfiguredPropertyAgentEmails(normalizedPropertyId);
+    if (configuredAgentEmails === undefined) {
+      logger.warn('contact_submission_rejected', { component: 'contact', requestId, reason: 'property-not-found' });
+      return new Response(JSON.stringify({ error: 'Wskazana oferta nie jest już dostępna.' }), { status: 404 });
+    }
+    agentEmails = configuredAgentEmails;
+  }
+
   try {
     const startedAt = Date.now();
-    await sendContactEmail(body);
+    await sendContactEmail({ ...body, agentEmails });
     logger.info('contact_email_sent', {
       component: 'contact',
       requestId,
       inquiryType: body.propertyTitle ? 'property' : 'general',
+      agentRecipientCount: agentEmails.length,
       durationMs: Date.now() - startedAt,
     });
     return new Response(JSON.stringify({ ok: true }), { status: 200 });

@@ -2,6 +2,8 @@ import nodemailer from 'nodemailer';
 import { getLogger } from './logger.js';
 
 const logger = getLogger('astro');
+const GLOBAL_S_HOME_INBOX = 'info@globalshome.com';
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 if (!process.env.SMTP_HOST) {
   try {
@@ -13,6 +15,22 @@ if (!process.env.SMTP_HOST) {
 }
 
 let transporterPromise;
+
+const normaliseEmail = (value) => {
+  const email = String(value ?? '').trim().toLowerCase();
+  return EMAIL_RE.test(email) ? email : undefined;
+};
+
+/**
+ * The public inbox always receives every enquiry. Property agents are added
+ * only from server-resolved data (see the API route), and duplicates from the
+ * three provider feeds are collapsed to one delivery.
+ */
+export const resolveBusinessRecipients = (agentEmails = []) => [...new Set([
+  GLOBAL_S_HOME_INBOX,
+  normaliseEmail(process.env.MAIL_TO),
+  ...agentEmails.map(normaliseEmail),
+].filter(Boolean))];
 
 function getTransporter() {
   if (transporterPromise) return transporterPromise;
@@ -42,7 +60,8 @@ function getTransporter() {
 }
 
 /**
- * Business notification (to MAIL_TO). Content differs by source:
+ * Business notification (always to info@globalshome.com, plus configured and
+ * server-resolved agent recipients). Content differs by source:
  * - Property inquiry (propertyTitle present): listing + link, then the
  *   submitter's message under "Treść wiadomości".
  * - Contact form: the qualifying fields (kierunek/cel/budżet/typ, each
@@ -54,10 +73,10 @@ function getTransporter() {
  * lines, since '' is falsy too).
  */
 function buildBusinessBody(fields) {
-  const { name, email, phone, message, propertyTitle, propertyUrl, direction, purpose, budget, propertyType } = fields;
+  const { name, email, phone, message, propertyTitle, propertyUrl, direction, purpose, budget, propertyType, isTest } = fields;
   const isPropertyInquiry = Boolean(propertyTitle);
 
-  const heading = isPropertyInquiry ? 'Nowe zapytanie o nieruchomość' : 'Nowe zapytanie z formularza kontaktowego';
+  const heading = `${isTest ? '[TEST] ' : ''}${isPropertyInquiry ? 'Nowe zapytanie o nieruchomość' : 'Nowe zapytanie z formularza kontaktowego'}`;
 
   const contactBlock = [
     `Imię i nazwisko: ${name}`,
@@ -89,7 +108,7 @@ function buildBusinessBody(fields) {
 }
 
 /** Confirmation (to the submitter's own email) - acknowledges receipt. */
-function buildConfirmationBody({ name, propertyTitle, propertyUrl }) {
+function buildConfirmationBody({ name, propertyTitle, propertyUrl, isTest }) {
   const introLines = propertyTitle
     ? [
         `Dziękujemy za kontakt z Global S Home. Otrzymaliśmy Twoje zapytanie dotyczące oferty: ${propertyTitle}.`,
@@ -98,34 +117,36 @@ function buildConfirmationBody({ name, propertyTitle, propertyUrl }) {
     : ['Dziękujemy za kontakt z Global S Home. Otrzymaliśmy Twoje zapytanie.'];
 
   return [
+    isTest ? ['[TEST] To jest wiadomość testowa wysłana z domeny testowej.'] : null,
     [`Dzień dobry${name ? ` ${name}` : ''},`],
     introLines,
     ['Nasz przedstawiciel skontaktuje się z Tobą w ciągu 24 godzin.'],
     ['Pozdrawiamy,', 'Zespół Global S Home'],
-  ]
+  ].filter(Boolean)
     .map((block) => block.join('\n'))
     .join('\n\n');
 }
 
 export async function sendContactEmail(fields) {
-  const { name, email, propertyTitle, propertyUrl } = fields;
+  const { name, email, propertyTitle, propertyUrl, agentEmails = [], isTest } = fields;
   const transporter = await getTransporter();
   const from = process.env.MAIL_FROM || process.env.SMTP_USER;
-  const to = process.env.MAIL_TO || from;
+  const to = resolveBusinessRecipients(agentEmails);
+  const subjectPrefix = isTest ? '[TEST] ' : '';
 
   const businessInfo = await transporter.sendMail({
     from,
     to,
     replyTo: email,
-    subject: propertyTitle ? `Zapytanie o ofertę: ${propertyTitle}` : 'Nowe zapytanie ze strony',
+    subject: `${subjectPrefix}${propertyTitle ? `Zapytanie o ofertę: ${propertyTitle}` : 'Nowe zapytanie ze strony'}`,
     text: buildBusinessBody(fields),
   });
 
   const confirmationInfo = await transporter.sendMail({
     from,
     to: email,
-    subject: 'Potwierdzenie otrzymania zapytania — Global S Home',
-    text: buildConfirmationBody({ name, propertyTitle, propertyUrl }),
+    subject: `${subjectPrefix}Potwierdzenie otrzymania zapytania — Global S Home`,
+    text: buildConfirmationBody({ name, propertyTitle, propertyUrl, isTest }),
   });
 
   const previewCount = [businessInfo, confirmationInfo]

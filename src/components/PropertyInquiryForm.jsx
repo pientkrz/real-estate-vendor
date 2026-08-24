@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PhoneInput from './PhoneInput';
 import { isValidPhoneNumber } from '../utils/phoneValidation';
 
-const PropertyInquiryForm = ({ propertyTitle, propertyUrl, agentName }) => {
+const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl, agentName }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -37,6 +37,7 @@ const PropertyInquiryForm = ({ propertyTitle, propertyUrl, agentName }) => {
                 body: JSON.stringify({
                     ...formData,
                     source: 'property-inquiry',
+                    propertyId,
                     propertyTitle,
                     propertyUrl,
                 }),

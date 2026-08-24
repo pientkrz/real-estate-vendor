@@ -50,6 +50,36 @@ export const loadConfiguredPropertyAggregates = (env = import.meta.env) => (
   readOfferState(getOfferRuntimeConfig(runtimeEnv(env)).statePath)?.aggregates ?? []
 );
 
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const normaliseEmail = (value) => {
+  const email = String(value ?? '').trim().toLowerCase();
+  return EMAIL_RE.test(email) ? email : undefined;
+};
+
+/**
+ * Resolve the e-mail addresses of agents attached to a visible aggregate.
+ *
+ * This intentionally reads the server-side provider records instead of
+ * accepting an address from the browser. A visitor can therefore never use
+ * the public contact endpoint to redirect a property inquiry to an arbitrary
+ * recipient. Only active provider records participate; a deleted source must
+ * not receive new enquiries.
+ */
+export const loadConfiguredPropertyAgentEmails = (propertyId, env = import.meta.env) => {
+  const aggregate = loadConfiguredPropertyAggregates(env).find((candidate) => (
+    candidate.id === propertyId && candidate.lifecycle?.isVisible
+  ));
+  if (!aggregate) return undefined;
+
+  const sourceAgentEmails = Object.values(aggregate.sourceRecords ?? {})
+    .filter((record) => (record.sourceStatus ?? 'active') === 'active')
+    .map((record) => normaliseEmail(record.agent?.email));
+  const resolvedAgentEmail = normaliseEmail(aggregate.agent?.email);
+
+  return [...new Set([...sourceAgentEmails, resolvedAgentEmail].filter(Boolean))];
+};
+
 /**
  * Return compact views for the existing filter/detail components.
  * Lifecycle conflicts are deliberately withheld until a reconciliation policy

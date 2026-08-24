@@ -6,6 +6,7 @@ import { createEmptyOfferState, writeOfferStateAtomic } from './offerState.js';
 import {
   loadConfiguredNieruchomosciOnlineAgents,
   loadConfiguredOffers,
+  loadConfiguredPropertyAgentEmails,
   loadConfiguredProviderOffers,
   loadConfiguredPropertyAggregates,
 } from './offerService.js';
@@ -59,5 +60,30 @@ describe('processed offer state loader', () => {
     expect(loadConfiguredPropertyAggregates()).toEqual([]);
     expect(loadConfiguredOffers()).toEqual([]);
     expect(loadConfiguredNieruchomosciOnlineAgents()).toEqual([]);
+  });
+
+  it('resolves unique agent e-mails only from active source records', () => {
+    const directory = fs.mkdtempSync(path.join(os.tmpdir(), 'offer-service-agent-emails-'));
+    temporaryDirectories.push(directory);
+    const statePath = path.join(directory, 'offers-state.json');
+    const state = createEmptyOfferState();
+    state.aggregates = [{
+      id: '191-2',
+      lifecycle: { state: 'active', isVisible: true },
+      agent: { email: 'piotrek@globalshome.com' },
+      sourceRecords: {
+        'otodom-pl': { sourceStatus: 'active', agent: { email: 'piotrek@globalshome.com' } },
+        'nieruchomosci-online-pl': { sourceStatus: 'active', agent: { email: 'anna@globalshome.com' } },
+        'oferty-net': { sourceStatus: 'inactive', agent: { email: 'archived@globalshome.com' } },
+      },
+    }];
+    writeOfferStateAtomic(statePath, state);
+    process.env.OFFER_STATE_PATH = statePath;
+
+    expect(loadConfiguredPropertyAgentEmails('191-2')).toEqual([
+      'piotrek@globalshome.com',
+      'anna@globalshome.com',
+    ]);
+    expect(loadConfiguredPropertyAgentEmails('missing')).toBeUndefined();
   });
 });

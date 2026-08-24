@@ -180,7 +180,7 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
                             <h3 class="text-2xl font-headline font-bold text-on-surface mb-2">Zapytaj o ofertę</h3>
                             <p class="text-sm text-on-surface-variant font-body mb-8">Otrzymaj kompletną dokumentację i analizę inwestycyjną w ciągu 24 godzin.</p>
 
-                            <PropertyInquiryForm client:load propertyTitle={params?.tytul || city} propertyUrl={Astro.url.href} agentName={assignedAgent?.name} />
+                            <PropertyInquiryForm client:load propertyId={offer.id} propertyTitle={params?.tytul || city} propertyUrl={Astro.url.href} agentName={assignedAgent?.name} />
 
                             {assignedAgent && <PropertyAgentCard agent={assignedAgent} />}
 
