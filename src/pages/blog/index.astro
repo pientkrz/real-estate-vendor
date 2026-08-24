@@ -4,7 +4,8 @@ import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { getCollection } from 'astro:content';
 
-const blogEntries = await getCollection('blog');
+const blogEntries = (await getCollection('blog'))
+    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const getCategory = (entry) => (entry.data.category || 'Editorial').toUpperCase();
 
