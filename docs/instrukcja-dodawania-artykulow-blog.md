@@ -93,7 +93,7 @@ Na początku pliku znajduje się sekcja nagłówkowa między liniami `---`. Wype
 title: "Tytuł Twojego artykułu"
 description: "Krótki opis, który pojawi się jako zajawka."
 pubDate: 2026-06-15
-category: "ARCHITEKTURA"
+categories: ["ARCHITEKTURA", "INWESTYCJE"]
 author: "Imię Nazwisko"
 thumbnail: "https://link-do-zdjecia.jpg"
 ---
@@ -124,7 +124,7 @@ Po kilku minutach nowy artykuł pojawi się na stronie `/blog`.
 | `title` | ✓ tak | Tytuł artykułu wyświetlany na karcie i stronie artykułu |
 | `description` | ✓ tak | Krótki opis (1–2 zdania) — pojawia się jako zajawka na liście i jako podtytuł w artykule |
 | `pubDate` | ✓ tak | Data publikacji w formacie `RRRR-MM-DD`, np. `2026-06-15` — decyduje o kolejności na liście |
-| `category` | nie | Kategoria wyświetlana nad tytułem, np. `ARCHITEKTURA`, `INVESTMENT`, `LIFESTYLE` — pisz wielkimi literami |
+| `categories` | nie | Lista kategorii wyświetlana nad tytułem i używana przez filtr, np. `["ARCHITEKTURA", "INWESTYCJE"]`. Wpis może należeć do wielu kategorii; pisz je wielkimi literami. |
 | `author` | nie | Imię i nazwisko autora — wyświetlane w bocznej kolumnie artykułu |
 | `thumbnail` | nie | Adres URL zdjęcia głównego — wyświetlane na karcie listy i jako baner artykułu |
 

@@ -2,7 +2,7 @@
 title: "Tytuł artykułu"
 description: "Jedno lub dwa zdania opisujące temat artykułu — pojawi się jako podtytuł na stronie artykułu i jako zajawka na liście wpisów."
 pubDate: 2026-06-15
-category: "ARCHITEKTURA"
+categories: ["ARCHITEKTURA", "INWESTYCJE"]
 author: "Imię Nazwisko"
 thumbnail: "https://adres-url-do-zdjecia.jpg"
 ---

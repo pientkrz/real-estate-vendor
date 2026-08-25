@@ -3,13 +3,12 @@ import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import { getCollection } from 'astro:content';
+import { formatBlogCategories, getBlogCategories } from '../../utils/blogCategories';
 
 const blogEntries = (await getCollection('blog'))
     .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const getCategory = (entry) => (entry.data.category || 'Editorial').toUpperCase();
-
-const categories = [...new Set(blogEntries.map(getCategory))].sort();
+const categories = [...new Set(blogEntries.flatMap((entry) => getBlogCategories(entry.data, 'EDITORIAL')))].sort();
 ---
 
 <Layout title="Architectural Journal | Global S Home" description="Explorations in high-end architecture, investment strategy, and Mediterranean living.">
@@ -18,7 +17,7 @@ const categories = [...new Set(blogEntries.map(getCategory))].sort();
         <Navbar client:load />
     </div>
 
-    <main class="bg-bone">
+    <main class="overflow-x-hidden bg-bone">
         <!-- Immersive Hero Section -->
         <section class="relative h-[80vh] flex flex-col items-center justify-center bg-obsidian text-bone overflow-hidden">
             <!-- Asymmetrical Background Text -->
@@ -46,9 +45,9 @@ const categories = [...new Set(blogEntries.map(getCategory))].sort();
         </section>
 
         <!-- Category Filter -->
-        <nav class="sticky top-[88px] z-40 bg-bone/80 backdrop-blur-xl border-y border-outline/5 h-20 flex items-center">
-            <div class="max-w-7xl mx-auto px-6 md:px-12 w-full flex items-center justify-center">
-                <ul class="flex gap-12 text-[11px] font-label uppercase tracking-widest text-outline">
+        <nav class="sticky top-[72px] sm:top-[88px] z-40 flex h-20 items-center overflow-x-auto bg-bone/80 backdrop-blur-xl border-y border-outline/5">
+            <div class="mx-auto w-full min-w-max max-w-7xl px-6 md:px-12">
+                <ul class="flex w-max min-w-full justify-start gap-8 text-[11px] font-label uppercase tracking-widest text-outline md:justify-center md:gap-12">
                     <li
                         data-filter="all"
                         class="filter-btn text-primary border-b border-primary pb-1 cursor-pointer transition-colors"
@@ -75,7 +74,7 @@ const categories = [...new Set(blogEntries.map(getCategory))].sort();
 
                         return (
                             <article
-                                data-category={getCategory(entry)}
+                                data-categories={getBlogCategories(entry.data, 'EDITORIAL').join(',')}
                                 class={`group ${idx % 3 === 1 ? 'lg:translate-y-12' : ''} transition-transform duration-700`}
                             >
                                 <a href={`${import.meta.env.BASE_URL}blog/${entry.id}`} class="block relative">
@@ -102,7 +101,7 @@ const categories = [...new Set(blogEntries.map(getCategory))].sort();
                                     
                                     <div class="space-y-4 pr-8">
                                         <span class="text-[10px] font-label uppercase tracking-[0.2em] text-primary">
-                                            {getCategory(entry)}
+                                            {formatBlogCategories(entry.data, 'EDITORIAL')}
                                         </span>
                                         <h2 class="text-3xl font-serif font-bold text-on-surface leading-tight group-hover:text-primary transition-colors duration-500">
                                             {entry.data.title}
@@ -137,7 +136,7 @@ const categories = [...new Set(blogEntries.map(getCategory))].sort();
 
 <script>
     const buttons = document.querySelectorAll('.filter-btn');
-    const articles = document.querySelectorAll('article[data-category]');
+    const articles = document.querySelectorAll('article[data-categories]');
 
     buttons.forEach(btn => {
         btn.addEventListener('click', () => {
@@ -151,7 +150,8 @@ const categories = [...new Set(blogEntries.map(getCategory))].sort();
             btn.classList.remove('text-outline');
 
             articles.forEach(article => {
-                const match = filter === 'all' || article.dataset.category === filter;
+                const articleCategories = (article.dataset.categories || '').split(',');
+                const match = filter === 'all' || articleCategories.includes(filter);
                 article.style.display = match ? '' : 'none';
             });
         });

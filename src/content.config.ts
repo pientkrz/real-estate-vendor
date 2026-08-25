@@ -9,6 +9,8 @@ const blog = defineCollection({
 		pubDate: z.coerce.date(),
 		author: z.string().optional(),
 		thumbnail: z.string().optional(),
+		categories: z.array(z.string().trim().min(1)).min(1).optional(),
+		// Compatibility with articles created before multiple categories were supported.
 		category: z.string().optional(),
 	}),
 });
