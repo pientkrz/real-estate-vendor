@@ -2,7 +2,7 @@
 title: "Najem krótkoterminowy za granicą w 2025"
 description: "Jak zarabiać na wynajmie krótkoterminowym za granicą? Sprawdź, gdzie bardziej opłaca się inwestować w 2025 roku – Hiszpania czy Dubaj?"
 pubDate: 2025-06-18
-category: "DUBAJ"
+categories: ["DUBAJ"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/06/cropped-GLOBAL-S-HOME-blog-2025.jpg"
 ---
 

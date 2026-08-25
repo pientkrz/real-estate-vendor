@@ -2,7 +2,7 @@
 title: "Zamieszkaj tam, gdzie naprawdę chcesz być | Global S Home"
 description: "Zamieszkaj tam, gdzie naprawdę chcesz być – Hiszpania, Cypr, Dubaj, Grecja. Przewodnik 2025 z przykładami, pytaniami i darmową wejściówką VIP."
 pubDate: 2025-09-12
-category: "CYPR"
+categories: ["CYPR"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/09/cropped-GLOBAL-S-HOME-blog-zamieszkaj-tam-gdzie-chcesz-byc-1-scaled-1.jpg"
 ---
 

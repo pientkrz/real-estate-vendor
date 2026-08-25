@@ -2,7 +2,7 @@
 title: "Zakup Nieruchomości W Dubaju"
 description: "Dubaj od lat przyciąga uwagę inwestorów z całego świata, stając się jednym z najdynamiczniej rozwijających się rynków nieruchomości."
 pubDate: 2025-02-06
-category: "ARTYKUŁY"
+categories: ["ARTYKUŁY"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/02/dubaj-globalshome-1.jpg"
 ---
 

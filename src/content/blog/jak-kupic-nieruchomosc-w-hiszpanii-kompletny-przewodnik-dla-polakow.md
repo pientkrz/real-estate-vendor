@@ -2,7 +2,7 @@
 title: "Jak kupić nieruchomości w Hiszpanii? | Global S Home"
 description: "Dowiedz się, jak krok po kroku kupić nieruchomość w Hiszpanii. Praktyczny poradnik, regiony, koszty, formalności i wsparcie ekspertów Global S Home."
 pubDate: 2025-05-07
-category: "COSTA BLANCA"
+categories: ["COSTA BLANCA"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/05/cropped-Blog-Global-Hiszpania-scaled-1.webp"
 ---
 

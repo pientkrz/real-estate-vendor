@@ -2,7 +2,7 @@
 title: "Ukryte koszty zakupu nieruchomości za granicą"
 description: "Planujesz zakup nieruchomości w Hiszpanii lub Dubaju? Sprawdź, ile naprawdę kosztuje inwestycja – wszystkie podatki, opłaty i różnice w systemach."
 pubDate: 2025-07-23
-category: "DUBAJ"
+categories: ["DUBAJ", "HISZPANIA"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/07/GLOBAL-S-HOME-BLOG-LIPIEC.jpg"
 ---
 

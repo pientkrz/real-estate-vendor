@@ -2,7 +2,7 @@
 title: "Ceny nieruchomości w Dubaju do 2030 – czy wzrosną dwukrotnie?"
 description: "Czy warto inwestować w Dubaju? Prognozy mówią jasno: ceny nieruchomości mogą się podwoić do 2030 roku. Sprawdź, co napędza ten rynek."
 pubDate: 2025-05-15
-category: "DUBAJ"
+categories: ["DUBAJ"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/05/cropped-20250201_183827-scaled-1.jpg"
 ---
 

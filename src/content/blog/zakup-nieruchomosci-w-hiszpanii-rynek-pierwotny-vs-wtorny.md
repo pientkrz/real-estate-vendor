@@ -2,7 +2,7 @@
 title: "Zakup nieruchomości w Hiszpanii – rynek pierwotny vs wtórny"
 description: "Rynek pierwotny czy wtórny w Hiszpanii? Porównanie kosztów, podatków i korzyści inwestycyjnych. Wybierz świadomie z Global S Home."
 pubDate: 2025-08-20
-category: "COSTA BLANCA"
+categories: ["COSTA BLANCA"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/08/cropped-GLOBAL-S-HOME-BLOG-SIERPIEN-ZAKUP-NIERUCHOMOSCI-PIERWOTNY-VS-WTORNY.jpg"
 ---
 

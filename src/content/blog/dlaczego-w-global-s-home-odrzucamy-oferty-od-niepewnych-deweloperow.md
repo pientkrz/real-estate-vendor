@@ -2,7 +2,7 @@
 title: "Dlaczego w Global S Home odrzucamy oferty od niepewnych deweloperów?"
 description: "Twoje bezpieczeństwo to nasz priorytet. W Global S Home nie ryzykujemy - współpracujemy tylko ze sprawdzonymi deweloperami, których weryfikujemy osobiście."
 pubDate: 2026-02-12
-category: "CYPR"
+categories: ["CYPR"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2026/02/Dlaczego-w-Global-S-Home-odrzucamy-oferty-od-niepewnych-deweloperow-4.5.jpg"
 ---
 

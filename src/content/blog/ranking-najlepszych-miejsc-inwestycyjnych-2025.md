@@ -2,7 +2,7 @@
 title: "Ranking najlepszych miejsc Inwestycyjnych 2025"
 description: "Sprawdź ranking TOP 5 lokalizacji w Europie i Dubaju, idealnych do inwestycji w 2025 roku. Porównanie cen, zwrotów i stylu życia – poradnik dla Polaków."
 pubDate: 2025-05-22
-category: "COSTA BLANCA"
+categories: ["COSTA BLANCA"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/05/cropped-NAJLEPSZYCH-MIEJSC-INWESTYCYJNYCH-ZA-GRANICA-GLOBALSHOME.jpg"
 ---
 

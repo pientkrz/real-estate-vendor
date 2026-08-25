@@ -2,7 +2,7 @@
 title: "Costa Blanca – najpiękniejsze miejsca, które musisz zobaczyć"
 description: "Odkryj 3 topowe miejsca na Costa Blanca idealne do życia i inwestycji – Alicante, Pilar de la Horadada i Torrevieja. Sprawdź, gdzie warto kupić!"
 pubDate: 2025-08-27
-category: "COSTA BLANCA"
+categories: ["COSTA BLANCA"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/08/cropped-GLOBAL-S-HOME-blog-sierpien-3.jpg"
 ---
 

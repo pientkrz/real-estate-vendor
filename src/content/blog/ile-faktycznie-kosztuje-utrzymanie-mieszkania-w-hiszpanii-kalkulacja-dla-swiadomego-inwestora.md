@@ -2,7 +2,7 @@
 title: "Ile faktycznie kosztuje utrzymanie mieszkania w Hiszpanii?"
 description: "Ile kosztuje utrzymanie mieszkania w Hiszpanii? Poznaj realne koszty, podatki i opłaty. Zaplanuj mądrą strategię inwestycyjną z Global S Home."
 pubDate: 2026-03-12
-category: "HISZPANIA"
+categories: ["HISZPANIA"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2026/03/ILE-KOSZTUJE-UTRZYMANIE-MIESZKANIA-W-HISZPANII-GLOBAL-S-HOME-2026-scaled.jpg"
 ---
 

@@ -2,7 +2,7 @@
 title: "Jak kupić nieruchomość za granicą – za gotówkę czy na kredyt?"
 description: "Kupujesz nieruchomość za granicą? Sprawdź, co bardziej się opłaca w 2025 roku – kredyt hipoteczny czy zakup za gotówkę. Praktyczny przewodnik!"
 pubDate: 2025-06-11
-category: "CYPR"
+categories: ["CYPR"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/06/cropped-GLOBAL-S-HOME.webp"
 ---
 

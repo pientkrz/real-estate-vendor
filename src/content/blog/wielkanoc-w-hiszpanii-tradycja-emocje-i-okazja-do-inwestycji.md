@@ -2,7 +2,7 @@
 title: "Wielkanoc w Hiszpanii – Tradycja, Emocje i Okazja do Inwestycji"
 description: "Wielkanoc w Hiszpanii to prawdziwa uczta dla zmysłów i duszy. Nazywana tu Semana Santa, to nie tylko religijne święto, ale też emocjonalne widowisko…"
 pubDate: 2025-04-17
-category: "COSTA BLANCA"
+categories: ["COSTA BLANCA"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/04/Big-Easter-celebrations-in-Costa-Blanca-city-get-tourist-recognition-in-Spain.jpg"
 ---
 

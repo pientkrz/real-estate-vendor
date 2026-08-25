@@ -2,7 +2,7 @@
 title: "Inwestowanie w nieruchomości w Hiszpanii w 2025 roku"
 description: "Odkryj kluczowe trendy na hiszpańskim rynku nieruchomości w 2025 roku. Dowiedz się, gdzie warto inwestować i jakie zmiany czekają inwestorów."
 pubDate: 2025-06-05
-category: "APARTAMENTY"
+categories: ["APARTAMENTY"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/06/cropped-Odkryj-kluczowe-trendy-na-hiszpanskim-rynku-nieruchomosci-w-2025-roku.png"
 ---
 

@@ -2,7 +2,7 @@
 title: "Polacy a inwestycje zagraniczne w 2026"
 description: "Rok 2026 przyniósł wyraźną zmianę w podejściu polskich inwestorów do rynku nieruchomości. Jeszcze kilka lat temu głównym motorem napędowym był szybki zysk (tzw."
 pubDate: 2026-01-22
-category: "CYPR"
+categories: ["CYPR"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2026/01/polacy-a-inwestycje-zagraniczne-w-2026-Global-S-Home-scaled.jpg"
 ---
 

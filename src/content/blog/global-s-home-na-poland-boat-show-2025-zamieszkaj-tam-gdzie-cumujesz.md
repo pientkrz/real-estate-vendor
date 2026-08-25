@@ -2,7 +2,7 @@
 title: "Global S Home na Poland Boat Show 2025"
 description: "Dołącz do Global S Home na targach Poland Boat Show 2025. Odkryj, jak pasję do jachtów połączyć z życiem w najlepszych kurortach świata!"
 pubDate: 2025-09-03
-category: "COSTA BLANCA"
+categories: ["COSTA BLANCA"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/09/cropped-Kopia-–-GLOBAL-S-HOME-scaled-1.jpg"
 ---
 

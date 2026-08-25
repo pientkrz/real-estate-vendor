@@ -2,7 +2,7 @@
 title: "Korzyści z Zakupu Nieruchomości na Cyprze"
 description: "Cypr to wyspa, która od lat przyciąga inwestorów oraz osoby szukające miejsca, w którym można cieszyć się niepowtarzalnym stylem życia."
 pubDate: 2025-02-06
-category: "ARTYKUŁY"
+categories: ["ARTYKUŁY"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/02/WhatsAppImage2023-07-04at19.06.45-1.jpeg"
 ---
 

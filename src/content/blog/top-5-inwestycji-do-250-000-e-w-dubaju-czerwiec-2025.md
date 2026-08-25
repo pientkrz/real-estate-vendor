@@ -2,7 +2,7 @@
 title: "Top 5 inwestycji do 250 000 € w Dubaju – Czerwiec 2025"
 description: "Odkryj 5 najlepszych inwestycji w Dubaju do 250 000 € na czerwiec 2025. Sprawdź lokalizacje, ceny i potencjał zysku. Idealny przewodnik dla inwestorów."
 pubDate: 2025-05-29
-category: "DUBAJ"
+categories: ["DUBAJ"]
 thumbnail: "https://globalshome.com/wp-content/uploads/2025/05/cropped-Global_S_Home_Top_5_Inwestycji_w_Dubaju_do_250000_E-2.jpg"
 ---
 
