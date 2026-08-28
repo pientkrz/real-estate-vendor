@@ -93,11 +93,7 @@
   }
 }
 
-/* Listings map: water is recoloured to #c2dcff per-pixel on canvas
-   (WaterTintTileLayer in ListingsMap.jsx) — a CSS filter was tried first but
-   transforms every pixel uniformly, visibly tinting land/roads/labels blue
-   too. This background just matches the water colour so tiles loading in
-   don't flash a different colour. */
+/* Neutral backdrop used while satellite tiles load. */
 .listings-map.leaflet-container {
-  background: #c2dcff;
+  background: #d7d2c5;
 }
