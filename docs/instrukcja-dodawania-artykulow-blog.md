@@ -36,7 +36,7 @@ Każdy artykuł posiada własną podstronę dostępną pod adresem `/blog/nazwa-
 
 ## 2. Jak wygląda strona po dodaniu artykułu
 
-Po dodaniu nowego pliku i wdrożeniu aplikacji:
+Po dodaniu poprawnego pliku do katalogu bloga na VPS:
 
 - nowa karta artykułu pojawia się w siatce na stronie `/blog`
 - artykuł jest dostępny pod własnym adresem `/blog/nazwa-twojego-pliku`
@@ -59,12 +59,12 @@ Skopiuj jego zawartość.
 
 ---
 
-### Krok 2 — utwórz nowy plik
+### Krok 2 — utwórz nowy plik na VPS
 
 W folderze:
 
 ```
-src/content/blog/
+/home/ixtnzfseqk/content/blog/
 ```
 
 utwórz nowy plik tekstowy z rozszerzeniem `.md`. Nazwa pliku stanie się adresem URL artykułu, dlatego:
@@ -109,11 +109,11 @@ Pod zamykającą linią `---` wpisz treść artykułu. Szczegóły dotyczące fo
 
 ---
 
-### Krok 5 — wdróż zmiany
+### Krok 5 — zapisz plik
 
-Zapisz plik, a następnie wypchnij zmiany do repozytorium Git (np. przez GitHub Desktop lub terminal). GitHub Actions automatycznie przebuduje i opublikuje stronę.
+Po zapisaniu poprawnego pliku w `/home/ixtnzfseqk/content/blog/` nowy artykuł pojawi się przy następnym żądaniu strony `/blog`. Nie jest potrzebne wdrożenie aplikacji ani jej restart.
 
-Po kilku minutach nowy artykuł pojawi się na stronie `/blog`.
+Katalog na VPS jest źródłem prawdy dla domeny testowej. Plik o tym samym slug-u w repozytorium jest używany tylko lokalnie, gdy `BLOG_CONTENT_PATH` wskazuje na `src/content/blog`.
 
 ---
 
@@ -124,7 +124,7 @@ Po kilku minutach nowy artykuł pojawi się na stronie `/blog`.
 | `title` | ✓ tak | Tytuł artykułu wyświetlany na karcie i stronie artykułu |
 | `description` | ✓ tak | Krótki opis (1–2 zdania) — pojawia się jako zajawka na liście i jako podtytuł w artykule |
 | `pubDate` | ✓ tak | Data publikacji w formacie `RRRR-MM-DD`, np. `2026-06-15` — decyduje o kolejności na liście |
-| `categories` | nie | Lista kategorii wyświetlana nad tytułem i używana przez filtr, np. `["ARCHITEKTURA", "INWESTYCJE"]`. Wpis może należeć do wielu kategorii; pisz je wielkimi literami. |
+| `categories` | ✓ tak | Niepusta lista kategorii wyświetlana nad tytułem i używana przez filtr, np. `["ARCHITEKTURA", "INWESTYCJE"]`. Wpis może należeć do wielu kategorii; pisz je wielkimi literami. |
 | `author` | nie | Imię i nazwisko autora — wyświetlane w bocznej kolumnie artykułu |
 | `thumbnail` | nie | Adres URL zdjęcia głównego — wyświetlane na karcie listy i jako baner artykułu |
 
@@ -264,8 +264,8 @@ Pojawia się jako elegancki wyróżnik przełamujący treść:
 
 | Objaw | Przyczyna | Rozwiązanie |
 |-------|-----------|-------------|
-| Artykuł nie pojawia się na stronie | Plik jest poza folderem `src/content/blog/` | Upewnij się, że plik jest w odpowiednim folderze |
-| Błąd podczas wdrożenia | Brakuje wymaganego pola `title`, `description` lub `pubDate` | Sprawdź czy wszystkie wymagane pola są uzupełnione |
+| Karta „Invalid blog” na stronie `/blog` | Plik ma błędny YAML, brakuje wymaganego pola albo `categories` nie jest niepustą listą | Otwórz `/blog/nazwa-pliku`; strona pokaże bezpieczną listę błędów oraz aktualny szablon. Treść błędnego pliku nie jest publikowana. |
+| Artykuł nie pojawia się na stronie | Plik jest poza folderem `/home/ixtnzfseqk/content/blog/`, ma niedozwoloną nazwę, jest linkiem symbolicznym albo nie można go odczytać | Użyj zwykłego pliku `.md` w katalogu bloga i nazwy z małych liter, cyfr oraz myślników |
 | Błąd daty | Data podana w niepoprawnym formacie | Użyj formatu `RRRR-MM-DD`, np. `2026-06-15` |
 | Zdjęcie nie wyświetla się | Niepoprawny lub niedostępny adres URL zdjęcia | Wklej link w przeglądarce i sprawdź czy otwiera się zdjęcie |
 | Adres URL artykułu zawiera znaki specjalne | Nazwa pliku zawiera polskie litery lub spacje | Zmień nazwę pliku — używaj tylko liter `a–z`, cyfr i myślników |

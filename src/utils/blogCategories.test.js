@@ -7,10 +7,6 @@ describe('blog categories', () => {
       .toEqual(['DUBAJ', 'INWESTYCJE']);
   });
 
-  it('keeps articles with the former single category format compatible', () => {
-    expect(getBlogCategories({ category: 'Cypr' })).toEqual(['CYPR']);
-  });
-
   it('formats every category for article metadata', () => {
     expect(formatBlogCategories({ categories: ['Hiszpania', 'Inwestycje'] }))
       .toBe('HISZPANIA · INWESTYCJE');

@@ -4,6 +4,12 @@ import { convertPrice } from '../utils/exchangeRates';
 
 const displayCount = (value) => (Number(value) > 0 ? value : '—');
 const hasCount = (value) => Number(value) > 0;
+const getPhotoTags = (value) => [...new Set(
+  String(value ?? '')
+    .split('|')
+    .map((tag) => tag.trim())
+    .filter(Boolean),
+)];
 
 const PropertyMetric = ({ icon, children }) => (
   <span className="flex items-center gap-1.5 whitespace-nowrap">
@@ -12,7 +18,7 @@ const PropertyMetric = ({ icon, children }) => (
   </span>
 );
 
-const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths, area, price, image, status }) => {
+const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths, area, price, image, status, photoTags }) => {
   const base = import.meta.env.BASE_URL;
   const loc = [city, region, country].filter(Boolean).join(', ');
 
@@ -24,10 +30,18 @@ const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths
           src={image}
           className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
         />
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 right-4 flex flex-wrap items-start gap-2">
           <span className="bg-surface/90 backdrop-blur-md px-3 py-1 font-label text-[10px] tracking-widest text-primary uppercase">
             {status}
           </span>
+          {photoTags.map((tag) => (
+            <span
+              key={tag}
+              className="bg-primary/90 backdrop-blur-md px-3 py-1 font-label text-[10px] tracking-widest text-on-primary uppercase"
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
 
@@ -95,6 +109,7 @@ const FeaturedProperties = ({
               )}
               image={prop.params?.zdjecie1}
               status={prop.typ === 'sprzedaz' ? 'Na sprzedaż' : 'Wynajem'}
+              photoTags={getPhotoTags(prop.params?.opis_ang)}
             />
           </div>
         ))}

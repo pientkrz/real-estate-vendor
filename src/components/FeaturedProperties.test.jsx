@@ -35,4 +35,11 @@ describe('FeaturedProperties — metryki karty oferty', () => {
     expect(screen.queryByText(/Sypialni/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Łazienek/)).not.toBeInTheDocument();
   });
+
+  it('shows pipe-separated Oferty.net tags on the property photo', () => {
+    render(<FeaturedProperties properties={[createProperty({ opis_ang: 'Sea view | Private pool | ' })]} />);
+
+    expect(screen.getByText('Sea view')).toBeInTheDocument();
+    expect(screen.getByText('Private pool')).toBeInTheDocument();
+  });
 });

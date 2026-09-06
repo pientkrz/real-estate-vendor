@@ -49,7 +49,13 @@ describe('buildPropertyAggregates', () => {
       params: { powierzchnia: 52, powierzchnia_uzytkowa: 44, ulica: 'Harbor Road' },
     });
     const oferty = active('oferty-net', '113-6', {
-      params: { powierzchnia: 52, rokbudowy: 2024, liczba_sypialni: 2, zdjecie1: 'https://oferty/1.jpg' },
+      params: {
+        powierzchnia: 52,
+        rokbudowy: 2024,
+        liczba_sypialni: 2,
+        zdjecie1: 'https://oferty/1.jpg',
+        opis_ang: 'Sea view | Private pool',
+      },
     });
 
     const [aggregate] = buildPropertyAggregates([oferty, noe, otodom]);
@@ -77,7 +83,10 @@ describe('buildPropertyAggregates', () => {
     expect(aggregate.agent).toMatchObject({ name: 'Wojciech Danielak', email: 'wojtek@globalshome.com' });
     expect(toOfferView(aggregate).agent).toMatchObject({ name: 'Wojciech Danielak' });
     expect(toOfferView(aggregate)).not.toHaveProperty('sourceRecords');
-    expect(toOfferSummaryView(aggregate).params).toMatchObject({ liczbasypialni: 2 });
+    expect(toOfferSummaryView(aggregate).params).toMatchObject({
+      liczbasypialni: 2,
+      opis_ang: 'Sea view | Private pool',
+    });
     expect(toOfferSummaryView(aggregate).params.rokbudowy).toBeUndefined();
   });
 

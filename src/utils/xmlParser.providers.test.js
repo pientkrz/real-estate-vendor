@@ -100,6 +100,7 @@ describe('parseOfertyNetXml', () => {
               <param nazwa="agent_nazwisko" typ="text">Wojciech Danielak</param>
               <param nazwa="agent_email" typ="text">wojtek@globalshome.com</param>
               <param nazwa="agent_tel_kom" typ="text">+48 690 048 888</param>
+              <param nazwa="opis_ang" typ="text">Sea view | Private pool</param>
               <param nazwa="opis" typ="text"><linia>Pierwsza linia</linia><linia>Druga linia</linia></param>
             </oferta>
           </dzial>
@@ -129,6 +130,7 @@ describe('parseOfertyNetXml', () => {
       liczbapokoi: 3,
       liczbalazienek: 2,
       opis: 'Pierwsza linia\nDruga linia',
+      opis_ang: 'Sea view | Private pool',
       tytul: 'Penthouse w Atenach',
       zdjecie1: '/uploads/oferty-net/first.jpg',
       zdjecie2: '/uploads/oferty-net/second.jpg',

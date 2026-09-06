@@ -1,40 +1,39 @@
 ---
-import { getCollection, render } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
 import RelatedCarousel from '../../components/RelatedCarousel';
 import { formatBlogCategories } from '../../utils/blogCategories';
+import { BLOG_TEMPLATE, loadRuntimeBlogPost, loadRuntimeBlogPosts } from '../../server/blogService.js';
 
-export const prerender = true;
+export const prerender = false;
 
-export async function getStaticPaths() {
-	const blogEntries = await getCollection('blog');
-	return blogEntries.map(entry => ({
-		params: { slug: entry.id }, props: { entry },
-	}));
-}
+const slug = Array.isArray(Astro.params.slug) ? Astro.params.slug.join('/') : Astro.params.slug;
+const entry = await loadRuntimeBlogPost(slug);
+const allPosts = entry ? await loadRuntimeBlogPosts() : [];
+const recentPosts = allPosts.filter((post) => !post.isInvalid);
 
-const { entry } = Astro.props;
-const { Content } = await render(entry);
-
-// Fetch recent posts for the carousel
-const allPosts = await getCollection('blog');
-const recentPosts = allPosts
-	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+if (!entry) Astro.response.status = 404;
 
 ---
 
-<Layout title={`${entry.data.title} | Global S Journal`} description={entry.data.description}>
+<Layout title={entry ? `${entry.data.title} | Global S Journal` : 'Nie znaleziono artykułu | Global S Journal'} description={entry?.data.description || 'Artykuł nie istnieje lub nie jest dostępny.'}>
 	<Navbar client:load />
 	
 	<main class="bg-bone pt-32">
+		{!entry ? (
+			<section class="max-w-7xl mx-auto px-6 md:px-12 py-48 text-center">
+				<h1 class="text-5xl font-headline font-bold text-obsidian">Nie znaleziono artykułu</h1>
+				<a class="mt-8 inline-block text-primary font-label uppercase tracking-widest" href={`${import.meta.env.BASE_URL}blog`}>Wróć do bloga</a>
+			</section>
+		) : (
+		<>
 		<!-- Editorial Hero -->
 		<header class="max-w-7xl mx-auto px-6 md:px-12 pt-24 pb-12">
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-end mb-16">
 				<div>
 					<span class="text-primary font-label text-xs tracking-[0.4em] uppercase mb-8 block">
-						{formatBlogCategories(entry.data, "JOURNAL")}
+						{formatBlogCategories(entry.data)}
 					</span>
 					<h1 class="text-5xl md:text-8xl font-headline font-bold leading-[0.9] tracking-tight text-obsidian">
 						{entry.data.title}
@@ -64,12 +63,12 @@ const recentPosts = allPosts
 			<!-- Sidebar Metadata -->
 			<aside class="lg:col-span-3 space-y-12">
 				<div class="sticky top-40">
-					<div class="mb-12">
+					{!entry.isInvalid && <div class="mb-12">
 						<span class="text-[10px] font-label uppercase tracking-widest text-primary mb-4 block">Published</span>
 						<time class="text-xl font-headline font-bold" datetime={entry.data.pubDate.toISOString()}>
 							{entry.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
 						</time>
-					</div>
+					</div>}
 
 					{entry.data.author && (
 						<div>
@@ -89,14 +88,27 @@ const recentPosts = allPosts
 
 			<!-- Content Area -->
 			<article class="lg:col-span-9">
-				<div class="prose prose-stone prose-xl max-w-none prose-headings:font-headline prose-headings:font-bold prose-p:font-body prose-p:text-obsidian/80 prose-p:leading-loose prose-headings:tracking-tight prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:text-primary prose-blockquote:border-primary">
-					<Content />
-				</div>
+				{entry.isInvalid ? (
+					<div class="max-w-3xl rounded-sm bg-surface-container-low p-8 md:p-12">
+						<h2 class="font-headline text-3xl font-bold text-obsidian">Invalid blog</h2>
+						<p class="mt-4 font-body text-on-surface-variant">Plik został odnaleziony, ale nie spełnia wymaganego formatu. Popraw wskazane pola; po zapisaniu poprawna wersja pojawi się przy następnym żądaniu strony.</p>
+						<h3 class="mt-10 font-label text-xs uppercase tracking-widest text-primary">Informacje walidacyjne</h3>
+						<ul class="mt-4 list-disc space-y-2 pl-5 font-body text-on-surface-variant">
+							{entry.validationErrors.map((error) => <li>{error}</li>)}
+						</ul>
+						<h3 class="mt-10 font-label text-xs uppercase tracking-widest text-primary">Wymagany szablon pliku</h3>
+						<pre class="mt-4 overflow-x-auto bg-obsidian p-5 text-sm leading-relaxed text-bone"><code>{BLOG_TEMPLATE}</code></pre>
+					</div>
+				) : (
+					<div class="prose prose-stone prose-xl max-w-none prose-headings:font-headline prose-headings:font-bold prose-p:font-body prose-p:text-obsidian/80 prose-p:leading-loose prose-headings:tracking-tight prose-blockquote:font-serif prose-blockquote:italic prose-blockquote:text-primary prose-blockquote:border-primary" set:html={entry.html} />
+				)}
 			</article>
 		</div>
 
 		<!-- Related Content Carousel -->
-		<RelatedCarousel client:visible posts={recentPosts} currentPostId={entry.id} />
+		{!entry.isInvalid && <RelatedCarousel client:visible posts={recentPosts} currentPostId={entry.id} />}
+		</>
+		)}
 	</main>
 	
 	<Footer />

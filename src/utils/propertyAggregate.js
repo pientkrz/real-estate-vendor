@@ -494,6 +494,9 @@ export const toOfferSummaryView = (aggregate) => ({
     latitude: aggregate.params.latitude,
     longitude: aggregate.params.longitude,
     zdjecie1: aggregate.params.zdjecie1,
+    // Oferty.net supplies short English listing tags in `opis_ang`, separated
+    // by pipes. This is intentionally exposed only to the listing-card UI.
+    opis_ang: aggregate.params.opis_ang,
   },
 });
 

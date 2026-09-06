@@ -2,24 +2,25 @@
 # =============================================================================
 # BLOG POST TEMPLATE
 # =============================================================================
-# Copy this file to src/content/blog/your-post-slug.md and fill in the details.
+# Copy this file to the configured BLOG_CONTENT_PATH directory as
+# your-post-slug.md and fill in the details.
 #
 # REQUIRED FIELDS:
 # title: The main headline of the post.
 # description: A short summary for cards and SEO (150-160 chars recommended).
 # pubDate: Format: YYYY-MM-DD.
+# categories: A non-empty YAML list of categories.
 #
 # OPTIONAL FIELDS:
 # author: The name of the writer.
-# category: ARCHITECTURAL PHILOSOPHY, COLLECTION, REAL ESTATE, etc.
 # thumbnail: A high-resolution image URL (Unsplash or local /public/ path).
 # =============================================================================
 
 title: "ENTER TITLE HERE"
 description: "Enter a brief, compelling summary of the blog post to attract readers."
 pubDate: 2026-04-20
+categories: ["COLLECTION"]
 author: "Local T P STAFF"
-category: "COLLECTION"
 thumbnail: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200"
 ---
 

@@ -2,13 +2,15 @@
 import Layout from '../../layouts/Layout.astro';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
-import { getCollection } from 'astro:content';
+import { loadRuntimeBlogPosts } from '../../server/blogService.js';
 import { formatBlogCategories, getBlogCategories } from '../../utils/blogCategories';
 
-const blogEntries = (await getCollection('blog'))
-    .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+export const prerender = false;
 
-const categories = [...new Set(blogEntries.flatMap((entry) => getBlogCategories(entry.data, 'EDITORIAL')))].sort();
+const blogEntries = await loadRuntimeBlogPosts();
+const categories = [...new Set(blogEntries
+    .filter((entry) => !entry.isInvalid)
+    .flatMap((entry) => getBlogCategories(entry.data)))].sort();
 ---
 
 <Layout title="Architectural Journal | Global S Home" description="Explorations in high-end architecture, investment strategy, and Mediterranean living.">
@@ -74,7 +76,7 @@ const categories = [...new Set(blogEntries.flatMap((entry) => getBlogCategories(
 
                         return (
                             <article
-                                data-categories={getBlogCategories(entry.data, 'EDITORIAL').join(',')}
+                                data-categories={getBlogCategories(entry.data).join(',')}
                                 class={`group ${idx % 3 === 1 ? 'lg:translate-y-12' : ''} transition-transform duration-700`}
                             >
                                 <a href={`${import.meta.env.BASE_URL}blog/${entry.id}`} class="block relative">
@@ -101,7 +103,7 @@ const categories = [...new Set(blogEntries.flatMap((entry) => getBlogCategories(
                                     
                                     <div class="space-y-4 pr-8">
                                         <span class="text-[10px] font-label uppercase tracking-[0.2em] text-primary">
-                                            {formatBlogCategories(entry.data, 'EDITORIAL')}
+                                            {formatBlogCategories(entry.data)}
                                         </span>
                                         <h2 class="text-3xl font-serif font-bold text-on-surface leading-tight group-hover:text-primary transition-colors duration-500">
                                             {entry.data.title}

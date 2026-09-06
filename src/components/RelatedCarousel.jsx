@@ -75,7 +75,7 @@ const RelatedCarousel = ({ posts, currentPostId }) => {
               </div>
               
               <span className="text-primary font-label text-[10px] tracking-widest uppercase mb-3 block">
-                {formatBlogCategories(post.data, 'INVESTMENT')}
+                {formatBlogCategories(post.data)}
               </span>
               <h3 className="text-xl md:text-2xl font-serif leading-tight group-hover:text-primary transition-colors duration-300">
                 {post.data.title}
