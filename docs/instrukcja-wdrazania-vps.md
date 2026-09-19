@@ -5,6 +5,8 @@ Kompletny przewodnik: jak połączyć się z serwerem, jak zbudować i wdrożyć
 Historia dotychczasowych wdrożeń (co dokładnie zmieniono i kiedy): [dziennik-wdrozen-vps.md](dziennik-wdrozen-vps.md).
 Szczegóły i rozwiązywanie problemów z samym połączeniem SSH: [instrukcja-polaczenia-ssh-vps.md](instrukcja-polaczenia-ssh-vps.md).
 Obsługa dostaw FTP, retencja oraz harmonogram procesów: [instrukcja-obslugi-dostaw-ofert.md](instrukcja-obslugi-dostaw-ofert.md).
+Format logów, korelacja `traceId` oraz przygotowanie do OpenTelemetry są opisane
+w [instrukcji logowania](instrukcja-logowania.md).
 
 ## Spis treści
 1. [Architektura hostingu](#1-architektura-hostingu)
