@@ -68,6 +68,9 @@ const openCountryDropdown = () =>
 const checkCountry = (name) =>
   fireEvent.click(screen.getByRole('checkbox', { name }));
 
+const applyFilter = () =>
+  fireEvent.click(screen.getByRole('button', { name: 'Zastosuj' }));
+
 const openCategoryDropdown = () =>
   fireEvent.click(screen.getByRole('button', { name: /wszystkie typy|mieszkania|domy|działki|typy|typów/i }));
 
@@ -130,6 +133,7 @@ describe('CollectionManager — country filter', () => {
 
     openCountryDropdown();
     checkCountry('Spain');
+    applyFilter();
 
     await waitFor(() => expect(cardCount()).toBe(2));
 
@@ -141,12 +145,26 @@ describe('CollectionManager — country filter', () => {
     expect(screen.queryByRole('heading', { name: 'Paphos' })).not.toBeInTheDocument();
   });
 
+  it('does not change results until a country selection is applied', async () => {
+    renderApp();
+    await waitForListings();
+
+    openCountryDropdown();
+    checkCountry('Spain');
+
+    expect(cardCount()).toBe(6);
+
+    applyFilter();
+    await waitFor(() => expect(cardCount()).toBe(2));
+  });
+
   it('button label shows the single selected country name', async () => {
     renderApp();
     await waitForListings();
 
     openCountryDropdown();
     checkCountry('Greece');
+    applyFilter();
 
     await waitFor(() =>
       expect(screen.getByRole('button', { name: /^greece/i })).toBeInTheDocument(),
@@ -160,6 +178,7 @@ describe('CollectionManager — country filter', () => {
     openCountryDropdown();
     checkCountry('Spain');
     checkCountry('Greece');
+    applyFilter();
 
     await waitFor(() => expect(cardCount()).toBe(4));
 
@@ -178,6 +197,7 @@ describe('CollectionManager — country filter', () => {
     openCountryDropdown();
     checkCountry('Spain');
     checkCountry('Cyprus');
+    applyFilter();
 
     await waitFor(() =>
       expect(screen.getByRole('button', { name: /2 kraje/i })).toBeInTheDocument(),
@@ -191,10 +211,13 @@ describe('CollectionManager — country filter', () => {
     openCountryDropdown();
     checkCountry('Spain');
     checkCountry('Greece');
+    applyFilter();
     await waitFor(() => expect(cardCount()).toBe(4));
 
     // Uncheck Spain
+    openCountryDropdown();
     checkCountry('Spain');
+    applyFilter();
     await waitFor(() => expect(cardCount()).toBe(2));
 
     expect(screen.getByRole('heading', { name: 'Athens' })).toBeInTheDocument();
@@ -211,6 +234,7 @@ describe('CollectionManager — country filter', () => {
     checkCountry('Spain');
     checkCountry('Greece');
     checkCountry('Cyprus');
+    applyFilter();
 
     await waitFor(() => expect(cardCount()).toBe(6));
   });
@@ -221,6 +245,7 @@ describe('CollectionManager — country filter', () => {
 
     openCountryDropdown();
     checkCountry('Spain');
+    applyFilter();
     await waitFor(() => expect(cardCount()).toBe(2));
 
     fireEvent.click(screen.getByRole('button', { name: /reset filtrów/i }));
@@ -257,12 +282,15 @@ describe('CollectionManager — multi-category filter', () => {
     openCategoryDropdown();
     checkCategory('Mieszkania');
     checkCategory('Domy');
+    applyFilter();
 
     await waitFor(() => expect(cardCount()).toBe(2));
     expect(screen.getByRole('button', { name: /2 typy/i })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Działka testowa' })).not.toBeInTheDocument();
 
+    openCategoryDropdown();
     checkCategory('Domy');
+    applyFilter();
 
     await waitFor(() => expect(cardCount()).toBe(1));
     expect(screen.getByRole('button', { name: /^mieszkania/i })).toBeInTheDocument();
@@ -274,6 +302,7 @@ describe('CollectionManager — multi-category filter', () => {
 
     openCategoryDropdown();
     checkCategory('Mieszkania');
+    applyFilter();
     await waitFor(() => expect(cardCount()).toBe(1));
 
     fireEvent.click(screen.getByRole('button', { name: /reset filtrów/i }));

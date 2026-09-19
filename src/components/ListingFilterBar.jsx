@@ -1,11 +1,24 @@
-import React, { useMemo, useEffect, useState, useRef } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { convertPrice } from '../utils/exchangeRates';
+import FilterSelect from './FilterSelect';
 import {
   PROPERTY_CATEGORIES,
   PROPERTY_CATEGORY_LABELS,
 } from '../utils/offerMappings.js';
 
 const DISPLAY_CURRENCIES = ['EUR', 'PLN'];
+const ROOM_OPTIONS = [
+  { value: '', label: 'Dowolna' },
+  { value: '1', label: '1+' },
+  { value: '2', label: '2+' },
+  { value: '3', label: '3+' },
+  { value: '4', label: '4+' },
+];
+const SORT_OPTIONS = [
+  { value: 'price-desc', label: 'Cena: malejąco' },
+  { value: 'price-asc', label: 'Cena: rosnąco' },
+  { value: 'area-desc', label: 'Powierzchnia: malejąco' },
+];
 
 const ListingFilterBar = ({
   offers,
@@ -66,26 +79,6 @@ const ListingFilterBar = ({
     [offers],
   );
 
-  const [countryOpen, setCountryOpen] = useState(false);
-  const countryRef = useRef(null);
-  const [categoryOpen, setCategoryOpen] = useState(false);
-  const categoryRef = useRef(null);
-
-  useEffect(() => {
-    const handleClick = (e) => {
-      if (countryRef.current && !countryRef.current.contains(e.target)) setCountryOpen(false);
-      if (categoryRef.current && !categoryRef.current.contains(e.target)) setCategoryOpen(false);
-    };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
-
-  const toggleCountry = (c) =>
-    setFilters(f => ({
-      ...f,
-      countries: f.countries.includes(c) ? f.countries.filter(x => x !== c) : [...f.countries, c],
-    }));
-
   const countryLabel =
     filters.countries.length === 0 ? 'Wszystkie kraje' :
     filters.countries.length === 1 ? filters.countries[0] :
@@ -101,16 +94,6 @@ const ListingFilterBar = ({
   );
 
   const selectedTabs = filters.tabs ?? (filters.tab ? [filters.tab] : []);
-
-  const toggleTab = (tab) =>
-    setFilters((current) => {
-      const currentTabs = current.tabs ?? (current.tab ? [current.tab] : []);
-      const tabs = currentTabs.includes(tab)
-        ? currentTabs.filter((value) => value !== tab)
-        : [...currentTabs, tab];
-      const { tab: legacyTab, ...withoutLegacyTab } = current;
-      return { ...withoutLegacyTab, tabs };
-    });
 
   const categoryLabel =
     selectedTabs.length === 0 ? 'Wszystkie typy' :
@@ -211,105 +194,44 @@ const ListingFilterBar = ({
           </div>
         </div>
 
-        {/* Location — multi-select */}
-        <div className="relative" ref={countryRef}>
-          <span className="font-label text-[10px] uppercase tracking-widest text-primary block mb-1">Lokalizacja</span>
-          <button
-            onClick={() => setCountryOpen(o => !o)}
-            className="flex items-center gap-1 text-on-surface font-medium text-sm hover:text-primary transition-colors"
-          >
-            {countryLabel}
-            <span className="material-symbols-outlined text-sm leading-none">
-              {countryOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
-            </span>
-          </button>
-
-          {countryOpen && (
-            <div className="absolute top-full left-0 mt-2 bg-surface border border-outline-variant/20 shadow-xl z-50 min-w-[180px] py-1">
-              {countries.map(c => (
-                <label
-                  key={c}
-                  className="flex items-center gap-3 px-4 py-2 hover:bg-surface-container-low cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={filters.countries.includes(c)}
-                    onChange={() => toggleCountry(c)}
-                    className="accent-primary w-3.5 h-3.5 cursor-pointer"
-                  />
-                  <span className="font-body text-sm text-on-surface">{c}</span>
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
+        <FilterSelect
+          label="Lokalizacja"
+          value={filters.countries}
+          options={countries.map((country) => ({ value: country, label: country }))}
+          multiple
+          summary={countryLabel}
+          onApply={(countries) => setFilters((current) => ({ ...current, countries }))}
+        />
 
         {/* Property type — all documented Otodom categories stay available,
             even when the current delivery has no matching record. */}
-        <div className="relative" ref={categoryRef}>
-          <span className="font-label text-[10px] uppercase tracking-widest text-primary block mb-1">Typ nieruchomości</span>
-          <button
-            type="button"
-            onClick={() => setCategoryOpen((open) => !open)}
-            className="flex items-center gap-1 text-on-surface font-medium text-sm hover:text-primary transition-colors"
-          >
-            {categoryLabel}
-            <span className="material-symbols-outlined text-sm leading-none">
-              {categoryOpen ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}
-            </span>
-          </button>
+        <FilterSelect
+          label="Typ nieruchomości"
+          value={selectedTabs}
+          options={tabs.map((tab) => ({ value: tab, label: PROPERTY_CATEGORY_LABELS[tab] ?? tab }))}
+          multiple
+          summary={categoryLabel}
+          onApply={(tabs) => setFilters((current) => {
+            const { tab: legacyTab, ...withoutLegacyTab } = current;
+            return { ...withoutLegacyTab, tabs };
+          })}
+        />
 
-          {categoryOpen && (
-            <div className="absolute top-full left-0 mt-2 bg-surface border border-outline-variant/20 shadow-xl z-50 min-w-[220px] py-1">
-              {tabs.map((tab) => (
-                <label
-                  key={tab}
-                  className="flex items-center gap-3 px-4 py-2 hover:bg-surface-container-low cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={selectedTabs.includes(tab)}
-                    onChange={() => toggleTab(tab)}
-                    className="accent-primary w-3.5 h-3.5 cursor-pointer"
-                  />
-                  <span className="font-body text-sm text-on-surface">
-                    {PROPERTY_CATEGORY_LABELS[tab] ?? tab}
-                  </span>
-                </label>
-              ))}
-            </div>
-          )}
-        </div>
+        <FilterSelect
+          label="Pokoje"
+          value={filters.minRooms ?? ''}
+          options={ROOM_OPTIONS}
+          summary={ROOM_OPTIONS.find((option) => option.value === (filters.minRooms ?? ''))?.label ?? 'Dowolna'}
+          onApply={(minRooms) => setFilters((current) => ({ ...current, minRooms }))}
+        />
 
-        {/* Rooms */}
-        <div>
-          <span className="font-label text-[10px] uppercase tracking-widest text-primary block mb-1">Pokoje</span>
-          <select
-            className="bg-transparent border-none text-on-surface font-medium focus:ring-0 p-0 text-sm cursor-pointer hover:text-primary transition-colors"
-            value={filters.minRooms ?? ''}
-            onChange={e => setFilters(f => ({ ...f, minRooms: e.target.value }))}
-          >
-            <option value="">Dowolna</option>
-            <option value="1">1+</option>
-            <option value="2">2+</option>
-            <option value="3">3+</option>
-            <option value="4">4+</option>
-          </select>
-        </div>
-
-        {/* Sort */}
-        <div className="border-l border-outline-variant/30 pl-8 mb-1">
-          <span className="font-label text-[10px] uppercase tracking-widest text-primary block mb-1">Sortuj według</span>
-          <select
-            className="bg-transparent border-none text-on-surface font-medium focus:ring-0 p-0 text-sm cursor-pointer hover:text-primary transition-colors"
-            value={filters.sortBy ?? 'price-desc'}
-            onChange={e => setFilters(f => ({ ...f, sortBy: e.target.value }))}
-          >
-            <option value="price-desc">Cena: malejąco</option>
-            <option value="price-asc">Cena: rosnąco</option>
-            <option value="area-desc">Powierzchnia: malejąco</option>
-          </select>
-        </div>
+        <FilterSelect
+          label="Sortuj według"
+          value={filters.sortBy ?? 'price-desc'}
+          options={SORT_OPTIONS}
+          summary={SORT_OPTIONS.find((option) => option.value === (filters.sortBy ?? 'price-desc'))?.label ?? 'Cena: malejąco'}
+          onApply={(sortBy) => setFilters((current) => ({ ...current, sortBy }))}
+        />
 
         {/* Reset */}
         <button
