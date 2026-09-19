@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import PhoneNumberInput from 'react-phone-number-input/input';
-import { parsePhoneNumber } from 'react-phone-number-input';
+import { getCountryCallingCode, parsePhoneNumber } from 'react-phone-number-input';
 import pl from 'react-phone-number-input/locale/pl';
 import DialCodeSelect from './DialCodeSelect';
 
@@ -14,17 +13,27 @@ const PhoneInput = ({
   label = 'Numer telefonu',
 }) => {
   const [country, setCountry] = useState(() => parsePhoneNumber(value || '')?.country || 'PL');
-  // Owned locally rather than driven straight from the `value` prop: round-tripping
-  // every keystroke up through the host form's state and back down added enough of a
-  // render delay that react-phone-number-input's AsYouType formatter would lose or
-  // misplace characters typed in quick succession. Local state lets the digits input
-  // re-render immediately on each keystroke; the parent is still kept in sync via
-  // onChange for validation/submission.
-  const [localValue, setLocalValue] = useState(value);
+  // Display only national digits: the selected dial code already appears in the
+  // adjacent country control. The form state remains E.164 for validation and email.
+  const [localValue, setLocalValue] = useState(() => parsePhoneNumber(value || '')?.nationalNumber || '');
 
-  const handlePhoneChange = (newValue) => {
-    setLocalValue(newValue);
-    onChange({ target: { name, value: newValue || '' } });
+  const handlePhoneChange = (event) => {
+    const callingCode = getCountryCallingCode(country);
+    const rawValue = event.target.value.trim();
+    let digits = rawValue.replace(/\D/g, '');
+    const hasInternationalPrefix = rawValue.startsWith('+') || rawValue.startsWith('00');
+
+    if (rawValue.startsWith('00')) {
+      digits = digits.slice(2);
+    }
+
+    // A pasted full number may include the selected country code. Keep the number
+    // cell national-only instead of duplicating that code in the submitted value.
+    if (hasInternationalPrefix && digits.startsWith(callingCode) && digits.length > callingCode.length) {
+      digits = digits.slice(callingCode.length);
+    }
+    setLocalValue(digits);
+    onChange({ target: { name, value: digits ? `+${callingCode}${digits}` : '' } });
   };
 
   const handleCountryChange = (newCountry) => {
@@ -53,8 +62,11 @@ const PhoneInput = ({
           labels={pl}
           label="Kraj numeru telefonu"
         />
-        <PhoneNumberInput
-          country={country}
+        <input
+          type="tel"
+          inputMode="numeric"
+          autoComplete="tel-national"
+          pattern="[0-9]*"
           id={name}
           name={name}
           value={localValue}
@@ -62,7 +74,7 @@ const PhoneInput = ({
           onBlur={onBlur}
           aria-invalid={!!error}
           className="flex-1 min-w-0 bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 placeholder:text-outline/50"
-          placeholder="500 000 000"
+          placeholder="500000000"
         />
       </div>
       {error && <p className="text-[11px] text-red-600 font-body">{error}</p>}
