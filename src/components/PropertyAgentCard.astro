@@ -18,23 +18,23 @@ const agentName = agent.name || 'Global S Home';
       class="w-14 h-14 shrink-0 rounded-full object-cover bg-primary/10"
       loading="lazy"
     />
-    <div class="min-w-0">
+    <div class="min-w-0 flex-1">
       <h4 class="font-headline text-xl font-bold text-on-surface leading-tight">{agentName}</h4>
       <p class="mt-1 text-xs font-label uppercase tracking-wider text-outline">Opiekun tej oferty</p>
-      <div class="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm font-body">
-        {agent.phone && (
-          <a href={`tel:${phoneHref}`} class="inline-flex items-center gap-1.5 text-on-surface hover:text-primary transition-colors">
-            <span class="material-symbols-outlined text-base text-primary" aria-hidden="true">call</span>
-            {agent.phone}
-          </a>
-        )}
-        {agent.email && (
-          <a href={`mailto:${agent.email}`} class="inline-flex items-center gap-1.5 text-on-surface hover:text-primary transition-colors break-all">
-            <span class="material-symbols-outlined text-base text-primary" aria-hidden="true">mail</span>
-            {agent.email}
-          </a>
-        )}
-      </div>
     </div>
+  </div>
+  <div class="mt-5 flex flex-col items-start gap-2 text-sm font-body">
+    {agent.phone && (
+      <a href={`tel:${phoneHref}`} class="flex w-full items-center gap-1.5 text-left text-on-surface hover:text-primary transition-colors">
+        <span class="material-symbols-outlined shrink-0 text-base text-primary" aria-hidden="true">call</span>
+        <span class="min-w-0 whitespace-nowrap">{agent.phone}</span>
+      </a>
+    )}
+    {agent.email && (
+      <a href={`mailto:${agent.email}`} class="flex w-full min-w-0 items-center gap-1.5 text-left text-on-surface hover:text-primary transition-colors" title={agent.email}>
+        <span class="material-symbols-outlined shrink-0 text-base text-primary" aria-hidden="true">mail</span>
+        <span class="min-w-0 truncate">{agent.email}</span>
+      </a>
+    )}
   </div>
 </section>
