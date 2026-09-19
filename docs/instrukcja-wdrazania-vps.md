@@ -165,7 +165,9 @@ pscp -P 222 -pw "$cyberfolks_server_password" -r dist/server dist/client \
 
 Gdy wdrożenie zmienia sposób parsowania już zachowanych dostaw (np. lokalizację),
 po restarcie wykonaj **tylko na środowisku testowym** jednorazowy replay pod
-tą samą blokadą co cron:
+tą samą blokadą co cron. Replay jest dostępny tylko tak długo, jak istnieje
+najnowszy pełny ZIP oraz wszystkie jego późniejsze różnice (różnice wygasają po
+48 godzinach):
 
 ```bash
 cd ~/apps/new-global-s-home
@@ -173,9 +175,16 @@ bash scripts/vps/ingest-offers.sh --replay-retained
 ```
 
 Polecenie nie pobiera nowych ofert i nie modyfikuje retencji: odtwarza z
-zachowanego pełnego ZIP-a i późniejszych różnic prywatną migawkę JSON. Sprawdź
-następnie `logs/ingestion-$(date -u +%F).jsonl` oraz stronę testową. Nie używaj
-tego kroku w `~/domains/globalshome.com` bez osobnej decyzji wdrożeniowej.
+zachowanego pełnego ZIP-a i późniejszych różnic prywatną migawkę JSON. Jeśli
+historia jest niepełna, bezpiecznie pomija tego dostawcę i nie zmienia jego stanu.
+Sprawdź następnie `logs/ingestion-$(date -u +%F).jsonl` oraz stronę testową. Nie
+używaj tego kroku w `~/domains/globalshome.com` bez osobnej decyzji wdrożeniowej.
+
+Po wdrożeniu przejścia ze starszego magazynu zdjęć uruchom jednorazowo **tylko
+na teście** `scripts/ingest-offers.mjs --compact-current-photos` pod tym samym
+`flock`. Zwalnia ono stare foldery per dostawa dopiero po opublikowaniu oraz
+sprawdzeniu nowej, hashowanej kolekcji `current`; nigdy nie usuwaj tych folderów
+ręcznie.
 
 ---
 

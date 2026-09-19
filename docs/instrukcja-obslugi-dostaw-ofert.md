@@ -34,15 +34,15 @@ OFFER_STATE_PATH=/home/ixtnzfseqk/apps/new-global-s-home/data/offer-ingestion/of
 OFFER_PHOTO_ROOT=/home/ixtnzfseqk/aktualne-zdjecia-ofert
 OFFER_PHOTO_PUBLIC_BASE_PATH=/offer-photos
 OFFER_SETTLE_MINUTES=15
-OFFER_RETAINED_FULL_CYCLES=1
-OFFER_REJECTED_RETENTION_DAYS=3
+OFFER_DIFFERENTIAL_RETENTION_HOURS=48
+OFFER_REJECTED_RETENTION_HOURS=48
 OFFER_UNZIP_BIN=unzip
 ```
 
 `OFFER_STATE_PATH` jest trwałym migawkowym plikiem JSON z ostatnim poprawnym
 stanem. Zawiera znormalizowane rekordy dostawców, agentów NOE, agregaty i metadane
 dostaw. Jest prywatny i zastępowany atomowo. `OFFER_PHOTO_ROOT` także jest
-prywatny; trasa Astro `/offer-photos/<provider>/<delivery-id>/<file>` odczytuje
+prywatny; trasa Astro `/offer-photos/<provider>/current/<hash>` odczytuje
 wyłącznie zdjęcia zapisane tam przez proces przetwarzania.
 
 ## Zasady dostaw i retencji
@@ -58,15 +58,34 @@ wpis XML, korzeń XML oraz znacznik rodzaju dostawy.
   usunięcia/dezaktywacji. Jest ignorowana, dopóki dostawca nie ma pełnej bazy.
 - Nieprawidłowa dostawa jest oznaczana jako odrzucona i nie zmienia ostatniego
   poprawnego stanu.
-- Retencja zachowuje jeden pomyślny cykl dla dostawcy: najnowszy pełny ZIP i
-  wszystkie późniejsze ZIP-y różnicowe. Po opublikowaniu nowszego pełnego stanu
-  poprzedni pełny plik oraz jego różnice są usuwane. Odrzucone ZIP-y są
-  przechowywane przez trzy dni.
+- Retencja zachowuje dokładnie jeden, najnowszy poprawnie opublikowany pełny
+  ZIP dla każdego dostawcy. Poprzedni pełny ZIP jest usuwany dopiero po
+  pomyślnym opublikowaniu nowszego pełnego stanu.
+- Poprawne ZIP-y różnicowe oraz odrzucone ZIP-y są przechowywane przez 48
+  godzin, a następnie usuwane niezależnie od tego, czy dostawca nadesłał kolejny
+  pełny plik. Aplikacja nie potrzebuje ich do obsługi strony: korzysta wyłącznie
+  z opublikowanej migawki JSON.
 
-Zdjęcia są kopiowane bezpośrednio z zaakceptowanych wpisów ZIP do katalogu
-odpowiedniej dostawy w `OFFER_PHOTO_ROOT`; archiwum nie jest rozpakowywane do
-tymczasowego katalogu. Gdy dostawa jest usuwana przez retencję, usuwany jest
-także jej katalog ze zdjęciami.
+Zdjęcia są kopiowane bezpośrednio z zaakceptowanych wpisów ZIP do
+`OFFER_PHOTO_ROOT/<dostawca>/current/`. Nazwa pliku zawiera hash jego treści,
+więc identyczne zdjęcie nie jest przechowywane ponownie. Po publikacji stanu
+proces zostawia tylko pliki wskazywane przez bieżącą migawkę ofert i agentów;
+zdjęcia zastąpionych albo usuniętych ofert są usuwane. Retencja ZIP-ów i
+retencja zdjęć są celowo niezależne.
+
+Nie usuwaj pojedynczych ZIP-ów ani katalogów zdjęć ręcznie. Jeśli trzeba
+zwolnić miejsce po starszym wdrożeniu, uruchom jednorazowo pod blokadą cron:
+
+```bash
+flock -n data/offer-ingestion/ingestion.lock \
+  /opt/alt/alt-nodejs22/root/usr/bin/node --env-file=.env \
+  scripts/ingest-offers.mjs --compact-current-photos
+```
+
+Polecenie najpierw przenosi i sprawdza wszystkie zdjęcia wskazane przez stan,
+potem usuwa dawne katalogi dostaw i uzgadnia metadane ZIP-ów już usuniętych
+ręcznie. Nie uruchamiaj `offers:replay` po wygaśnięciu różnic: replay działa
+wyłącznie wtedy, gdy pełny ZIP i wszystkie późniejsze różnice nadal istnieją.
 
 ## Pierwsza konfiguracja i wdrożenie
 

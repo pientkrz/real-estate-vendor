@@ -32,8 +32,8 @@ export const getOfferRuntimeConfig = (env = process.env) => {
     photoRoot,
     photoPublicBasePath: (env.OFFER_PHOTO_PUBLIC_BASE_PATH || '/offer-photos').replace(/\/$/, ''),
     settleMinutes: asPositiveInteger(env.OFFER_SETTLE_MINUTES, 15),
-    rejectedRetentionDays: asNonNegativeInteger(env.OFFER_REJECTED_RETENTION_DAYS, 3),
-    retainedFullCycles: asPositiveInteger(env.OFFER_RETAINED_FULL_CYCLES, 1),
+    differentialRetentionHours: asNonNegativeInteger(env.OFFER_DIFFERENTIAL_RETENTION_HOURS, 48),
+    rejectedRetentionHours: asNonNegativeInteger(env.OFFER_REJECTED_RETENTION_HOURS, 48),
     unzipBin: env.OFFER_UNZIP_BIN || 'unzip',
     providerDirectories: {
       'otodom-pl': env.OTODOM_DELIVERY_DIR || path.join(deliveryRoot, 'otodom-pl'),

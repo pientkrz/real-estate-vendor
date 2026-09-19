@@ -2,7 +2,7 @@
 
 import process from 'node:process';
 import { getOfferRuntimeConfig, readOfferState } from '../src/server/offerState.js';
-import { bootstrapOtoDomState, processAvailableDeliveries, replayRetainedDeliveries } from '../src/ingestion/offerIngestion.js';
+import { bootstrapOtoDomState, compactCurrentPhotos, processAvailableDeliveries, replayRetainedDeliveries } from '../src/ingestion/offerIngestion.js';
 import { getLogger, registerProcessErrorLogging } from '../src/server/logger.js';
 
 process.env.LOG_PROCESS = 'ingestion';
@@ -44,11 +44,14 @@ try {
   } else if (args[0] === '--replay-retained') {
     const report = await replayRetainedDeliveries({ config, logger });
     process.stdout.write(`replayed=${report.applied.length} skipped=${report.skipped.length} failed=${report.failed.length} published=${report.statePublished}\n`);
+  } else if (args[0] === '--compact-current-photos') {
+    const report = compactCurrentPhotos({ config, logger });
+    process.stdout.write(`migrated=${report.migratedFiles} legacyDirectoriesRemoved=${report.legacyDirectoriesRemoved} reconciledDeliveries=${report.reconciledDeliveries}\n`);
   } else if (args.length === 0) {
     const report = await processAvailableDeliveries({ config, logger });
     process.stdout.write(`applied=${report.applied.length} ignored=${report.ignored.length} rejected=${report.rejected.length} skipped=${report.skipped.length}\n`);
   } else {
-    throw new Error('Usage: ingest-offers.mjs [--status | --bootstrap-otodom <xml path> | --replay-retained]');
+    throw new Error('Usage: ingest-offers.mjs [--status | --bootstrap-otodom <xml path> | --replay-retained | --compact-current-photos]');
   }
 } catch (error) {
   logger.error('ingestion_command_failed', { component: 'ingestion', error });

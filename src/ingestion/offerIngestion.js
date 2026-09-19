@@ -212,12 +212,20 @@ const findZipPhotoEntry = (reference, imageEntries) => {
   return sameBaseName.length === 1 ? sameBaseName[0] : undefined;
 };
 
-const publicPhotoUrl = (config, provider, deliveryId, entry) => (
-  `${config.photoPublicBasePath}/${encodeURIComponent(provider)}/${encodeURIComponent(deliveryId)}/${entry
-    .split('/')
-    .map((part) => encodeURIComponent(part))
-    .join('/')}`
+const currentPhotoRoot = (config, provider) => path.resolve(config.photoRoot, provider, 'current');
+
+const publicPhotoUrl = (config, provider, fileName) => (
+  `${config.photoPublicBasePath}/${encodeURIComponent(provider)}/current/${encodeURIComponent(fileName)}`
 );
+
+const isPathInside = (candidate, root) => candidate === root || candidate.startsWith(`${root}${path.sep}`);
+
+const currentPhotoPath = (config, provider, fileName) => {
+  const root = currentPhotoRoot(config, provider);
+  const candidate = path.resolve(root, fileName);
+  if (!isPathInside(candidate, root)) throw new Error('Unsafe current photo path');
+  return candidate;
+};
 
 const extractZipEntry = (archivePath, entry, targetPath, unzipBin) => new Promise((resolve, reject) => {
   fs.mkdirSync(path.dirname(targetPath), { recursive: true });
@@ -259,7 +267,29 @@ const materialisePhotos = async ({ offers, agents, provider, deliveryId, archive
     .map(safeZipRelativePath)
     .filter((entry) => entry && IMAGE_EXTENSION.test(entry));
   const resolvedEntries = new Set();
+  const storedEntries = new Map();
+  const createdPaths = [];
   const prefix = photoPrefix(provider);
+  const stagingRoot = path.resolve(config.photoRoot, '.staging', `${process.pid}-${deliveryId}-${Date.now()}`);
+
+  const storeEntry = async (entry) => {
+    if (storedEntries.has(entry)) return storedEntries.get(entry);
+    const stagingPath = path.resolve(stagingRoot, `${storedEntries.size}${path.extname(entry).toLowerCase()}`);
+    if (!isPathInside(stagingPath, stagingRoot)) throw new Error('Unsafe photo staging path');
+    await extractZipEntry(archivePath, entry, stagingPath, config.unzipBin);
+    const hash = crypto.createHash('sha256').update(fs.readFileSync(stagingPath)).digest('hex');
+    const fileName = `${hash}${path.extname(entry).toLowerCase()}`;
+    const targetPath = currentPhotoPath(config, provider, fileName);
+    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+    if (fs.existsSync(targetPath)) fs.rmSync(stagingPath, { force: true });
+    else {
+      fs.renameSync(stagingPath, targetPath);
+      createdPaths.push(targetPath);
+    }
+    const url = publicPhotoUrl(config, provider, fileName);
+    storedEntries.set(entry, url);
+    return url;
+  };
 
   const replaceReference = (reference) => {
     const rawReference = String(reference ?? '');
@@ -267,40 +297,47 @@ const materialisePhotos = async ({ offers, agents, provider, deliveryId, archive
     const entry = findZipPhotoEntry(sourceReference, imageEntries);
     if (!entry) return undefined;
     resolvedEntries.add(entry);
-    return publicPhotoUrl(config, provider, deliveryId, entry);
+    return entry;
   };
 
-  for (const offer of offers) {
-    for (const [key, value] of Object.entries(offer.params || {})) {
-      if (!/^zdjecie\d+$/i.test(key)) continue;
-      const resolved = replaceReference(value);
-      if (resolved) offer.params[key] = resolved;
-      else delete offer.params[key];
-    }
-  }
-  for (const agent of agents) {
-    if (!agent?.image) continue;
-    const resolved = replaceReference(agent.image);
-    if (resolved) agent.image = resolved;
-    else delete agent.image;
-  }
-
-  const photoVersionRoot = path.resolve(config.photoRoot, provider, deliveryId);
-  const providerRoot = path.resolve(config.photoRoot, provider);
-  if (!photoVersionRoot.startsWith(`${providerRoot}${path.sep}`)) throw new Error('Unsafe photo extraction path');
-
   try {
-    for (const entry of resolvedEntries) {
-      const targetPath = path.resolve(photoVersionRoot, ...entry.split('/'));
-      if (!targetPath.startsWith(`${photoVersionRoot}${path.sep}`)) throw new Error('Unsafe ZIP photo entry path');
-      await extractZipEntry(archivePath, entry, targetPath, config.unzipBin);
+    for (const offer of offers) {
+      for (const [key, value] of Object.entries(offer.params || {})) {
+        if (!/^zdjecie\d+$/i.test(key)) continue;
+        const resolved = replaceReference(value);
+        if (resolved) offer.params[key] = await storeEntry(resolved);
+        else delete offer.params[key];
+      }
     }
+    for (const agent of agents) {
+      if (!agent?.image) continue;
+      const resolved = replaceReference(agent.image);
+      if (resolved) agent.image = await storeEntry(resolved);
+      else delete agent.image;
+    }
+    return { photoCount: resolvedEntries.size, createdPaths };
   } catch (error) {
-    fs.rmSync(photoVersionRoot, { recursive: true, force: true });
+    createdPaths.forEach((photoPath) => fs.rmSync(photoPath, { force: true }));
     throw error;
+  } finally {
+    fs.rmSync(stagingRoot, { recursive: true, force: true });
   }
+};
 
-  return resolvedEntries.size;
+const copyToCurrentPhotoStore = (config, provider, sourcePath, createdPaths = []) => {
+  const extension = path.extname(sourcePath).toLowerCase();
+  if (!IMAGE_EXTENSION.test(extension)) throw new Error('Unsupported current photo extension');
+  const contents = fs.readFileSync(sourcePath);
+  const fileName = `${crypto.createHash('sha256').update(contents).digest('hex')}${extension}`;
+  const targetPath = currentPhotoPath(config, provider, fileName);
+  if (!fs.existsSync(targetPath)) {
+    const temporaryPath = `${targetPath}.${process.pid}.${Date.now()}.tmp`;
+    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+    fs.writeFileSync(temporaryPath, contents);
+    fs.renameSync(temporaryPath, targetPath);
+    createdPaths.push(targetPath);
+  }
+  return publicPhotoUrl(config, provider, fileName);
 };
 
 const isSettledArchive = (stat, settleMinutes, now) => (
@@ -351,13 +388,6 @@ const safelyUnlink = (filePath, allowedDirectory, logger) => {
   }
 };
 
-const removePhotoVersion = (delivery, config) => {
-  const target = path.resolve(config.photoRoot, delivery.provider, delivery.id);
-  const providerRoot = path.resolve(config.photoRoot, delivery.provider);
-  if (!target.startsWith(`${providerRoot}${path.sep}`)) return;
-  fs.rmSync(target, { recursive: true, force: true });
-};
-
 const pruneDeliveries = (state, config, now, logger) => {
   let changed = false;
   for (const [provider, directory] of Object.entries(config.providerDirectories)) {
@@ -367,31 +397,177 @@ const pruneDeliveries = (state, config, now, logger) => {
       // It must never cause a real full archive to be discarded by retention.
       .filter((delivery) => delivery.status === 'applied' && delivery.kind === 'full' && !delivery.bootstrap)
       .sort((left, right) => Date.parse(right.receivedAt) - Date.parse(left.receivedAt));
-    const keptFullIds = new Set(successfulFull.slice(0, config.retainedFullCycles).map((delivery) => delivery.id));
-    const earliestKeptFull = successfulFull.find((delivery) => keptFullIds.has(delivery.id));
+    const newestFull = successfulFull[0];
 
     for (const delivery of providerDeliveries) {
-      const rejectedExpired = delivery.status === 'rejected'
-        && now.getTime() - Date.parse(delivery.receivedAt) >= config.rejectedRetentionDays * 24 * 60 * 60 * 1000;
-      const obsoleteSuccessful = earliestKeptFull
-        && ['applied', 'ignored'].includes(delivery.status)
-        && Date.parse(delivery.receivedAt) < Date.parse(earliestKeptFull.receivedAt);
-      if (!rejectedExpired && !obsoleteSuccessful) continue;
+      const ageHours = (now.getTime() - Date.parse(delivery.receivedAt)) / (60 * 60 * 1000);
+      const isOldFull = delivery.status === 'applied' && delivery.kind === 'full' && !delivery.bootstrap
+        && newestFull && delivery.id !== newestFull.id;
+      const isExpiredDifferential = ['applied', 'ignored'].includes(delivery.status)
+        && delivery.kind === 'differential'
+        && ageHours >= config.differentialRetentionHours;
+      const isExpiredRejected = delivery.status === 'rejected'
+        && ageHours >= config.rejectedRetentionHours;
+      if (!isOldFull && !isExpiredDifferential && !isExpiredRejected) continue;
+      const reason = isOldFull ? 'superseded-full' : isExpiredDifferential ? 'differential-expired' : 'rejected-expired';
+      const archiveExisted = fs.existsSync(delivery.archivePath);
       if (safelyUnlink(delivery.archivePath, directory, logger)) {
-        removePhotoVersion(delivery, config);
         delivery.purged = true;
         changed = true;
-        logger?.info('delivery_retention_removed', {
+        logger?.info(archiveExisted ? 'delivery_retention_removed' : 'delivery_archive_reconciled', {
           component: 'retention',
           provider,
           deliveryId: delivery.id,
           archiveName: path.basename(delivery.archivePath),
           status: delivery.status,
+          retentionReason: reason,
         });
       }
     }
   }
   return changed;
+};
+
+const referencedCurrentPhotoPaths = (state, config, provider) => {
+  const prefix = `${config.photoPublicBasePath}/${encodeURIComponent(provider)}/current/`;
+  const references = new Set();
+  const visit = (value) => {
+    if (typeof value === 'string' && value.startsWith(prefix)) {
+      try {
+        references.add(currentPhotoPath(config, provider, decodeURIComponent(value.slice(prefix.length))));
+      } catch {
+        // Invalid URLs remain unreachable and are deliberately not retained.
+      }
+    } else if (Array.isArray(value)) value.forEach(visit);
+    else if (value && typeof value === 'object') Object.values(value).forEach(visit);
+  };
+  visit(state);
+  return references;
+};
+
+const walkFiles = (directory) => {
+  if (!fs.existsSync(directory)) return [];
+  return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const entryPath = path.join(directory, entry.name);
+    return entry.isDirectory() ? walkFiles(entryPath) : entry.isFile() ? [entryPath] : [];
+  });
+};
+
+const sweepCurrentPhotos = (state, config, logger) => {
+  const report = { filesRemoved: 0, bytesRemoved: 0 };
+  for (const provider of Object.keys(config.providerDirectories)) {
+    const root = currentPhotoRoot(config, provider);
+    const referenced = referencedCurrentPhotoPaths(state, config, provider);
+    for (const photoPath of walkFiles(root)) {
+      if (referenced.has(photoPath)) continue;
+      try {
+        report.bytesRemoved += fs.statSync(photoPath).size;
+        fs.rmSync(photoPath, { force: true });
+        report.filesRemoved += 1;
+      } catch (error) {
+        logger?.warn('current_photo_sweep_remove_failed', { component: 'photos', provider, error });
+      }
+    }
+    for (const directory of walkFiles(root).map((file) => path.dirname(file)).sort((left, right) => right.length - left.length)) {
+      try { fs.rmdirSync(directory); } catch { /* non-empty directories are expected */ }
+    }
+  }
+  logger?.info('current_photo_sweep_completed', { component: 'photos', ...report });
+  return report;
+};
+
+const migrateLegacyPhotoValue = (value, config, provider, createdPaths) => {
+  if (typeof value !== 'string') return value;
+  const prefix = `${config.photoPublicBasePath}/${encodeURIComponent(provider)}/`;
+  if (!value.startsWith(prefix) || value.startsWith(`${prefix}current/`)) return value;
+  const parts = value.slice(prefix.length).split('/').map((part) => decodeURIComponent(part));
+  if (parts.length < 2 || parts.some((part) => !part || part === '.' || part === '..')) {
+    throw new Error('Invalid legacy photo URL during compaction');
+  }
+  const providerRoot = path.resolve(config.photoRoot, provider);
+  const sourcePath = path.resolve(providerRoot, ...parts);
+  if (!isPathInside(sourcePath, providerRoot) || !fs.existsSync(sourcePath) || !fs.statSync(sourcePath).isFile()) {
+    throw new Error('Legacy photo referenced by state is unavailable');
+  }
+  return copyToCurrentPhotoStore(config, provider, sourcePath, createdPaths);
+};
+
+const migrateLegacyPhotoUrls = (value, config, provider, createdPaths) => {
+  if (Array.isArray(value)) return value.map((item) => migrateLegacyPhotoUrls(item, config, provider, createdPaths));
+  if (value && typeof value === 'object') return Object.fromEntries(
+    Object.entries(value).map(([key, item]) => [key, migrateLegacyPhotoUrls(item, config, provider, createdPaths)]),
+  );
+  return migrateLegacyPhotoValue(value, config, provider, createdPaths);
+};
+
+const removeLegacyPhotoDirectories = (config, provider) => {
+  const providerRoot = path.resolve(config.photoRoot, provider);
+  if (!fs.existsSync(providerRoot)) return { directoriesRemoved: 0, bytesRemoved: 0 };
+  let directoriesRemoved = 0;
+  let bytesRemoved = 0;
+  for (const entry of fs.readdirSync(providerRoot, { withFileTypes: true })) {
+    if (!entry.isDirectory() || entry.name === 'current') continue;
+    const target = path.resolve(providerRoot, entry.name);
+    if (!isPathInside(target, providerRoot)) continue;
+    for (const filePath of walkFiles(target)) bytesRemoved += fs.statSync(filePath).size;
+    fs.rmSync(target, { recursive: true, force: true });
+    directoriesRemoved += 1;
+  }
+  return { directoriesRemoved, bytesRemoved };
+};
+
+/**
+ * One-time migration for a deployment that used delivery-ID photo folders.
+ * It is deliberately explicit: normal cron ingestion never removes legacy
+ * folders until this command has made every active reference content-addressed.
+ */
+export const compactCurrentPhotos = ({ config, now = new Date(), logger = getLogger('ingestion') } = {}) => {
+  const current = readOfferState(config?.statePath);
+  const report = { migratedFiles: 0, legacyDirectoriesRemoved: 0, legacyBytesRemoved: 0, reconciledDeliveries: 0 };
+  if (!current) {
+    logger.warn('photo_compaction_skipped', { component: 'photos', reason: 'missing-state' });
+    return report;
+  }
+
+  const candidate = cloneState(current);
+  const createdPaths = [];
+  try {
+    for (const provider of Object.keys(config.providerDirectories)) {
+      const before = createdPaths.length;
+      const migrated = migrateLegacyPhotoUrls(candidate, config, provider, createdPaths);
+      Object.assign(candidate, migrated);
+      report.migratedFiles += createdPaths.length - before;
+    }
+    for (const provider of Object.keys(config.providerDirectories)) {
+      for (const photoPath of referencedCurrentPhotoPaths(candidate, config, provider)) {
+        if (!fs.existsSync(photoPath)) throw new Error('Current photo verification failed');
+      }
+    }
+  } catch (error) {
+    createdPaths.forEach((photoPath) => fs.rmSync(photoPath, { force: true }));
+    logger.error('photo_compaction_failed', { component: 'photos', error });
+    throw error;
+  }
+
+  for (const delivery of candidate.deliveries) {
+    if (!delivery.purged && delivery.archivePath && !fs.existsSync(delivery.archivePath)) {
+      delivery.purged = true;
+      report.reconciledDeliveries += 1;
+      logger.info('delivery_archive_reconciled', {
+        component: 'retention', provider: delivery.provider, deliveryId: delivery.id, retentionReason: 'archive-already-missing',
+      });
+    }
+  }
+  writeOfferStateAtomic(config.statePath, candidate);
+  sweepCurrentPhotos(candidate, config, logger);
+  for (const provider of Object.keys(config.providerDirectories)) {
+    const removed = removeLegacyPhotoDirectories(config, provider);
+    report.legacyDirectoriesRemoved += removed.directoriesRemoved;
+    report.legacyBytesRemoved += removed.bytesRemoved;
+  }
+  if (pruneDeliveries(candidate, config, now, logger)) writeOfferStateAtomic(config.statePath, candidate);
+  logger.info('photo_compaction_completed', { component: 'photos', ...report });
+  return report;
 };
 
 const readRetainedDelivery = ({ provider, archivePath, deliveryId, expectedKind, config, logger }) => {
@@ -440,13 +616,17 @@ const retainedCycle = (state, provider) => {
       delivery.provider === provider
       && delivery.status === 'applied'
       && !delivery.bootstrap
-      && !delivery.purged
       && ['full', 'differential'].includes(delivery.kind)
       && delivery.archivePath
     ))
     .sort((left, right) => Date.parse(left.receivedAt) - Date.parse(right.receivedAt));
   const fullIndex = deliveries.map((delivery) => delivery.kind).lastIndexOf('full');
-  return fullIndex === -1 ? [] : deliveries.slice(fullIndex);
+  if (fullIndex === -1) return { deliveries: [], reason: 'no-retained-full-cycle' };
+  const cycle = deliveries.slice(fullIndex);
+  const unavailable = cycle.some((delivery) => delivery.purged || !fs.existsSync(delivery.archivePath));
+  return unavailable
+    ? { deliveries: [], reason: 'incomplete-retained-history' }
+    : { deliveries: cycle };
 };
 
 /**
@@ -475,13 +655,14 @@ export const replayRetainedDeliveries = async ({
   });
 
   for (const provider of providers) {
-    const cycle = retainedCycle(current, provider);
+    const retained = retainedCycle(current, provider);
+    const cycle = retained.deliveries;
     if (cycle.length === 0) {
       report.skipped.push(provider);
       logger.warn('location_replay_provider_skipped', {
         component: 'location-replay',
         provider,
-        reason: 'no-retained-full-cycle',
+        reason: retained.reason,
       });
       continue;
     }
@@ -547,6 +728,7 @@ export const replayRetainedDeliveries = async ({
   if (report.applied.length > 0) {
     rebuildStateAggregates(candidate);
     writeOfferStateAtomic(config.statePath, candidate);
+    sweepCurrentPhotos(candidate, config, logger);
     report.statePublished = true;
   }
   logger.info('location_replay_completed', {
@@ -568,6 +750,7 @@ export const processAvailableDeliveries = async ({ config, now = new Date(), log
   const startedAt = Date.now();
   let state = readOfferState(config.statePath) || createEmptyOfferState();
   let changed = false;
+  const unpublishedPhotoPaths = [];
   const report = { applied: [], ignored: [], rejected: [], skipped: [] };
   const candidates = Object.entries(config.providerDirectories)
     .flatMap(([provider, directory]) => getCandidateArchives(provider, directory, config, now))
@@ -661,7 +844,8 @@ export const processAvailableDeliveries = async ({ config, now = new Date(), log
         continue;
       }
 
-      const photoCount = await materialisePhotos({ offers, agents, provider, deliveryId: id, archivePath, entries, config });
+      const photoAssets = await materialisePhotos({ offers, agents, provider, deliveryId: id, archivePath, entries, config });
+      unpublishedPhotoPaths.push(...(photoAssets?.createdPaths || []));
       // Materialising rewrites image paths, therefore the persisted source
       // records must be built afterwards rather than from the pre-extraction
       // validation attempt above.
@@ -676,7 +860,7 @@ export const processAvailableDeliveries = async ({ config, now = new Date(), log
         deliveryKind: kind,
         offerCount: offers.length,
         agentCount: agents.length,
-        photoCount,
+        photoCount: photoAssets?.photoCount || 0,
       });
     } catch (error) {
       addDelivery(state, {
@@ -701,7 +885,17 @@ export const processAvailableDeliveries = async ({ config, now = new Date(), log
 
   let published = false;
   if (changed) {
-    writeOfferStateAtomic(config.statePath, state);
+    try {
+      writeOfferStateAtomic(config.statePath, state);
+    } catch (error) {
+      unpublishedPhotoPaths.forEach((photoPath) => fs.rmSync(photoPath, { force: true }));
+      logger.warn('photo_staging_cleanup_completed', {
+        component: 'photos',
+        reason: 'state-publication-failed',
+        fileCount: unpublishedPhotoPaths.length,
+      });
+      throw error;
+    }
     published = true;
     logger.info('offer_state_published', {
       component: 'ingestion',
@@ -713,6 +907,7 @@ export const processAvailableDeliveries = async ({ config, now = new Date(), log
     writeOfferStateAtomic(config.statePath, state);
     published = true;
   }
+  if (published) sweepCurrentPhotos(state, config, logger);
   logger.info('ingestion_run_completed', {
     component: 'ingestion',
     appliedCount: report.applied.length,
@@ -727,7 +922,6 @@ export const processAvailableDeliveries = async ({ config, now = new Date(), log
 
 const materialiseBootstrapPhotos = ({ offers, xmlPath, config }) => {
   const sourceRoot = path.resolve(path.dirname(xmlPath));
-  const targetRoot = path.resolve(config.photoRoot, 'otodom-pl', 'bootstrap');
   const prefix = photoPrefix('otodom-pl');
 
   for (const offer of offers) {
@@ -739,17 +933,13 @@ const materialiseBootstrapPhotos = ({ offers, xmlPath, config }) => {
         continue;
       }
       const sourcePath = path.resolve(sourceRoot, ...relativePath.split('/'));
-      const targetPath = path.resolve(targetRoot, ...relativePath.split('/'));
       if (!sourcePath.startsWith(`${sourceRoot}${path.sep}`)
-        || !targetPath.startsWith(`${targetRoot}${path.sep}`)
         || !fs.existsSync(sourcePath)
         || !fs.statSync(sourcePath).isFile()) {
         delete offer.params[key];
         continue;
       }
-      fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-      fs.copyFileSync(sourcePath, targetPath);
-      offer.params[key] = publicPhotoUrl(config, 'otodom-pl', 'bootstrap', relativePath);
+      offer.params[key] = copyToCurrentPhotoStore(config, 'otodom-pl', sourcePath);
     }
   }
 };

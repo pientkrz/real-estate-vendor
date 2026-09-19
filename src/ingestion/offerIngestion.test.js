@@ -3,7 +3,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createEmptyOfferState, readOfferState, writeOfferStateAtomic } from '../server/offerState.js';
-import { __private__, applyDeliveryToState, replayRetainedDeliveries } from './offerIngestion.js';
+import { __private__, applyDeliveryToState, compactCurrentPhotos, replayRetainedDeliveries } from './offerIngestion.js';
 
 const temporaryDirectories = [];
 const temporaryDirectory = () => {
@@ -100,7 +100,7 @@ describe('applyDeliveryToState', () => {
 });
 
 describe('delivery retention', () => {
-  it('keeps one full cycle and removes the preceding full, differential, and expired rejection', () => {
+  it('keeps only the newest full and expires differential and rejected ZIPs after 48 hours', () => {
     const root = temporaryDirectory();
     const inbox = path.join(root, 'otodom-pl');
     const photoRoot = path.join(root, 'photos');
@@ -122,8 +122,8 @@ describe('delivery retention', () => {
     expect(__private__.pruneDeliveries(state, {
       providerDirectories: { 'otodom-pl': inbox },
       photoRoot,
-      retainedFullCycles: 1,
-      rejectedRetentionDays: 3,
+      differentialRetentionHours: 48,
+      rejectedRetentionHours: 48,
     }, new Date('2026-08-10T00:00:00.000Z'))).toBe(true);
 
     expect(fs.existsSync(oldFull)).toBe(false);
@@ -149,11 +149,31 @@ describe('delivery retention', () => {
     __private__.pruneDeliveries(state, {
       providerDirectories: { 'otodom-pl': inbox },
       photoRoot,
-      retainedFullCycles: 1,
-      rejectedRetentionDays: 3,
+      differentialRetentionHours: 48,
+      rejectedRetentionHours: 48,
     }, new Date('2026-08-21T13:00:00.000Z'));
 
     expect(fs.existsSync(actualFull)).toBe(true);
+  });
+
+  it('does not expire a differential before the configured 48-hour window', () => {
+    const root = temporaryDirectory();
+    const inbox = path.join(root, 'otodom-pl');
+    const differential = path.join(inbox, 'recent-delta.zip');
+    fs.mkdirSync(inbox, { recursive: true });
+    fs.writeFileSync(differential, 'zip');
+    const state = createEmptyOfferState();
+    state.deliveries = [{
+      id: 'recent-delta', provider: 'otodom-pl', archivePath: differential,
+      receivedAt: '2026-08-21T13:00:00.000Z', kind: 'differential', status: 'applied',
+    }];
+
+    expect(__private__.pruneDeliveries(state, {
+      providerDirectories: { 'otodom-pl': inbox },
+      differentialRetentionHours: 48,
+      rejectedRetentionHours: 48,
+    }, new Date('2026-08-23T12:59:59.000Z'))).toBe(false);
+    expect(fs.existsSync(differential)).toBe(true);
   });
 });
 
@@ -178,6 +198,8 @@ describe('retained delivery replay', () => {
       { id: 'oto-full', provider: 'otodom-pl', archivePath: path.join(root, 'otodom-full.zip'), receivedAt: '2026-08-20T00:00:00.000Z', kind: 'full', status: 'applied' },
       { id: 'oto-delta', provider: 'otodom-pl', archivePath: path.join(root, 'otodom-delta.zip'), receivedAt: '2026-08-20T01:00:00.000Z', kind: 'differential', status: 'applied' },
     ];
+    fs.writeFileSync(state.deliveries[0].archivePath, 'zip');
+    fs.writeFileSync(state.deliveries[1].archivePath, 'zip');
     writeOfferStateAtomic(config.statePath, state);
     const reader = vi.fn(async ({ archivePath }) => {
       const isDelta = archivePath.endsWith('otodom-delta.zip');
@@ -222,7 +244,39 @@ describe('retained delivery replay', () => {
       materialise: async () => 0,
     });
 
-    expect(report).toMatchObject({ applied: [], failed: ['otodom-pl'], statePublished: false });
+    expect(report).toMatchObject({ applied: [], skipped: ['otodom-pl'], failed: [], statePublished: false });
     expect(readOfferState(config.statePath)).toEqual(state);
+  });
+});
+
+describe('current photo compaction', () => {
+  it('migrates referenced legacy photos and removes delivery folders without changing active state', () => {
+    const root = temporaryDirectory();
+    const config = {
+      statePath: path.join(root, 'offers-state.json'),
+      photoRoot: path.join(root, 'photos'),
+      photoPublicBasePath: '/offer-photos',
+      providerDirectories: { 'otodom-pl': path.join(root, 'otodom-pl') },
+      differentialRetentionHours: 48,
+      rejectedRetentionHours: 48,
+    };
+    const legacyDirectory = path.join(config.photoRoot, 'otodom-pl', 'delivery-one');
+    fs.mkdirSync(legacyDirectory, { recursive: true });
+    fs.writeFileSync(path.join(legacyDirectory, 'home.jpg'), 'photo-bytes');
+    const state = createEmptyOfferState();
+    state.providerStates['otodom-pl'] = {
+      hasFullBaseline: true,
+      records: { one: { ...offer('otodom-pl', 'one'), params: { zdjecie1: '/offer-photos/otodom-pl/delivery-one/home.jpg' } } },
+    };
+    writeOfferStateAtomic(config.statePath, state);
+
+    const report = compactCurrentPhotos({ config, logger: { info: vi.fn(), warn: vi.fn(), error: vi.fn() } });
+    const compacted = readOfferState(config.statePath);
+    const imageUrl = compacted.providerStates['otodom-pl'].records.one.params.zdjecie1;
+
+    expect(report.legacyDirectoriesRemoved).toBe(1);
+    expect(imageUrl).toMatch(/^\/offer-photos\/otodom-pl\/current\/[a-f0-9]{64}\.jpg$/);
+    expect(fs.existsSync(path.join(config.photoRoot, 'otodom-pl', 'delivery-one'))).toBe(false);
+    expect(fs.existsSync(path.join(config.photoRoot, 'otodom-pl', 'current', path.basename(imageUrl)))).toBe(true);
   });
 });
