@@ -4,6 +4,8 @@ import { formatBlogCategories } from '../utils/blogCategories';
 
 const RelatedCarousel = ({ posts, currentPostId }) => {
   const scrollRef = useRef(null);
+  const base = import.meta.env.BASE_URL;
+  const placeholder = `${base}assets/placeholder.svg`;
 
   // Filter out the current post and sort by date (though posts passed should already be sorted)
   const filteredPosts = posts
@@ -62,9 +64,21 @@ const RelatedCarousel = ({ posts, currentPostId }) => {
               className={`min-w-[300px] md:min-w-[400px] group snap-start block ${index % 2 === 1 ? 'mt-12' : ''}`}
             >
               <div className="relative aspect-square overflow-hidden mb-6 bg-obsidian/5">
-                <img 
-                  src={post.data.thumbnail || "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=800"} 
+                <img
+                  src={post.data.thumbnail || placeholder}
                   alt={post.data.title}
+                  width="1200"
+                  height="1200"
+                  loading={index === 0 ? 'eager' : 'lazy'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
+                  decoding="async"
+                  sizes="(min-width: 768px) 400px, 300px"
+                  onError={(event) => {
+                    const image = event.currentTarget;
+                    if (image.dataset.fallbackApplied === 'true') return;
+                    image.dataset.fallbackApplied = 'true';
+                    image.src = placeholder;
+                  }}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter grayscale hover:grayscale-0"
                 />
                 <div className="absolute top-6 right-6 bg-bone/90 backdrop-blur-sm px-4 py-2">

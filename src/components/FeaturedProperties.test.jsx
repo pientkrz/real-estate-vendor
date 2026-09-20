@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import FeaturedProperties from './FeaturedProperties';
 
@@ -41,5 +41,39 @@ describe('FeaturedProperties — metryki karty oferty', () => {
 
     expect(screen.getByText('Sea view')).toBeInTheDocument();
     expect(screen.getByText('Private pool')).toBeInTheDocument();
+  });
+
+  it('prioritizes only the first card image and defers the rest', () => {
+    render(
+      <FeaturedProperties
+        properties={[
+          createProperty({ id: 'first', zdjecie1: '/first.jpg' }),
+          createProperty({ id: 'second', zdjecie1: '/second.jpg' }),
+        ]}
+      />,
+    );
+
+    const images = screen.getAllByRole('img');
+    expect(images[0]).toHaveAttribute('loading', 'eager');
+    expect(images[0]).toHaveAttribute('fetchpriority', 'high');
+    expect(images[1]).toHaveAttribute('loading', 'lazy');
+    expect(images[1]).toHaveAttribute('fetchpriority', 'auto');
+    images.forEach((image) => {
+      expect(image).toHaveAttribute('decoding', 'async');
+      expect(image).toHaveAttribute('sizes', '(min-width: 1024px) 31vw, (min-width: 768px) 45vw, 100vw');
+      expect(image).toHaveAttribute('width', '1200');
+      expect(image).toHaveAttribute('height', '750');
+    });
+  });
+
+  it('uses the local placeholder when a card has no photo or the photo fails', () => {
+    render(<FeaturedProperties properties={[createProperty({ zdjecie1: undefined })]} />);
+
+    const image = screen.getByRole('img');
+    expect(image).toHaveAttribute('src', '/assets/placeholder.svg');
+
+    fireEvent.error(image);
+    expect(image).toHaveAttribute('src', '/assets/placeholder.svg');
+    expect(image).toHaveAttribute('data-fallback-applied', 'true');
   });
 });

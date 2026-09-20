@@ -47,6 +47,6 @@ Poniższe zadania wynikają z przeglądu strony głównej, widoku oferty, bloga 
    - Problem: komunikat o braku ofert nie zawiera bezpośredniej akcji naprawczej.
    - Rekomendacja: dodać w stanie pustym przycisk „Wyczyść filtry” oraz krótką sugestię rozszerzenia kryteriów.
 
-9. **P2 — Brak optymalizacji ładowania zdjęć kart**
+9.✅ ~~**P2 — Brak optymalizacji ładowania zdjęć kart**~~
    - Problem: obrazy kart są kluczowe dla decyzji użytkownika, ale brak wyraźnego stanu ładowania i strategii leniwego ładowania.
-   - Rekomendacja: dodać `loading="lazy"`, wymiary/aspekt obrazu oraz skeleton lub bezpieczny placeholder dla brakującego zdjęcia.
+   - Wykonano: dodano priorytetowe ładowanie pierwszego zdjęcia, lazy loading kolejnych kart, `decoding="async"`, responsywne `sizes`, wymiary obrazów i bezpieczny lokalny placeholder z obsługą błędów.

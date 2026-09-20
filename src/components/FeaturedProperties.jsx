@@ -18,16 +18,33 @@ const PropertyMetric = ({ icon, children }) => (
   </span>
 );
 
-const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths, area, price, image, status, photoTags }) => {
+const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths, area, price, image, status, photoTags, priority = false }) => {
   const base = import.meta.env.BASE_URL;
+  const placeholder = `${base}assets/placeholder.svg`;
   const loc = [city, region, country].filter(Boolean).join(', ');
+  const imageSource = image || placeholder;
+
+  const handleImageError = (event) => {
+    const element = event.currentTarget;
+    if (element.dataset.fallbackApplied === 'true') return;
+    element.dataset.fallbackApplied = 'true';
+    element.src = placeholder;
+    element.removeAttribute('srcset');
+  };
 
   return (
     <a href={`${base}property/${id}`} className="group block cursor-pointer">
       <div className="relative overflow-hidden mb-4 aspect-[4/5] lg:aspect-[5/3] rounded-sm">
         <img
           alt={title}
-          src={image}
+          src={imageSource}
+          width="1200"
+          height="750"
+          loading={priority ? 'eager' : 'lazy'}
+          fetchPriority={priority ? 'high' : 'auto'}
+          decoding="async"
+          sizes="(min-width: 1024px) 31vw, (min-width: 768px) 45vw, 100vw"
+          onError={handleImageError}
           className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700"
         />
         <div className="absolute top-4 left-4 right-4 flex flex-wrap items-start gap-2">
@@ -108,6 +125,7 @@ const FeaturedProperties = ({
                 displayCurrency,
               )}
               image={prop.params?.zdjecie1}
+              priority={index === 0}
               status={prop.typ === 'sprzedaz' ? 'Na sprzedaż' : 'Wynajem'}
               photoTags={getPhotoTags(prop.params?.opis_ang)}
             />
