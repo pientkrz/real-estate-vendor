@@ -116,6 +116,13 @@ Na maszynie deweloperskiej, w katalogu projektu:
 pnpm build
 ```
 
+Przed buildem ustaw niezmienny identyfikator wydania, aby reporter przeglądarkowy
+oznaczał błędy właściwą wersją, np. `PUBLIC_APP_RELEASE=$(git rev-parse --short HEAD)`.
+W prywatnym `.env` VPS ustaw równolegle `OTEL_SERVICE_NAME`,
+`OTEL_SERVICE_VERSION`, `OTEL_DEPLOYMENT_ENVIRONMENT=test` i
+`LOG_RETENTION_DAYS=30`; szczegóły oraz zapytania `jq` opisuje
+[instrukcja logowania](instrukcja-logowania.md).
+
 Produkuje `dist/server/` (kod SSR) i `dist/client/` (statyczne assety). Konfiguracja dostaw ofert na VPS jest odczytywana przez Node w czasie działania z prywatnego `.env` przekazanego przez `--env-file`. Należy odróżnić ją od ewentualnych zmiennych `import.meta.env.*`, które Vite zapisuje na stałe podczas kompilacji.
 
 Zalecane: przed wysyłką na serwer uruchom build samodzielnie lokalnie i sprawdź podstawowe trasy:
@@ -243,7 +250,8 @@ plink ... -batch "jq -c 'select(.level == \"error\")' apps/<nazwa-aplikacji>/log
 
 - **`scripts/vps/start.sh`** — idempotentny: uruchamia serwer tylko jeśli nic jeszcze nie nasłuchuje na jego porcie (sprawdza przez `curl`). Bezpieczny do wielokrotnego uruchomienia.
 - **`scripts/vps/ingest-offers.sh`** — uruchamia krótkie przetwarzanie dostaw FTP, z blokadą `flock`.
-- **`scripts/vps/setup-cron.sh`** — instaluje wpis `@reboot` dla aplikacji oraz wpis `*/30` dla dostaw ofert. Idempotentny — zastępuje wyłącznie wcześniejsze wpisy tej aplikacji, bez dublowania.
+- **`scripts/vps/setup-cron.sh`** — instaluje wpis `@reboot` dla aplikacji, wpis `*/30` dla dostaw ofert oraz codzienny cleanup logów o 03:17. Jest idempotentny — zastępuje wyłącznie wcześniejsze wpisy tej aplikacji, bez dublowania.
+- **`scripts/vps/prune-logs.mjs`** — usuwa wyłącznie wygasłe dzienne pliki JSONL należące do aplikacji, zgodnie z `LOG_RETENTION_DAYS`.
 - **`scripts/vps/run-astro.mjs`** i **`log-process-event.mjs`** — uruchamiają SSR przez rejestrację błędów procesu i zapisują zdarzenia supervisor do JSONL; nie uruchamiaj ich ręcznie poza `start.sh`.
 
 Wdrożenie (raz, po przesłaniu skryptów na serwer obok aplikacji):

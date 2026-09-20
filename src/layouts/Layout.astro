@@ -10,6 +10,8 @@ interface Props {
 
 const { title, description = "Global S Home - Premium Real Estate", lockViewport = false } = Astro.props;
 const requestId = Astro.locals.requestId ?? '';
+const traceparent = Astro.locals.traceContext?.traceparent ?? '';
+const appRelease = import.meta.env.PUBLIC_APP_RELEASE || 'unknown';
 ---
 
 <!doctype html>
@@ -20,6 +22,7 @@ const requestId = Astro.locals.requestId ?? '';
 		<link rel="icon" type="image/svg+xml" href={`${import.meta.env.BASE_URL}favicon.svg`} />
 		<meta name="generator" content={Astro.generator} />
 		{requestId && <meta name="global-s-home-request-id" content={requestId} />}
+		{traceparent && <meta name="global-s-home-traceparent" content={traceparent} />}
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		
@@ -29,21 +32,55 @@ const requestId = Astro.locals.requestId ?? '';
 	<body class={`bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container ${lockViewport ? 'overflow-hidden' : 'min-h-screen'}`}>
 		<slot />
 			<CookieConsent client:only="react" />
-		<script is:inline define:vars={{ requestId }}>
+		<script is:inline define:vars={{ requestId, traceparent, appRelease }}>
 			(() => {
 				let reportCount = 0;
 				const MAX_REPORTS = 3;
-				const report = (kind, value) => {
+				const MAX_MESSAGE_LENGTH = 500;
+				const MAX_STACK_LENGTH = 2000;
+				const EMAIL_RE = /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi;
+				const PHONE_RE = /(?:\+?\d[\d\s().-]{7,}\d)/g;
+				const TRACEPARENT_RE = /^00-([0-9a-f]{32})-([0-9a-f]{16})-([0-9a-f]{2})$/;
+				const randomHex = (bytes) => {
+					const values = new Uint8Array(bytes);
+					crypto.getRandomValues(values);
+					return [...values].map((value) => value.toString(16).padStart(2, '0')).join('');
+				};
+				const safeSource = (value) => {
+					if (typeof value !== 'string' || !value) return undefined;
+					try {
+						const url = new URL(value, window.location.origin);
+						return url.pathname.startsWith('/') ? url.pathname.slice(0, 300) : undefined;
+					} catch {
+						return undefined;
+					}
+				};
+				const redactText = (value, maximumLength) => String(value || '')
+					.replace(EMAIL_RE, '[REDACTED_EMAIL]')
+					.replace(PHONE_RE, '[REDACTED_PHONE]')
+					.replace(/https?:\/\/[^\s)]+/gi, (url) => safeSource(url) || '[REDACTED_URL]')
+					.replace(/(?:[A-Za-z]:[\\/]|\/home\/|file:\/\/)[^\s\n)]+/g, '[REDACTED_PATH]')
+					.slice(0, maximumLength);
+				const createChildTraceparent = () => {
+					const match = TRACEPARENT_RE.exec(traceparent || '');
+					if (!match) return undefined;
+					return `00-${match[1]}-${randomHex(8)}-${match[3]}`;
+				};
+				const report = (kind, value, details = {}) => {
 					if (reportCount >= MAX_REPORTS) return;
 					reportCount += 1;
 					const error = value instanceof Error ? value : new Error(String(value || 'Unknown client error'));
 					const payload = {
 						kind,
-						requestId: requestId || undefined,
+						documentRequestId: requestId || undefined,
+						traceparent: createChildTraceparent(),
+						release: String(appRelease || 'unknown').slice(0, 128),
+						component: String(details.component || 'browser').slice(0, 120),
+						operation: String(details.operation || `window.${kind}`).slice(0, 120),
+						source: safeSource(details.source),
 						errorName: String(error.name || 'Error').slice(0, 120),
-						// Do not transmit browser error text or stacks: either may contain
-						// a value the visitor supplied to an interactive component.
-						message: 'browser-runtime-error',
+						message: redactText(error.message || 'browser-runtime-error', MAX_MESSAGE_LENGTH) || 'browser-runtime-error',
+						stack: redactText(error.stack, MAX_STACK_LENGTH) || undefined,
 						route: window.location.pathname,
 					};
 					const data = JSON.stringify(payload);
@@ -53,14 +90,19 @@ const requestId = Astro.locals.requestId ?? '';
 					}
 					void fetch('/api/client-errors', {
 						method: 'POST',
-						headers: { 'Content-Type': 'application/json' },
+						headers: { 'Content-Type': 'application/json', ...(payload.traceparent ? { traceparent: payload.traceparent } : {}) },
 						body: data,
 						keepalive: true,
 					}).catch(() => {});
 				};
 				window.__globalSHomeReportClientError = report;
-				window.addEventListener('error', (event) => report('error', event.error || event.message), true);
-				window.addEventListener('unhandledrejection', (event) => report('unhandledrejection', event.reason));
+				window.__globalSHomeCreateChildTraceparent = createChildTraceparent;
+				window.addEventListener('error', (event) => report('error', event.error || event.message, {
+					component: 'browser', operation: 'window.error', source: event.filename,
+				}), true);
+				window.addEventListener('unhandledrejection', (event) => report('unhandledrejection', event.reason, {
+					component: 'browser', operation: 'window.unhandledrejection',
+				}));
 			})();
 		</script>
 	</body>

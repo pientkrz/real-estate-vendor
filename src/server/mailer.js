@@ -128,7 +128,7 @@ function buildConfirmationBody({ name, propertyTitle, propertyUrl, isTest }) {
 }
 
 export async function sendContactEmail(fields) {
-  const { name, email, propertyTitle, propertyUrl, agentEmails = [], isTest } = fields;
+  const { name, email, propertyTitle, propertyUrl, agentEmails = [], isTest, telemetry = {} } = fields;
   const transporter = await getTransporter();
   const from = process.env.MAIL_FROM || process.env.SMTP_USER;
   const to = resolveBusinessRecipients(agentEmails);
@@ -154,7 +154,7 @@ export async function sendContactEmail(fields) {
     .filter(Boolean)
     .length;
   if (previewCount) {
-    logger.info('mailer_test_preview_created', { component: 'mailer', previewCount });
+    logger.info('mailer_test_preview_created', { component: 'mailer', ...telemetry, previewCount });
   }
 
   return { businessInfo, confirmationInfo };

@@ -25,8 +25,19 @@ describe('structured logger', () => {
 
     const [file] = fs.readdirSync(directory).filter((entry) => entry.endsWith('.jsonl'));
     const [entry] = fs.readFileSync(path.join(directory, file), 'utf8').trim().split('\n').map(JSON.parse);
-    expect(entry).toMatchObject({ process: 'astro', event: 'process_started', component: 'runtime', port: 54322 });
+    expect(entry).toMatchObject({
+      process: 'astro', event: 'process_started', component: 'runtime', port: 54322,
+      severityText: 'INFO', severityNumber: 9, body: 'process_started',
+      resource: expect.objectContaining({
+        'service.name': 'global-s-home',
+        'service.version': 'unknown',
+        'deployment.environment.name': 'development',
+        'process.component': 'astro',
+      }),
+      attributes: expect.objectContaining({ 'event.name': 'process_started', component: 'runtime', port: 54322 }),
+    });
     expect(entry.timestamp).toBeTruthy();
+    expect(entry.observedTimestamp).toBeTruthy();
   });
 
   it('redacts contact details, secrets and server paths before writing', async () => {
@@ -50,11 +61,25 @@ describe('structured logger', () => {
   });
 
   it('uses a 30-day retention default and accepts an explicit valid level', () => {
-    expect(getLoggingConfig({ LOG_RETENTION_DAYS: '30', LOG_LEVEL: 'warn' }, 'C:/app')).toMatchObject({
+    expect(getLoggingConfig({
+      LOG_RETENTION_DAYS: '30', LOG_LEVEL: 'warn', OTEL_SERVICE_NAME: 'global-s-home-test',
+      OTEL_SERVICE_VERSION: 'release-1', OTEL_DEPLOYMENT_ENVIRONMENT: 'test',
+    }, 'C:/app')).toMatchObject({
       retentionDays: 30,
       level: 'warn',
       directory: path.resolve('C:/app', 'logs'),
+      serviceName: 'global-s-home-test',
+      serviceVersion: 'release-1',
+      deploymentEnvironment: 'test',
     });
     expect(__private__.sanitiseContext({ message: 'private' })).toEqual({ message: '[REDACTED]' });
+  });
+
+  it('drops entries safely after a transport error', async () => {
+    const directory = temporaryDirectory();
+    const logger = createStructuredLogger('astro', { directory, retentionDays: 30, level: 'info' });
+    logger.transport.emit('error', new Error('disk unavailable'));
+    expect(() => logger.error('transport_recovery_test', { component: 'runtime' })).not.toThrow();
+    await logger.close();
   });
 });

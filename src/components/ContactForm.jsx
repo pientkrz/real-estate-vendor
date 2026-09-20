@@ -35,9 +35,10 @@ const ContactForm = () => {
 
         setStatus('submitting');
         try {
+            const traceparent = window.__globalSHomeCreateChildTraceparent?.();
             const res = await fetch('/api/contact', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', ...(traceparent ? { traceparent } : {}) },
                 body: JSON.stringify({
                     ...formData,
                     source: 'contact',

@@ -2,10 +2,9 @@
 
 ## Cel i zakres
 
-Aplikacja zapisuje ustrukturyzowane logi JSONL lokalnie na VPS. Planowane
-rozszerzenie nada rekordom strukturę zgodną z modelem logów OpenTelemetry,
-dzięki czemu będą mogły zostać później przekazane do OpenTelemetry Collector/OTLP
-bez zmiany nazw zdarzeń. Nie korzysta z
+Aplikacja zapisuje ustrukturyzowane logi JSONL lokalnie na VPS w formacie
+zgodnym z modelem logów OpenTelemetry. Rekordy mogą zostać później przekazane
+do OpenTelemetry Collector/OTLP bez zmiany nazw zdarzeń. Aplikacja nie korzysta z
 zewnętrznego hostingu, Sentry ani automatycznych alertów. Każda linia jest
 samodzielnym dokumentem JSON, dlatego można ją bezpiecznie przeszukiwać przez
 `jq` bez parsowania tekstu konsoli.
@@ -37,6 +36,10 @@ chmod 700 /home/ixtnzfseqk/apps/new-global-s-home/logs
 ```
 
 Winston tworzy pliki dzienne i automatycznie usuwa pliki starsze niż 30 dni.
+Dodatkowy cron uruchamia codziennie o 03:17 bezpieczne czyszczenie wszystkich
+komponentów aplikacji, także gdy dany komponent nie wygenerował nowych logów.
+Usuwane są wyłącznie pliki `astro|ingestion|supervisor-YYYY-MM-DD.jsonl` starsze
+niż `LOG_RETENTION_DAYS`; inne pliki w katalogu pozostają nietknięte.
 Nie należy ręcznie usuwać pliku `.astro-rotation-audit.json` ani analogicznych
 plików audytu — zawierają jedynie metadane rotacji.
 
@@ -48,9 +51,8 @@ plików audytu — zawierają jedynie metadane rotacji.
 | `ingestion-YYYY-MM-DD.jsonl` | ZIP/XML, walidacja, parsowanie, zdjęcia, publikacja stanu i retencja dostaw |
 | `supervisor-YYYY-MM-DD.jsonl` | Start Astro, cron, blokada `flock` oraz błędy wrapperów VPS |
 
-Każdy obecny wpis ma między innymi `timestamp`, `level`, `process`, `component`,
-`event`, `pid` i bezpieczny kontekst. W ramach planowanego rozszerzenia nowe
-rekordy powinny dodatkowo mieć następujące pola zgodne z OpenTelemetry:
+Każdy wpis zawiera zachowane pola operacyjne (`level`, `process`, `component`,
+`event`, `pid`) oraz następujące pola zgodne z OpenTelemetry:
 
 | Pole | Znaczenie |
 | --- | --- |
@@ -73,10 +75,10 @@ Najważniejsze zdarzenia ingestii to `delivery_validation_started`,
 `process_uncaught_exception`, `contact_email_failed` i
 `currency_refresh_failed`.
 
-Po wdrożeniu rozszerzenia reporter przeglądarkowy będzie zapisywał
-`client_runtime_error`. Rekord będzie zawierał typ
+Reporter przeglądarkowy zapisuje `client_runtime_error`. Rekord zawiera typ
 błędu, trasę bez parametrów, release, komponent/operację, ścieżkę źródłową
-bez hosta, ograniczony komunikat i stack trace po redakcji oraz `traceId`.
+bez hosta, ograniczony komunikat i stack trace po redakcji, fingerprint oraz
+`traceId`/`spanId`.
 Raportowanie jest ograniczone do trzech zdarzeń na dokument, a endpoint do
 dziesięciu zgłoszeń na klienta w ciągu minuty.
 
@@ -88,6 +90,12 @@ jq -c 'select(.process == "ingestion")' logs/ingestion-$(date -u +%F).jsonl | ta
 
 # Wszystkie błędy bieżącego dnia
 jq -c 'select(.level == "error")' logs/*-$(date -u +%F).jsonl
+
+# Wszystkie wpisy jednego śladu, niezależnie od komponentu
+jq -c 'select(.traceId == "TRACE_ID")' logs/*-*.jsonl
+
+# Wyszukanie po polach kanonicznego modelu OTel
+jq -c 'select(.attributes["event.name"] == "client_runtime_error" and .attributes.component == "PropertyMap")' logs/astro-*.jsonl
 
 # Odrzucone dostawy konkretnego dostawcy
 jq -c 'select(.event == "delivery_rejected" and .provider == "otodom-pl")' logs/ingestion-*.jsonl
@@ -105,18 +113,18 @@ logów aplikacyjnych.
 
 Logger redaguje dane kontaktowe, hasła, tokeny, nagłówki, payloady HTTP,
 adresy IP i pełne ścieżki serwera. Nie przekazuj danych formularza ani obiektów
-żądań do loggera. Docelowo błędy przeglądarki będą ograniczone wielkością i
-liczbą zgłoszeń; tekst błędu oraz ograniczony stack trace będą zapisywane
-wyłącznie po tej samej redakcji. Nie zapisujemy DOM, cookies, storage,
-user-agenta ani pełnych payloadów.
+żądań do loggera. Błędy przeglądarki są redagowane przed wysłaniem i ponownie
+przed zapisem; są ograniczone wielkością i liczbą zgłoszeń. Nie zapisujemy DOM,
+cookies, storage, user-agenta ani pełnych payloadów.
 
 ## Zgodność z OpenTelemetry
 
 Lokalny JSONL jest formatem operacyjnym, ale nazwy pól i kontekst są utrzymywane
 w sposób zgodny z modelem logów OpenTelemetry. Obecny zakres nie uruchamia
 Collectora ani wysyłki poza VPS. Gdy będzie potrzebna centralizacja, należy
-dodać transport/adaptor mapujący `body`, `severity*`, `resource` i `attributes`
-do OTLP oraz zachować redakcję przed eksportem. Do korelacji używaj:
+dodać transport/adaptor mapujący `timestamp`, `observedTimestamp`, `body`,
+`severity*`, `resource`, `attributes` i kontekst śledzenia do OTLP oraz zachować
+redakcję przed eksportem. Do korelacji używaj:
 
 ```bash
 # Jeden ślad przez Astro, API i reporter klienta

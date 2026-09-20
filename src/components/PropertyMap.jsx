@@ -73,7 +73,10 @@ const PropertyMap = ({ location = {}, city = "", params = {} }) => {
             }, 500);
 
         } catch (error) {
-          window.__globalSHomeReportClientError?.('error', error);
+          window.__globalSHomeReportClientError?.('error', error, {
+            component: 'PropertyMap',
+            operation: 'leaflet.initialization',
+          });
         }
 
         return () => {

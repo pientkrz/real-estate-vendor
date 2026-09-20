@@ -8,7 +8,9 @@ const DEFAULT_LEVEL = 'info';
 const MAX_TEXT_LENGTH = 1_000;
 const MAX_STACK_LENGTH = 4_000;
 const INITIAL_WRITE_GRACE_PERIOD_MS = 100;
+const MAX_QUEUED_ENTRIES = 100;
 const LOGGER_LEVELS = new Set(['error', 'warn', 'info', 'debug']);
+const OTEL_SEVERITY = Object.freeze({ debug: 5, info: 9, warn: 13, error: 17 });
 
 const SENSITIVE_CONTEXT_KEYS = new Set([
   'name',
@@ -44,6 +46,11 @@ const noopLogger = Object.freeze({
 const positiveInteger = (value, fallback) => {
   const parsed = Number.parseInt(value, 10);
   return Number.isSafeInteger(parsed) && parsed > 0 ? parsed : fallback;
+};
+
+const nonEmptyText = (value, fallback) => {
+  const text = String(value ?? '').trim();
+  return text ? sanitiseText(text, 160) : fallback;
 };
 
 const sanitiseText = (value, maximumLength = MAX_TEXT_LENGTH) => String(value ?? '')
@@ -97,6 +104,9 @@ export const getLoggingConfig = (env = process.env, cwd = process.cwd()) => {
     directory,
     level,
     retentionDays: positiveInteger(env.LOG_RETENTION_DAYS, DEFAULT_RETENTION_DAYS),
+    serviceName: nonEmptyText(env.OTEL_SERVICE_NAME, 'global-s-home'),
+    serviceVersion: nonEmptyText(env.OTEL_SERVICE_VERSION || env.PUBLIC_APP_RELEASE, 'unknown'),
+    deploymentEnvironment: nonEmptyText(env.OTEL_DEPLOYMENT_ENVIRONMENT, 'development'),
   };
 };
 
@@ -122,51 +132,84 @@ export const createStructuredLogger = (component, options = {}) => {
   };
   delete config.env;
   delete config.cwd;
+  const injectedTransport = config.transport;
+  delete config.transport;
   fs.mkdirSync(config.directory, { recursive: true });
 
-  const transport = createTransport({ component, ...config });
+  const transport = injectedTransport || createTransport({ component, ...config });
   const logger = winston.createLogger({
     level: config.level,
-    defaultMeta: {
-      application: 'new-global-s-home',
-      process: component,
-      pid: process.pid,
-    },
-    format: winston.format.combine(
-      winston.format.timestamp(),
-      winston.format.json(),
-    ),
+    format: winston.format.json(),
     transports: [transport],
   });
 
   let closed;
   let transportReady = false;
+  let transportFailed = false;
   const queuedEntries = [];
   let resolveTransportReady;
   const ready = new Promise((resolve) => { resolveTransportReady = resolve; });
   const markTransportReady = () => {
     if (transportReady) return;
     transportReady = true;
-    queuedEntries.splice(0).forEach((entry) => logger.log(entry));
+    if (!transportFailed) queuedEntries.splice(0).forEach((entry) => logger.log(entry));
+    else queuedEntries.splice(0);
     resolveTransportReady();
   };
   transport.once('new', markTransportReady);
-  transport.once('error', markTransportReady);
+  const handleTransportError = () => {
+    transportFailed = true;
+    markTransportReady();
+  };
+  transport.on('error', handleTransportError);
+  // Winston can surface a transport failure through the logger as well. The
+  // application must keep serving requests even when a disk write is lost.
+  logger.on('error', handleTransportError);
   // DailyRotateFile may create its initial file synchronously, before the
   // listener above is attached. A short fallback keeps one-shot CLI and
   // supervisor logs from ending their Winston stream before that file opens.
   setTimeout(markTransportReady, 25);
 
   const writeEntry = (entry) => {
-    if (transportReady) logger.log(entry);
-    else queuedEntries.push(entry);
+    if (transportFailed) return;
+    if (transportReady) {
+      try {
+        logger.log(entry);
+      } catch {
+        handleTransportError();
+      }
+    } else if (queuedEntries.length < MAX_QUEUED_ENTRIES) {
+      queuedEntries.push(entry);
+    }
   };
   const write = (level, event, context = {}) => {
+    const timestamp = new Date().toISOString();
+    const attributes = {
+      'event.name': sanitiseText(event, 160),
+      'process.component': component,
+      ...sanitiseContext(context),
+    };
     writeEntry({
       level,
       event: sanitiseText(event, 160),
       message: sanitiseText(event, 160),
-      ...sanitiseContext(context),
+      timestamp,
+      observedTimestamp: new Date().toISOString(),
+      severityText: level.toUpperCase(),
+      severityNumber: OTEL_SEVERITY[level],
+      body: sanitiseText(event, 160),
+      resource: {
+        'service.name': config.serviceName,
+        'service.version': config.serviceVersion,
+        'deployment.environment.name': config.deploymentEnvironment,
+        'process.component': component,
+        'process.pid': process.pid,
+      },
+      attributes,
+      application: 'new-global-s-home',
+      process: component,
+      pid: process.pid,
+      ...attributes,
     });
   };
 
@@ -199,7 +242,7 @@ export const getLogger = (component = process.env.LOG_PROCESS || 'astro') => {
   // create a repository-local runtime log directory.
   if (process.env.VITEST) return noopLogger;
   const config = getLoggingConfig();
-  const key = `${component}\0${config.directory}\0${config.level}\0${config.retentionDays}`;
+  const key = `${component}\0${config.directory}\0${config.level}\0${config.retentionDays}\0${config.serviceVersion}\0${config.deploymentEnvironment}`;
   if (!cachedLoggers.has(key)) cachedLoggers.set(key, createStructuredLogger(component, config));
   return cachedLoggers.get(key);
 };
@@ -225,4 +268,5 @@ export const __private__ = {
   sanitiseContext,
   sanitiseError,
   sanitiseText,
+  OTEL_SEVERITY,
 };

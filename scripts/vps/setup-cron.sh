@@ -10,8 +10,10 @@ set -u
 APP_DIR="$HOME/apps/new-global-s-home"
 START_SCRIPT="$APP_DIR/scripts/vps/start.sh"
 INGEST_SCRIPT="$APP_DIR/scripts/vps/ingest-offers.sh"
+PRUNE_LOGS_SCRIPT="$APP_DIR/scripts/vps/prune-logs.mjs"
 CRON_ENTRY="@reboot /bin/bash $START_SCRIPT > /dev/null 2>&1"
 INGEST_CRON_ENTRY="*/30 * * * * /bin/bash $INGEST_SCRIPT > /dev/null 2>&1"
+LOG_RETENTION_CRON_ENTRY="17 3 * * * /opt/alt/alt-nodejs22/root/usr/bin/node --env-file=$APP_DIR/.env $PRUNE_LOGS_SCRIPT > /dev/null 2>&1"
 
 log_event() {
   level="$1"
@@ -32,14 +34,20 @@ if [ ! -f "$INGEST_SCRIPT" ]; then
   exit 1
 fi
 
-chmod +x "$START_SCRIPT" "$INGEST_SCRIPT" "$APP_DIR/scripts/vps/run-astro.mjs" "$APP_DIR/scripts/vps/log-process-event.mjs"
+if [ ! -f "$PRUNE_LOGS_SCRIPT" ]; then
+  echo "ERROR: $PRUNE_LOGS_SCRIPT not found. Deploy it before enabling log retention." >&2
+  exit 1
+fi
+
+chmod +x "$START_SCRIPT" "$INGEST_SCRIPT" "$PRUNE_LOGS_SCRIPT" "$APP_DIR/scripts/vps/run-astro.mjs" "$APP_DIR/scripts/vps/log-process-event.mjs"
 
 existing="$(crontab -l 2>/dev/null || true)"
-without_app_entries="$(printf '%s\n' "$existing" | grep -vF "$START_SCRIPT" | grep -vF "$INGEST_SCRIPT" || true)"
+without_app_entries="$(printf '%s\n' "$existing" | grep -vF "$START_SCRIPT" | grep -vF "$INGEST_SCRIPT" | grep -vF "$PRUNE_LOGS_SCRIPT" || true)"
 {
   printf '%s\n' "$without_app_entries"
   printf '%s\n' "$CRON_ENTRY"
   printf '%s\n' "$INGEST_CRON_ENTRY"
+  printf '%s\n' "$LOG_RETENTION_CRON_ENTRY"
 } | crontab -
 log_event info cron_entries_configured "rebootSchedule=@reboot" "ingestionSchedule=every-30-minutes"
 
@@ -47,6 +55,8 @@ echo "Configured cron @reboot entry:"
 echo "  $CRON_ENTRY"
 echo "Configured ingestion schedule:"
 echo "  $INGEST_CRON_ENTRY"
+echo "Configured log retention schedule:"
+echo "  $LOG_RETENTION_CRON_ENTRY"
 
 echo "Current crontab:"
 crontab -l
