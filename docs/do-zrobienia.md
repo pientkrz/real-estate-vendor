@@ -39,9 +39,9 @@ Poniższe zadania wynikają z przeglądu strony głównej, widoku oferty, bloga 
    - Problem: polski interfejs zawierał angielskie etykiety sekcji oferty, transakcji i bloga.
    - Wykonano: ujednolicono teksty interfejsu do języka polskiego; język obcojęzyczny pozostaje tylko w treści dostarczonej przez dostawcę oferty lub autora artykułu.
 
-7. **P1 — Dostępność i semantyka nowych selektorów filtrów**
-   - Problem: desktopowy popover jest oznaczony jako modal, a mobilny panel nie ma pełnego mechanizmu pułapki fokusu. Może to utrudniać obsługę klawiaturą i czytnikiem ekranu.
-   - Rekomendacja: stosować semantykę modalu i pułapkę fokusu wyłącznie dla mobilnego bottom sheetu, a na desktopie użyć semantyki popovera z poprawnym powrotem fokusu do przycisku.
+7.✅ ~~**P1 — Dostępność i semantyka nowych selektorów filtrów**~~
+   - Problem: desktopowy popover był oznaczony jako modal, a mobilny panel nie miał pełnego mechanizmu pułapki fokusu.
+   - Wykonano: mobilny bottom sheet używa semantyki modalu, blokady tła i pułapki fokusu, a desktopowy popover ma semantykę niemodalną oraz poprawny powrót fokusu do przycisku.
 
 8. **P2 — Brak szybkiej ścieżki wyjścia z pustych wyników**
    - Problem: komunikat o braku ofert nie zawiera bezpośredniej akcji naprawczej.
