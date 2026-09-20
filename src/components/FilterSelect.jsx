@@ -1,4 +1,5 @@
 import React, { useEffect, useId, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 const EMPTY_VALUES = [];
 const MOBILE_QUERY = '(max-width: 767px)';
@@ -37,6 +38,7 @@ const FilterSelect = ({ label, value, options, multiple = false, onApply, summar
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [draftValue, setDraftValue] = useState(value);
+  const [panelPosition, setPanelPosition] = useState(null);
   const titleId = `${panelId}-title`;
 
   const normalizedValue = multiple ? (Array.isArray(value) ? value : EMPTY_VALUES) : (value ?? '');
@@ -70,7 +72,9 @@ const FilterSelect = ({ label, value, options, multiple = false, onApply, summar
       }
     };
     const closeDesktopPopover = (event) => {
-      if (!isMobile && rootRef.current && !rootRef.current.contains(event.target)) {
+      const clickedTrigger = triggerRef.current?.contains(event.target);
+      const clickedPanel = panelRef.current?.contains(event.target);
+      if (!isMobile && !clickedTrigger && !clickedPanel) {
         setIsOpen(false);
       }
     };
@@ -106,6 +110,48 @@ const FilterSelect = ({ label, value, options, multiple = false, onApply, summar
       document.removeEventListener('pointerdown', closeDesktopPopover);
       document.removeEventListener('keydown', trapMobileFocus);
       document.body.style.overflow = previousOverflow;
+    };
+  }, [isOpen, isMobile]);
+
+  useEffect(() => {
+    if (!isOpen || isMobile) {
+      setPanelPosition(null);
+      return undefined;
+    }
+
+    const updatePanelPosition = () => {
+      const trigger = triggerRef.current;
+      const panel = panelRef.current;
+      if (!trigger || !panel) return;
+
+      const triggerRect = trigger.getBoundingClientRect();
+      const panelRect = panel.getBoundingClientRect();
+      const gap = 8;
+      const viewportPadding = 8;
+      const viewportWidth = document.documentElement.clientWidth || window.innerWidth;
+      const viewportHeight = window.innerHeight;
+      const fitsBelow = triggerRect.bottom + gap + panelRect.height <= viewportHeight - viewportPadding;
+      const fitsAbove = triggerRect.top - gap - panelRect.height >= viewportPadding;
+      const top = fitsBelow || !fitsAbove
+        ? Math.min(triggerRect.bottom + gap, viewportHeight - panelRect.height - viewportPadding)
+        : triggerRect.top - panelRect.height - gap;
+      const left = Math.min(
+        Math.max(viewportPadding, triggerRect.left),
+        Math.max(viewportPadding, viewportWidth - panelRect.width - viewportPadding),
+      );
+
+      setPanelPosition({
+        top: Math.max(viewportPadding, top),
+        left,
+      });
+    };
+
+    updatePanelPosition();
+    window.addEventListener('resize', updatePanelPosition);
+    window.addEventListener('scroll', updatePanelPosition, true);
+    return () => {
+      window.removeEventListener('resize', updatePanelPosition);
+      window.removeEventListener('scroll', updatePanelPosition, true);
     };
   }, [isOpen, isMobile]);
 
@@ -195,16 +241,8 @@ const FilterSelect = ({ label, value, options, multiple = false, onApply, summar
         </span>
       </button>
 
-      {isOpen && (
-        <>
-          {isMobile && (
-            <button
-              type="button"
-              className="fixed inset-0 z-[1199] cursor-default bg-obsidian/30 md:hidden"
-              aria-label={`Zamknij filtr: ${label}`}
-              onClick={close}
-            />
-          )}
+      {isOpen && (() => {
+        const panel = (
           <section
             id={panelId}
             ref={panelRef}
@@ -212,7 +250,14 @@ const FilterSelect = ({ label, value, options, multiple = false, onApply, summar
             aria-modal={isMobile ? 'true' : undefined}
             aria-labelledby={titleId}
             data-filter-mode={isMobile ? 'mobile' : 'desktop'}
-            className="fixed inset-x-0 bottom-0 z-[1200] max-h-[85vh] overflow-y-auto rounded-t-2xl bg-surface p-5 shadow-2xl md:absolute md:inset-x-auto md:bottom-auto md:left-0 md:top-full md:z-50 md:mt-2 md:min-w-[16rem] md:rounded-sm md:border md:border-outline-variant/20 md:p-3"
+            className={isMobile
+              ? 'fixed inset-x-0 bottom-0 z-[1200] max-h-[85vh] overflow-y-auto rounded-t-2xl bg-surface p-5 shadow-2xl'
+              : 'fixed z-[1200] max-h-[85vh] min-w-[16rem] max-w-[calc(100vw-1rem)] overflow-y-auto rounded-sm border border-outline-variant/20 bg-surface p-3 shadow-2xl'}
+            style={isMobile ? undefined : {
+              top: panelPosition ? `${panelPosition.top}px` : 0,
+              left: panelPosition ? `${panelPosition.left}px` : 0,
+              visibility: panelPosition ? 'visible' : 'hidden',
+            }}
           >
             <div className="mb-4 flex items-center justify-between md:hidden">
               <h2 id={titleId} className="font-headline text-xl font-bold text-on-surface">{label}</h2>
@@ -224,8 +269,24 @@ const FilterSelect = ({ label, value, options, multiple = false, onApply, summar
             {optionList}
             {actions}
           </section>
-        </>
-      )}
+        );
+
+        if (!isMobile && typeof document !== 'undefined') return createPortal(panel, document.body);
+
+        return (
+          <>
+            {isMobile && (
+              <button
+                type="button"
+                className="fixed inset-0 z-[1199] cursor-default bg-obsidian/30 md:hidden"
+                aria-label={`Zamknij filtr: ${label}`}
+                onClick={close}
+              />
+            )}
+            {panel}
+          </>
+        );
+      })()}
     </div>
   );
 };

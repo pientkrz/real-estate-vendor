@@ -80,6 +80,27 @@ describe('FilterSelect', () => {
     expect(trigger).toHaveFocus();
   });
 
+  it('renders every desktop popover in the body portal and keeps inside clicks open', () => {
+    setViewport(false);
+    render(<FilterSelect label="Typ nieruchomości" value={[]} options={COUNTRY_OPTIONS} multiple summary="Wszystkie typy" onApply={vi.fn()} />);
+
+    const trigger = screen.getByRole('button', { name: /wszystkie typy/i });
+    fireEvent.click(trigger);
+    const panel = screen.getByRole('dialog', { name: 'Typ nieruchomości' });
+
+    expect(panel.parentElement).toBe(document.body);
+    expect(panel).toHaveStyle({ visibility: 'visible' });
+    expect(panel.style.top).toMatch(/px$/);
+    expect(panel.style.left).toMatch(/px$/);
+
+    fireEvent.pointerDown(panel);
+    expect(screen.getByRole('dialog', { name: 'Typ nieruchomości' })).toBeInTheDocument();
+
+    fireEvent.pointerDown(document.body);
+    expect(screen.queryByRole('dialog', { name: 'Typ nieruchomości' })).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
   it('uses modal semantics, traps focus, and locks scrolling on mobile', () => {
     setViewport(true);
     render(<FilterSelect label="Lokalizacja" value={[]} options={COUNTRY_OPTIONS} multiple summary="Wszystkie kraje" onApply={vi.fn()} />);
