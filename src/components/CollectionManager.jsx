@@ -10,8 +10,6 @@ const ListingsMap = lazy(() =>
     : import('./ListingsMap')
 );
 
-const NAV_H = 96;
-
 const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimestamp, initialRatesSource }) => {
   const [filters, setFilters] = useState({
     priceMin: null,
@@ -58,7 +56,7 @@ const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimes
   }, [initialOffers, filters, displayCurrency, rates]);
 
   return (
-    <div className="pt-[96px] overflow-x-hidden">
+    <div className="pt-[var(--navbar-height)] overflow-x-hidden">
       {/* Map — full width */}
       <section className="h-[420px] w-full relative overflow-hidden bg-surface-container-low">
         <Suspense
@@ -73,7 +71,7 @@ const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimes
       </section>
 
       {/* Filter bar — sticky below navbar */}
-      <div className="sticky z-[1100]" style={{ top: `${NAV_H}px` }}>
+      <div className="sticky top-[var(--navbar-height)] z-[1100]">
         <ListingFilterBar
           offers={initialOffers}
           filters={filters}

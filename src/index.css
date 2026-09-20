@@ -16,6 +16,28 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+:root {
+  --navbar-height: 76px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --navbar-height: 84px;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --navbar-height: 88px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --navbar-height: 96px;
+  }
+}
+
 @theme {
   --color-surface-bright: #fcf9f8;
   --color-primary-fixed-dim: #edc06d;

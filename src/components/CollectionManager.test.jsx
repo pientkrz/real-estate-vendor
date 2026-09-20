@@ -112,6 +112,16 @@ describe('parseOtoDomXml — fixture integrity', () => {
 });
 
 describe('CollectionManager — country filter', () => {
+  it('uses the shared responsive navbar height for page and sticky filter offsets', () => {
+    const { container } = renderApp();
+    const page = container.firstElementChild;
+    const stickyFilter = container.querySelector('.sticky');
+
+    expect(page).toHaveClass('pt-[var(--navbar-height)]');
+    expect(stickyFilter).toHaveClass('top-[var(--navbar-height)]');
+    expect(stickyFilter).not.toHaveAttribute('style');
+  });
+
   it('shows all 6 offers on initial load with no country selected', async () => {
     renderApp();
     await waitForListings();
