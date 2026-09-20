@@ -29,11 +29,19 @@ const appRelease = import.meta.env.PUBLIC_APP_RELEASE || 'unknown';
 		<!-- Material Symbols (self-hosted) -->
 		<link rel="stylesheet" href={`${import.meta.env.BASE_URL}fonts/material-symbols.css`} />
 	</head>
-	<body class={`bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container ${lockViewport ? 'overflow-hidden' : 'min-h-screen'}`}>
+	<body
+		class={`bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container ${lockViewport ? 'overflow-hidden' : 'min-h-screen'}`}
+		data-global-request-id={requestId}
+		data-global-traceparent={traceparent}
+		data-global-app-release={appRelease}
+	>
 		<slot />
 			<CookieConsent client:only="react" />
-		<script is:inline define:vars={{ requestId, traceparent, appRelease }}>
+		<script is:inline>
 			(() => {
+				const requestId = document.body.dataset.globalRequestId || '';
+				const traceparent = document.body.dataset.globalTraceparent || '';
+				const appRelease = document.body.dataset.globalAppRelease || '';
 				let reportCount = 0;
 				const MAX_REPORTS = 3;
 				const MAX_MESSAGE_LENGTH = 500;
