@@ -65,7 +65,7 @@ while (params?.[`zdjecie${_photoIdx}`]) {
     _photoIdx++;
 }
 
-const city = params?.miasto || 'The Estate';
+const city = params?.miasto || 'Nieruchomość';
 const fullAddress = [location?.city, location?.region, location?.country].filter(Boolean).join(', ');
 const displayCount = (value) => Number(value) > 0 ? value : '—';
 const displayArea = params?.powierzchnia ? `${params.powierzchnia} m²` : '—';
@@ -85,7 +85,7 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
                         <nav class="flex gap-4 mb-6 text-[10px] font-label uppercase tracking-[0.3em] text-primary">
                             <a href={import.meta.env.BASE_URL} class="hover:opacity-70 transition-opacity">Global S Home</a>
                             <span>/</span>
-                            <a href={`${import.meta.env.BASE_URL}filter?type=${offer.typ}`} class="hover:opacity-70 transition-opacity">{offer.typ === 'sprzedaz' ? 'Sale' : 'Rent'}</a>
+                            <a href={`${import.meta.env.BASE_URL}filter?type=${offer.typ}`} class="hover:opacity-70 transition-opacity">{offer.typ === 'sprzedaz' ? 'Sprzedaż' : 'Wynajem'}</a>
                         </nav>
                         <h1 class="text-6xl md:text-8xl font-headline font-bold text-on-surface leading-[1.05] tracking-tighter mb-4">
                             {city}
@@ -108,7 +108,7 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
                             ))
                         ) : (
                             <div class="bg-surface-container-high col-span-full h-full flex items-center justify-center text-outline/30 italic">
-                                Additional imagery protected by NDA
+                                Dodatkowe zdjęcia są dostępne na życzenie
                             </div>
                         )}
                     </div>
@@ -164,8 +164,8 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
                     <!-- Editorial Column -->
                     <div class="lg:col-span-8">
                         <div class="max-w-2xl">
-                            <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Editorial Narrative</span>
-                            <h2 class="text-4xl font-headline font-bold text-on-surface mb-12">Architecture as an Asset of the Soul</h2>
+                            <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Opis nieruchomości</span>
+                            <h2 class="text-4xl font-headline font-bold text-on-surface mb-12">Architektura jako wartość dla duszy</h2>
                             
                             <div class="prose prose-stone max-w-none text-lg text-on-surface-variant font-body leading-[1.8] space-y-8" set:html={safeOpis} />
 
@@ -198,8 +198,8 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
             <section class="py-24 border-t border-outline/5">
                 <div class="max-w-7xl mx-auto px-6 md:px-12">
                     <div class="mb-12">
-                        <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Property Tour</span>
-                        <h2 class="text-5xl font-headline font-bold text-on-surface tracking-tighter">Visual Journey</h2>
+                        <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Wirtualny spacer</span>
+                        <h2 class="text-5xl font-headline font-bold text-on-surface tracking-tighter">Wizualna prezentacja</h2>
                     </div>
                     <div class="aspect-video w-full rounded-sm overflow-hidden shadow-2xl">
                         <PropertyVideoEmbed client:load embedUrl={embedUrl} />
@@ -208,12 +208,12 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
             </section>
         )}
 
-        <!-- Localization Section: The Enclave -->
+        <!-- Sekcja lokalizacji nieruchomości -->
         <section class="py-24 bg-surface-container-low/30 border-t border-outline/5">
             <div class="max-w-7xl mx-auto px-6 md:px-12">
                 <div class="mb-16">
-                    <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Geographical Context</span>
-                    <h2 class="text-5xl font-headline font-bold text-on-surface tracking-tighter">The Enclave</h2>
+                    <span class="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">Kontekst lokalizacji</span>
+                    <h2 class="text-5xl font-headline font-bold text-on-surface tracking-tighter">Lokalizacja</h2>
                 </div>
                 
                 <PropertyMap client:only="react" location={location} city={city} params={params} />

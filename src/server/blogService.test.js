@@ -48,7 +48,7 @@ describe('runtime blog service', () => {
     expect(post).toMatchObject({
       id: 'niepoprawny-wpis',
       isInvalid: true,
-      data: { title: 'Invalid blog', description: expect.any(String) },
+      data: { title: 'Nieprawidłowy artykuł', description: expect.any(String) },
     });
     expect(post.validationErrors.length).toBeGreaterThan(0);
     expect(post.html).toBeUndefined();

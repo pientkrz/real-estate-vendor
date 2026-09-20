@@ -20,7 +20,7 @@ Strona bloga dostępna pod adresem `/blog` wyświetla siatkę kart z istniejący
 - kategorię artykułu (np. ARCHITEKTURA, INVESTMENT)
 - tytuł
 - krótki opis (zajawkę)
-- przycisk prowadzący do pełnej treści („Read Full Inquiry")
+- przycisk prowadzący do pełnej treści („Czytaj cały artykuł")
 
 Jeśli nie ma żadnych artykułów, strona wyświetla komunikat o pustym archiwum.
 
@@ -264,7 +264,7 @@ Pojawia się jako elegancki wyróżnik przełamujący treść:
 
 | Objaw | Przyczyna | Rozwiązanie |
 |-------|-----------|-------------|
-| Karta „Invalid blog” na stronie `/blog` | Plik ma błędny YAML, brakuje wymaganego pola albo `categories` nie jest niepustą listą | Otwórz `/blog/nazwa-pliku`; strona pokaże bezpieczną listę błędów oraz aktualny szablon. Treść błędnego pliku nie jest publikowana. |
+| Karta „Nieprawidłowy artykuł” na stronie `/blog` | Plik ma błędny YAML, brakuje wymaganego pola albo `categories` nie jest niepustą listą | Otwórz `/blog/nazwa-pliku`; strona pokaże bezpieczną listę błędów oraz aktualny szablon. Treść błędnego pliku nie jest publikowana. |
 | Artykuł nie pojawia się na stronie | Plik jest poza folderem `/home/ixtnzfseqk/content/blog/`, ma niedozwoloną nazwę, jest linkiem symbolicznym albo nie można go odczytać | Użyj zwykłego pliku `.md` w katalogu bloga i nazwy z małych liter, cyfr oraz myślników |
 | Błąd daty | Data podana w niepoprawnym formacie | Użyj formatu `RRRR-MM-DD`, np. `2026-06-15` |
 | Zdjęcie nie wyświetla się | Niepoprawny lub niedostępny adres URL zdjęcia | Wklej link w przeglądarce i sprawdź czy otwiera się zdjęcie |

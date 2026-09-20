@@ -17,7 +17,7 @@ if (!entry) Astro.response.status = 404;
 
 ---
 
-<Layout title={entry ? `${entry.data.title} | Global S Journal` : 'Nie znaleziono artykułu | Global S Journal'} description={entry?.data.description || 'Artykuł nie istnieje lub nie jest dostępny.'}>
+<Layout title={entry ? `${entry.data.title} | Dziennik Global S` : 'Nie znaleziono artykułu | Dziennik Global S'} description={entry?.data.description || 'Artykuł nie istnieje lub nie jest dostępny.'}>
 	<Navbar client:load />
 	
 	<main class="bg-bone pt-32">
@@ -64,15 +64,15 @@ if (!entry) Astro.response.status = 404;
 			<aside class="lg:col-span-3 space-y-12">
 				<div class="sticky top-40">
 					{!entry.isInvalid && <div class="mb-12">
-						<span class="text-[10px] font-label uppercase tracking-widest text-primary mb-4 block">Published</span>
+						<span class="text-[10px] font-label uppercase tracking-widest text-primary mb-4 block">Opublikowano</span>
 						<time class="text-xl font-headline font-bold" datetime={entry.data.pubDate.toISOString()}>
-							{entry.data.pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+							{entry.data.pubDate.toLocaleDateString('pl-PL', { year: 'numeric', month: 'long', day: 'numeric' })}
 						</time>
 					</div>}
 
 					{entry.data.author && (
 						<div>
-							<span class="text-[10px] font-label uppercase tracking-widest text-primary mb-4 block">Specialist</span>
+							<span class="text-[10px] font-label uppercase tracking-widest text-primary mb-4 block">Specjalista</span>
 							<span class="text-xl font-headline font-bold">{entry.data.author}</span>
 						</div>
 					)}
@@ -80,7 +80,7 @@ if (!entry) Astro.response.status = 404;
 					<div class="pt-12 mt-12 border-t border-primary/10">
 						<button class="text-[11px] font-label uppercase tracking-[0.3em] text-obsidian hover:text-primary transition-colors flex items-center gap-4">
 							<span class="w-8 h-[1px] bg-current"></span>
-							Share Piece
+							Udostępnij artykuł
 						</button>
 					</div>
 				</div>
@@ -90,7 +90,7 @@ if (!entry) Astro.response.status = 404;
 			<article class="lg:col-span-9">
 				{entry.isInvalid ? (
 					<div class="max-w-3xl rounded-sm bg-surface-container-low p-8 md:p-12">
-						<h2 class="font-headline text-3xl font-bold text-obsidian">Invalid blog</h2>
+						<h2 class="font-headline text-3xl font-bold text-obsidian">Nieprawidłowy artykuł</h2>
 						<p class="mt-4 font-body text-on-surface-variant">Plik został odnaleziony, ale nie spełnia wymaganego formatu. Popraw wskazane pola; po zapisaniu poprawna wersja pojawi się przy następnym żądaniu strony.</p>
 						<h3 class="mt-10 font-label text-xs uppercase tracking-widest text-primary">Informacje walidacyjne</h3>
 						<ul class="mt-4 list-disc space-y-2 pl-5 font-body text-on-surface-variant">

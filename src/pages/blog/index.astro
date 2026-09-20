@@ -13,7 +13,7 @@ const categories = [...new Set(blogEntries
     .flatMap((entry) => getBlogCategories(entry.data)))].sort();
 ---
 
-<Layout title="Architectural Journal | Global S Home" description="Explorations in high-end architecture, investment strategy, and Mediterranean living.">
+<Layout title="Dziennik architektury | Global S Home" description="Inspiracje dotyczące architektury, strategii inwestycyjnych i życia w basenie Morza Śródziemnego.">
     <!-- Navbar with contrast -->
     <div class="absolute top-0 left-0 w-full z-50">
         <Navbar client:load />
@@ -25,23 +25,23 @@ const categories = [...new Set(blogEntries
             <!-- Asymmetrical Background Text -->
             <div class="absolute inset-0 pointer-events-none select-none flex items-center justify-center">
                 <span class="text-[20vw] font-serif font-bold text-white/[0.03] leading-none uppercase tracking-tighter mix-blend-overlay italic">
-                    Journal
+                    Dziennik
                 </span>
             </div>
             
             <div class="relative z-10 text-center px-6 animate-in fade-in zoom-in-95 duration-1000">
-                <span class="text-primary font-label text-xs tracking-[0.4em] uppercase mb-8 block">Volume 01 — Issue 04</span>
+                <span class="text-primary font-label text-xs tracking-[0.4em] uppercase mb-8 block">Tom 01 — Numer 04</span>
                 <h1 class="text-7xl md:text-9xl font-serif font-bold leading-[0.9] tracking-tighter mb-12 max-w-5xl mx-auto">
-                    Architectural <br/> <span class="text-primary">Journal</span>
+                    Dziennik <br/> <span class="text-primary">architektury</span>
                 </h1>
                 <p class="max-w-xl mx-auto text-on-surface-variant font-body text-lg leading-relaxed opacity-80">
-                    A curated collective of insights on high-fidelity Mediterranean architecture and the evolving landscape of luxury real assets.
+                    Wyselekcjonowane spojrzenie na architekturę śródziemnomorską, strategie inwestycyjne i zmieniający się świat luksusowych nieruchomości.
                 </p>
             </div>
 
             <!-- Scroll Indicator -->
             <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce flex flex-col items-center gap-4">
-                <span class="text-[10px] font-label uppercase tracking-widest opacity-40">Scroll to Explore</span>
+                <span class="text-[10px] font-label uppercase tracking-widest opacity-40">Przewiń, aby odkrywać</span>
                 <div class="w-px h-12 bg-primary/40"></div>
             </div>
         </section>
@@ -53,7 +53,7 @@ const categories = [...new Set(blogEntries
                     <li
                         data-filter="all"
                         class="filter-btn text-primary border-b border-primary pb-1 cursor-pointer transition-colors"
-                    >All Entries</li>
+                    >Wszystkie wpisy</li>
                     {categories.map(cat => (
                         <li
                             data-filter={cat}
@@ -112,7 +112,7 @@ const categories = [...new Set(blogEntries
                                             {entry.data.description}
                                         </p>
                                         <div class="pt-6 border-t border-outline/10 flex items-center justify-between group/btn">
-                                            <span class="text-[11px] font-label uppercase tracking-[0.2em] text-on-surface">Read Full Inquiry</span>
+                                            <span class="text-[11px] font-label uppercase tracking-[0.2em] text-on-surface">Czytaj cały artykuł</span>
                                             <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-2 transition-transform duration-500">arrow_forward</span>
                                         </div>
                                     </div>
@@ -125,7 +125,7 @@ const categories = [...new Set(blogEntries
                 {blogEntries.length === 0 && (
                     <div class="py-48 text-center bg-surface-container-low rounded-sm">
                         <span class="material-symbols-outlined text-4xl text-outline mb-6">edit_off</span>
-                        <p class="text-outline font-label uppercase tracking-widest italic">The editorial archive is currently in transition.</p>
+                        <p class="text-outline font-label uppercase tracking-widest italic">Archiwum redakcyjne jest obecnie w trakcie przygotowania.</p>
                     </div>
                 )}
             </div>

@@ -16,11 +16,15 @@ const joinBasePath = (base, path) => `${base}${path}`;
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState('');
   const menuButtonRef = useRef(null);
   const menuPanelRef = useRef(null);
   const wasMenuOpenRef = useRef(false);
   const base = import.meta.env.BASE_URL;
-  const currentPath = typeof window === 'undefined' ? '' : window.location.pathname;
+
+  useEffect(() => {
+    setCurrentPath(window.location.pathname);
+  }, []);
 
   const isActive = (path) => {
     const href = joinBasePath(base, path);

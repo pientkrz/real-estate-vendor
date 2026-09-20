@@ -102,13 +102,13 @@ const PropertyMap = ({ location = {}, city = "", params = {} }) => {
                     </div>
                     
                     <span className="material-symbols-outlined text-6xl text-outline/20 mb-4">location_off</span>
-                    <h3 className="text-xl font-headline font-bold text-on-surface/40 uppercase tracking-widest">Location Restricted</h3>
-                    <p className="text-[10px] font-label text-outline/60 mt-2 uppercase tracking-widest italic">Coordinates available via physical dossier only</p>
+                    <h3 className="text-xl font-headline font-bold text-on-surface/40 uppercase tracking-widest">Lokalizacja ograniczona</h3>
+                    <p className="text-[10px] font-label text-outline/60 mt-2 uppercase tracking-widest italic">Współrzędne dostępne wyłącznie w dokumentacji nieruchomości</p>
                     
-                    {/* Overlay "Location not available" */}
+                    {/* Nakładka „Lokalizacja niedostępna” */}
                     <div className="absolute inset-0 bg-obsidian/5 backdrop-blur-[2px] flex items-center justify-center pointer-events-none">
                         <div className="border border-primary/20 px-12 py-4 bg-surface/80 backdrop-blur-xl">
-                             <span className="text-primary font-label text-[10px] uppercase tracking-[0.5em]">Location not available</span>
+                            <span className="text-primary font-label text-[10px] uppercase tracking-[0.5em]">Lokalizacja niedostępna</span>
                         </div>
                     </div>
                 </div>
@@ -116,10 +116,10 @@ const PropertyMap = ({ location = {}, city = "", params = {} }) => {
             
             {!hasCoords && (
                 <div className="absolute top-8 left-8 z-[400] bg-surface/90 backdrop-blur-md p-8 shadow-2xl max-w-xs border border-outline/10">
-                    <span className="text-[10px] font-label uppercase tracking-widest text-primary mb-2 block">The Enclave</span>
+                    <span className="text-[10px] font-label uppercase tracking-widest text-primary mb-2 block">Lokalizacja</span>
                     <h4 className="text-xl font-headline font-bold mb-4">{city || location.level4}</h4>
                     <p className="text-xs text-on-surface-variant leading-relaxed">
-                        Geographical precision is restricted to maintain the privacy of the estate. Consult the curator for specific arrival logistics.
+                        Dokładna lokalizacja jest ograniczona ze względów prywatności. Skontaktuj się z naszym doradcą, aby uzyskać informacje dotyczące dojazdu.
                     </p>
                 </div>
             )}

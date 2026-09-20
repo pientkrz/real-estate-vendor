@@ -42,10 +42,10 @@ export const getBlogRuntimeConfig = (env, cwd = process.cwd()) => {
 };
 
 const invalidData = Object.freeze({
-  title: 'Invalid blog',
-  description: 'This blog file requires corrections before it can be published.',
+  title: 'Nieprawidłowy artykuł',
+  description: 'Ten artykuł wymaga poprawek, zanim będzie można go opublikować.',
   pubDate: new Date(0),
-  categories: ['INVALID BLOG'],
+  categories: ['NIEPRAWIDŁOWY ARTYKUŁ'],
 });
 
 const validationMessage = (field, message) => `${field}: ${message}`;
