@@ -36,6 +36,8 @@ OFFER_PHOTO_PUBLIC_BASE_PATH=/offer-photos
 OFFER_SETTLE_MINUTES=15
 OFFER_DIFFERENTIAL_RETENTION_HOURS=48
 OFFER_REJECTED_RETENTION_HOURS=48
+OFFER_PHOTO_VARIANT_WIDTHS=400,800,1200
+OFFER_PHOTO_WEBP_QUALITY=82
 OFFER_UNZIP_BIN=unzip
 ```
 
@@ -67,11 +69,17 @@ wpis XML, korzeń XML oraz znacznik rodzaju dostawy.
   z opublikowanej migawki JSON.
 
 Zdjęcia są kopiowane bezpośrednio z zaakceptowanych wpisów ZIP do
-`OFFER_PHOTO_ROOT/<dostawca>/current/`. Nazwa pliku zawiera hash jego treści,
-więc identyczne zdjęcie nie jest przechowywane ponownie. Po publikacji stanu
-proces zostawia tylko pliki wskazywane przez bieżącą migawkę ofert i agentów;
-zdjęcia zastąpionych albo usuniętych ofert są usuwane. Retencja ZIP-ów i
-retencja zdjęć są celowo niezależne.
+`OFFER_PHOTO_ROOT/<dostawca>/current/`. Dla obsługiwanych obrazów proces tworzy
+niepowiększane warianty WebP o szerokościach skonfigurowanych w
+`OFFER_PHOTO_VARIANT_WIDTHS` (domyślnie 400, 800 i 1200 px). Nazwa każdego
+pliku zawiera hash oryginalnej treści oraz szerokość, więc identyczne zdjęcie
+nie jest przechowywane ponownie. Pole `params.zdjecieN` zachowuje jeden
+domyślny adres (największy dostępny wariant, preferowany 1200 px), a
+`photoVariants`/`imageVariants` zawierają adresy do responsywnego `srcset`.
+Nieobsługiwany lub animowany format zachowuje bezpieczny oryginał bez
+pochodnych. Po publikacji stanu proces zostawia tylko pliki wskazywane przez
+bieżącą migawkę ofert i agentów; zdjęcia zastąpionych albo usuniętych ofert są
+usuwane. Retencja ZIP-ów i retencja zdjęć są celowo niezależne.
 
 Nie usuwaj pojedynczych ZIP-ów ani katalogów zdjęć ręcznie. Jeśli trzeba
 zwolnić miejsce po starszym wdrożeniu, uruchom jednorazowo pod blokadą cron:

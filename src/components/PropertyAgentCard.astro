@@ -3,6 +3,13 @@ const { agent } = Astro.props;
 const phoneHref = agent.phone?.replace(/[^+\d]/g, '');
 const hasPhoto = Boolean(agent.image);
 const agentName = agent.name || 'Global S Home';
+const agentSrcSet = Array.isArray(agent.imageVariants)
+  ? agent.imageVariants
+    .filter((variant) => variant?.url && Number(variant.width) > 0)
+    .sort((left, right) => Number(left.width) - Number(right.width))
+    .map((variant) => `${variant.url} ${variant.width}w`)
+    .join(', ')
+  : undefined;
 ---
 
 <section class="mt-8 bg-surface p-6" aria-label="Opiekun oferty">
@@ -12,6 +19,8 @@ const agentName = agent.name || 'Global S Home';
   <div class="flex gap-4">
     <img
       src={agent.image || '/assets/agent-placeholder.svg'}
+      srcset={agentSrcSet}
+      sizes="56px"
       alt={hasPhoto ? agentName : `Domyślne zdjęcie agenta: ${agentName}`}
       width="56"
       height="56"

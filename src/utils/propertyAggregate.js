@@ -302,6 +302,15 @@ const buildPropertyAggregate = (id, allRecords) => {
     const currency = setResolvedValue(scalar, provenance, conflicts, candidates, 'price.currency', (record) => record.currency, 'currency');
     const videoUrl = setResolvedValue(scalar, provenance, conflicts, candidates, 'videoUrl', (record) => record.videoUrl, 'videoUrl');
     const agent = setResolvedValue(scalar, provenance, conflicts, candidates, 'agent', (record) => record.agent, 'agent');
+    const photoVariants = setResolvedValue(
+      scalar,
+      provenance,
+      conflicts,
+      candidates,
+      'photoVariants',
+      (record) => record.photoVariants,
+      'photoVariants',
+    );
     const objectName = setResolvedValue(scalar, provenance, conflicts, candidates, 'otodom.objectName', (record) => record.objectName, 'ObjectName');
     const rawDetails = setResolvedValue(scalar, provenance, conflicts, candidates, 'otodom.rawDetails', (record) => record.rawDetails, 'ObjectName details');
     const location = resolveLocation(candidates, provenance, conflicts);
@@ -348,6 +357,7 @@ const buildPropertyAggregate = (id, allRecords) => {
         bathrooms: numericValue(params.liczbalazienek),
         attributes: params,
         media,
+        photoVariants: photoVariants ?? {},
         videoUrl: videoUrl ?? null,
         agent: agent ?? null,
       },
@@ -362,6 +372,7 @@ const buildPropertyAggregate = (id, allRecords) => {
       currency,
       videoUrl: videoUrl ?? null,
       agent: agent ?? null,
+      photoVariants: photoVariants ?? {},
       objectName,
       rawDetails,
       params,
@@ -468,6 +479,7 @@ export const toOfferDetailView = (aggregate) => ({
   currency: aggregate.currency,
   videoUrl: aggregate.videoUrl,
   agent: aggregate.agent,
+  photoVariants: aggregate.photoVariants ?? {},
   objectName: aggregate.objectName,
   rawDetails: aggregate.rawDetails,
   params: aggregate.params,
@@ -484,6 +496,7 @@ export const toOfferSummaryView = (aggregate) => ({
   currency: aggregate.currency,
   location: aggregate.location,
   lifecycle: aggregate.lifecycle,
+  photoVariants: aggregate.photoVariants ?? {},
   params: {
     tytul: aggregate.params.tytul,
     miasto: aggregate.params.miasto,

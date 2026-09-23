@@ -22,6 +22,16 @@ const asNonNegativeInteger = (value, fallback) => {
   return Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : fallback;
 };
 
+const asPhotoWidths = (value, fallback = [400, 800, 1200]) => {
+  const widths = String(value ?? '')
+    .split(',')
+    .map((item) => Number.parseInt(item.trim(), 10))
+    .filter((item) => Number.isSafeInteger(item) && item > 0)
+    .filter((item, index, all) => all.indexOf(item) === index)
+    .sort((left, right) => left - right);
+  return widths.length > 0 ? widths : fallback;
+};
+
 export const getOfferRuntimeConfig = (env = process.env) => {
   const deliveryRoot = env.OFFER_DELIVERY_ROOT || path.join(process.cwd(), 'offer-deliveries');
   const statePath = env.OFFER_STATE_PATH || path.join(process.cwd(), '.offer-data', 'offers-state.json');
@@ -31,6 +41,8 @@ export const getOfferRuntimeConfig = (env = process.env) => {
     statePath,
     photoRoot,
     photoPublicBasePath: (env.OFFER_PHOTO_PUBLIC_BASE_PATH || '/offer-photos').replace(/\/$/, ''),
+    photoVariantWidths: asPhotoWidths(env.OFFER_PHOTO_VARIANT_WIDTHS),
+    photoWebpQuality: Math.min(100, Math.max(1, asNonNegativeInteger(env.OFFER_PHOTO_WEBP_QUALITY, 82))),
     settleMinutes: asPositiveInteger(env.OFFER_SETTLE_MINUTES, 15),
     differentialRetentionHours: asNonNegativeInteger(env.OFFER_DIFFERENTIAL_RETENTION_HOURS, 48),
     rejectedRetentionHours: asNonNegativeInteger(env.OFFER_REJECTED_RETENTION_HOURS, 48),

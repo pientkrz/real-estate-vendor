@@ -60,6 +60,14 @@ const AgentGrid = ({ agents = [] }) => {
               <div className="aspect-[4/5] overflow-hidden relative bg-primary/10">
                 <img
                   src={agent.image || '/assets/agent-placeholder.svg'}
+                  srcSet={agent.imageVariants?.length
+                    ? agent.imageVariants
+                      .filter((variant) => variant?.url && Number(variant.width) > 0)
+                      .sort((left, right) => Number(left.width) - Number(right.width))
+                      .map((variant) => `${variant.url} ${variant.width}w`)
+                      .join(', ')
+                    : undefined}
+                  sizes="(min-width: 1024px) 260px, 80vw"
                   alt={agent.image ? agent.name : `Domyślne zdjęcie agenta: ${agent.name}`}
                   loading="lazy"
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"

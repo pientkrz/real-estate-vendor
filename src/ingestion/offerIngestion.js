@@ -8,6 +8,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawn, spawnSync } from 'node:child_process';
+import { createRequire } from 'node:module';
 import { XMLParser } from 'fast-xml-parser';
 import {
   parseNieruchomosciOnlineAgentsXml,
@@ -32,6 +33,12 @@ const XML_ENTRIES = Object.freeze({
 const PHOTO_MARKER = 'offer-photo://';
 const IMAGE_EXTENSION = /\.(?:avif|gif|jpe?g|png|webp)$/i;
 const MAX_XML_BUFFER_BYTES = 512 * 1024 * 1024;
+const require = createRequire(import.meta.url);
+let sharpModule;
+const getSharp = () => {
+  if (!sharpModule) sharpModule = require('sharp');
+  return sharpModule;
+};
 
 const parser = new XMLParser({
   ignoreAttributes: false,
@@ -272,23 +279,59 @@ const materialisePhotos = async ({ offers, agents, provider, deliveryId, archive
   const prefix = photoPrefix(provider);
   const stagingRoot = path.resolve(config.photoRoot, '.staging', `${process.pid}-${deliveryId}-${Date.now()}`);
 
+  const publishFile = (sourcePath, targetPath) => {
+    if (fs.existsSync(targetPath)) {
+      fs.rmSync(sourcePath, { force: true });
+      return;
+    }
+    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
+    fs.renameSync(sourcePath, targetPath);
+    createdPaths.push(targetPath);
+  };
+
   const storeEntry = async (entry) => {
     if (storedEntries.has(entry)) return storedEntries.get(entry);
     const stagingPath = path.resolve(stagingRoot, `${storedEntries.size}${path.extname(entry).toLowerCase()}`);
     if (!isPathInside(stagingPath, stagingRoot)) throw new Error('Unsafe photo staging path');
     await extractZipEntry(archivePath, entry, stagingPath, config.unzipBin);
-    const hash = crypto.createHash('sha256').update(fs.readFileSync(stagingPath)).digest('hex');
-    const fileName = `${hash}${path.extname(entry).toLowerCase()}`;
-    const targetPath = currentPhotoPath(config, provider, fileName);
-    fs.mkdirSync(path.dirname(targetPath), { recursive: true });
-    if (fs.existsSync(targetPath)) fs.rmSync(stagingPath, { force: true });
-    else {
-      fs.renameSync(stagingPath, targetPath);
-      createdPaths.push(targetPath);
+    const sourceBytes = fs.readFileSync(stagingPath);
+    const sourceHash = crypto.createHash('sha256').update(sourceBytes).digest('hex');
+    const sourceExtension = path.extname(entry).toLowerCase();
+    let metadata;
+    try {
+      metadata = await getSharp()(sourceBytes, { animated: false }).metadata();
+    } catch {
+      metadata = undefined;
     }
-    const url = publicPhotoUrl(config, provider, fileName);
-    storedEntries.set(entry, url);
-    return url;
+
+    const variants = [];
+    if (metadata?.width && ['.jpg', '.jpeg', '.png', '.webp', '.avif'].includes(sourceExtension)) {
+      for (const width of config.photoVariantWidths) {
+        if (width > metadata.width) continue;
+        const fileName = `${sourceHash}-${width}.webp`;
+        const targetPath = currentPhotoPath(config, provider, fileName);
+        const variantStagingPath = path.resolve(stagingRoot, `${storedEntries.size}-${width}.webp`);
+        await getSharp()(sourceBytes, { animated: false })
+          .resize({ width, withoutEnlargement: true })
+          .webp({ quality: config.photoWebpQuality })
+          .toFile(variantStagingPath);
+        publishFile(variantStagingPath, targetPath);
+        variants.push({ width, url: publicPhotoUrl(config, provider, fileName) });
+      }
+    }
+
+    if (variants.length > 0) {
+      fs.rmSync(stagingPath, { force: true });
+    } else {
+      const fileName = `${sourceHash}${sourceExtension}`;
+      publishFile(stagingPath, currentPhotoPath(config, provider, fileName));
+      variants.push({ width: metadata?.width || 0, url: publicPhotoUrl(config, provider, fileName) });
+    }
+
+    const defaultVariant = [...variants].sort((left, right) => right.width - left.width)[0];
+    const asset = { defaultUrl: defaultVariant.url, variants };
+    storedEntries.set(entry, asset);
+    return asset;
   };
 
   const replaceReference = (reference) => {
@@ -305,14 +348,22 @@ const materialisePhotos = async ({ offers, agents, provider, deliveryId, archive
       for (const [key, value] of Object.entries(offer.params || {})) {
         if (!/^zdjecie\d+$/i.test(key)) continue;
         const resolved = replaceReference(value);
-        if (resolved) offer.params[key] = await storeEntry(resolved);
+        if (resolved) {
+          const asset = await storeEntry(resolved);
+          offer.params[key] = asset.defaultUrl;
+          offer.photoVariants = { ...(offer.photoVariants || {}), [key]: asset.variants };
+        }
         else delete offer.params[key];
       }
     }
     for (const agent of agents) {
       if (!agent?.image) continue;
       const resolved = replaceReference(agent.image);
-      if (resolved) agent.image = await storeEntry(resolved);
+      if (resolved) {
+        const asset = await storeEntry(resolved);
+        agent.image = asset.defaultUrl;
+        agent.imageVariants = asset.variants;
+      }
       else delete agent.image;
     }
     return { photoCount: resolvedEntries.size, createdPaths };

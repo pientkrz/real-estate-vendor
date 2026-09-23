@@ -18,17 +18,23 @@ const PropertyMetric = ({ icon, children }) => (
   </span>
 );
 
-const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths, area, price, image, status, photoTags, priority = false }) => {
+const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths, area, price, image, photoVariants, status, photoTags, priority = false }) => {
   const base = import.meta.env.BASE_URL;
   const placeholder = `${base}assets/placeholder.svg`;
   const loc = [city, region, country].filter(Boolean).join(', ');
   const imageSource = image || placeholder;
+  const imageSrcSet = Object.values(photoVariants?.zdjecie1 || {})
+    .filter((variant) => variant?.url && Number(variant.width) > 0)
+    .sort((left, right) => Number(left.width) - Number(right.width))
+    .map((variant) => `${variant.url} ${variant.width}w`)
+    .join(', ');
 
   const handleImageError = (event) => {
     const element = event.currentTarget;
     if (element.dataset.fallbackApplied === 'true') return;
     element.dataset.fallbackApplied = 'true';
     element.src = placeholder;
+    element.removeAttribute('srcSet');
     element.removeAttribute('srcset');
   };
 
@@ -38,6 +44,7 @@ const PropertyCard = ({ id, title, city, region, country, rooms, bedrooms, baths
         <img
           alt={title}
           src={imageSource}
+          srcSet={imageSrcSet || undefined}
           width="1200"
           height="750"
           loading={priority ? 'eager' : 'lazy'}
@@ -125,6 +132,7 @@ const FeaturedProperties = ({
                 displayCurrency,
               )}
               image={prop.params?.zdjecie1}
+              photoVariants={prop.photoVariants}
               priority={index === 0}
               status={prop.typ === 'sprzedaz' ? 'Na sprzedaż' : 'Wynajem'}
               photoTags={getPhotoTags(prop.params?.opis_ang)}

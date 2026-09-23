@@ -34,10 +34,14 @@ export const GET: APIRoute = async ({ params }) => {
 
   try {
     const image = await fs.readFile(candidate);
+    const isCurrentAsset = segments.includes('current')
+      && /^\w{32,64}(?:-\d+)?\.(?:avif|gif|jpe?g|png|webp)$/i.test(segments.at(-1) || '');
     return new Response(image, {
       headers: {
         'Content-Type': contentType,
-        'Cache-Control': 'public, max-age=3600',
+        'Cache-Control': isCurrentAsset
+          ? 'public, max-age=31536000, immutable'
+          : 'public, max-age=3600',
       },
     });
   } catch (error: any) {

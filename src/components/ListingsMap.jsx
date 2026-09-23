@@ -27,6 +27,13 @@ const spiderfyRingOffsets = (count) => {
   });
 };
 
+const escapeHtml = (value) => String(value ?? '')
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#39;');
+
 // Greedy pixel-space clustering: walks the points once, attaching each one to the
 // nearest existing cluster within CLUSTER_RADIUS (updating that cluster's running
 // centroid), or starting a new cluster otherwise. Recomputed on every zoom/pan since
@@ -77,6 +84,11 @@ const createPropertyPin = (prop, latLng) => {
   const loc = [prop.location?.city, prop.location?.region, prop.location?.country].filter(Boolean).join(', ');
   const area = prop.params?.powierzchnia ? `${prop.params.powierzchnia} m²` : '';
   const photo = prop.params?.zdjecie1;
+  const photoSrcSet = (prop.photoVariants?.zdjecie1 || [])
+    .filter((variant) => variant?.url && Number(variant.width) > 0)
+    .sort((left, right) => Number(left.width) - Number(right.width))
+    .map((variant) => `${escapeHtml(variant.url)} ${variant.width}w`)
+    .join(', ');
 
   const pin = L.marker(latLng, {
     icon: L.divIcon({
@@ -100,13 +112,13 @@ const createPropertyPin = (prop, latLng) => {
 
   pin.bindPopup(`
     <div style="min-width:200px;font-family:'Work Sans',sans-serif;padding:4px;">
-      ${photo ? `<img src="${photo}" alt="${title}" loading="lazy" style="width:100%;height:120px;object-fit:cover;border-radius:2px;display:block;margin:0 0 8px;"/>` : ''}
-      <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;margin:0 0 4px;">${prop.tab || 'Nieruchomość'}</p>
-      <h4 style="font-size:15px;font-weight:700;margin:0 0 2px;color:#1c1b1b;">${title}</h4>
-      <p style="font-size:11px;color:#4e4638;margin:0 0 6px;">${loc}</p>
-      ${area ? `<p style="font-size:11px;color:#807666;margin:0 0 6px;">${area}</p>` : ''}
-      <div style="font-size:13px;font-weight:700;color:#7a590c;margin-bottom:8px;">${label}</div>
-      <a href="${base}property/${prop.id}" style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;font-weight:600;text-decoration:none;border-bottom:1px solid #7a590c;padding-bottom:1px;">Pokaż szczegóły →</a>
+      ${photo ? `<img src="${escapeHtml(photo)}"${photoSrcSet ? ` srcset="${photoSrcSet}" sizes="200px"` : ''} alt="${escapeHtml(title)}" loading="lazy" decoding="async" style="width:100%;height:120px;object-fit:cover;border-radius:2px;display:block;margin:0 0 8px;"/>` : ''}
+      <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;margin:0 0 4px;">${escapeHtml(prop.tab || 'Nieruchomość')}</p>
+      <h4 style="font-size:15px;font-weight:700;margin:0 0 2px;color:#1c1b1b;">${escapeHtml(title)}</h4>
+      <p style="font-size:11px;color:#4e4638;margin:0 0 6px;">${escapeHtml(loc)}</p>
+      ${area ? `<p style="font-size:11px;color:#807666;margin:0 0 6px;">${escapeHtml(area)}</p>` : ''}
+      <div style="font-size:13px;font-weight:700;color:#7a590c;margin-bottom:8px;">${escapeHtml(label)}</div>
+      <a href="${escapeHtml(`${base}property/${prop.id}`)}" style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;font-weight:600;text-decoration:none;border-bottom:1px solid #7a590c;padding-bottom:1px;">Pokaż szczegóły →</a>
     </div>
   `, { maxWidth: 260, closeButton: true });
 

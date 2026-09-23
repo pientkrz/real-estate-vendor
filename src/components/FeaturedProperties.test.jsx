@@ -66,6 +66,28 @@ describe('FeaturedProperties — metryki karty oferty', () => {
     });
   });
 
+  it('uses generated photo variants for responsive card images', () => {
+    render(
+      <FeaturedProperties
+        properties={[{
+          ...createProperty({ zdjecie1: '/photos/hash-1200.webp' }),
+          photoVariants: {
+            zdjecie1: [
+              { width: 400, url: '/photos/hash-400.webp' },
+              { width: 800, url: '/photos/hash-800.webp' },
+              { width: 1200, url: '/photos/hash-1200.webp' },
+            ],
+          },
+        }]}
+      />,
+    );
+
+    expect(screen.getByRole('img')).toHaveAttribute(
+      'srcset',
+      '/photos/hash-400.webp 400w, /photos/hash-800.webp 800w, /photos/hash-1200.webp 1200w',
+    );
+  });
+
   it('uses the local placeholder when a card has no photo or the photo fails', () => {
     render(<FeaturedProperties properties={[createProperty({ zdjecie1: undefined })]} />);
 
@@ -75,5 +97,6 @@ describe('FeaturedProperties — metryki karty oferty', () => {
     fireEvent.error(image);
     expect(image).toHaveAttribute('src', '/assets/placeholder.svg');
     expect(image).toHaveAttribute('data-fallback-applied', 'true');
+    expect(image).not.toHaveAttribute('srcset');
   });
 });
