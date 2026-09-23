@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 import { getLogger, registerProcessErrorLogging } from '../../src/server/logger.js';
+import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 process.env.LOG_PROCESS = 'astro';
 const logger = getLogger('astro');
@@ -13,7 +15,9 @@ logger.info('process_starting', {
 });
 
 try {
-  await import('../../server/entry.mjs');
+  const entryFile = process.env.ASTRO_ENTRY_FILE
+    || path.resolve(process.cwd(), 'dist/server/entry.mjs');
+  await import(pathToFileURL(entryFile).href);
   logger.info('process_started', { component: 'runtime', port: process.env.PORT });
 } catch (error) {
   logger.error('process_start_failed', { component: 'runtime', error });
