@@ -1,61 +1,29 @@
-import React, { useRef } from 'react';
-import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import React from 'react';
 
 const AgentGrid = ({ agents = [] }) => {
-  const scrollRef = useRef(null);
-
-  const scroll = (direction) => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, clientWidth } = scrollRef.current;
-    scrollRef.current.scrollTo({
-      left: direction === 'left' ? scrollLeft - clientWidth / 2 : scrollLeft + clientWidth / 2,
-      behavior: 'smooth',
-    });
-  };
-
   return (
     <section className="py-24 bg-surface-container-low" id="agents">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-8">
+        <div className="mb-16">
           <div>
             <span className="text-primary font-label text-sm tracking-[0.3em] uppercase mb-4 block">Nasi eksperci</span>
             <h2 className="text-5xl md:text-6xl font-headline font-bold text-on-surface tracking-tight">
               Skontaktuj się z naszymi specjalistami
             </h2>
           </div>
-          <div className="flex flex-col md:items-end gap-6">
-            <p className="max-w-md text-on-surface-variant font-body text-lg leading-relaxed">
-              Nasz zespół doświadczonych profesjonalistów przeprowadzi Cię przez każdy etap transakcji na rynku luksusowych nieruchomości.
-            </p>
-            <div className="hidden md:flex gap-4">
-              <button
-                onClick={() => scroll('left')}
-                className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-bone transition-all duration-300"
-                aria-label="Poprzedni"
-              >
-                <FiChevronLeft size={20} />
-              </button>
-              <button
-                onClick={() => scroll('right')}
-                className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-bone transition-all duration-300"
-                aria-label="Następny"
-              >
-                <FiChevronRight size={20} />
-              </button>
-            </div>
-          </div>
+          <p className="max-w-md mt-8 text-on-surface-variant font-body text-lg leading-relaxed">
+            Nasz zespół doświadczonych profesjonalistów przeprowadzi Cię przez każdy etap transakcji na rynku luksusowych nieruchomości.
+          </p>
         </div>
 
         <div
-          ref={scrollRef}
-          className="flex gap-8 overflow-x-auto pb-4 snap-x snap-mandatory"
+          className="flex gap-8 overflow-x-auto pb-4 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-4 md:overflow-visible md:pb-0"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {agents.map((agent, index) => (
             <div
               key={agent.id || `${agent.name}-${index}`}
-              className="w-[calc(25%-18px)] shrink-0 snap-start bg-surface rounded-sm overflow-hidden group hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-primary/10"
-              style={{ minWidth: '260px' }}
+              className="w-[calc(25%-18px)] min-w-[260px] md:w-auto md:min-w-0 shrink-0 snap-start bg-surface rounded-sm overflow-hidden group hover:shadow-2xl transition-all duration-500 border border-transparent hover:border-primary/10"
             >
               <div className="aspect-[4/5] overflow-hidden relative bg-primary/10">
                 <img
