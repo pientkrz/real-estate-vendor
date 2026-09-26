@@ -12,38 +12,37 @@ const agentSrcSet = Array.isArray(agent.imageVariants)
   : undefined;
 ---
 
-<section class="mt-8 bg-surface p-6" aria-label="Opiekun oferty">
-  <span class="text-primary font-label text-[10px] tracking-[0.22em] uppercase mb-4 block">
+<section class="mt-5 bg-surface p-4" aria-label="Opiekun oferty">
+  <span class="text-primary font-label text-[9px] tracking-[0.2em] uppercase mb-3 block">
     Twój opiekun oferty
   </span>
-  <div class="flex gap-4">
+  <div class="flex gap-3">
     <img
       src={agent.image || '/assets/agent-placeholder.svg'}
       srcset={agentSrcSet}
-      sizes="56px"
+      sizes="48px"
       alt={hasPhoto ? agentName : `Domyślne zdjęcie agenta: ${agentName}`}
-      width="56"
-      height="56"
-      class="w-14 h-14 shrink-0 rounded-full object-cover bg-primary/10"
+      width="48"
+      height="48"
+      class="w-12 h-12 shrink-0 rounded-full object-cover bg-primary/10"
       loading="lazy"
     />
     <div class="min-w-0 flex-1">
-      <h4 class="font-headline text-xl font-bold text-on-surface leading-tight">{agentName}</h4>
-      <p class="mt-1 text-xs font-label uppercase tracking-wider text-outline">Opiekun tej oferty</p>
+      <h4 class="font-headline text-lg font-bold text-on-surface leading-tight">{agentName}</h4>
+      <div class="mt-2 flex min-w-0 flex-wrap gap-x-4 gap-y-1 text-xs font-body">
+        {agent.phone && (
+          <a href={`tel:${phoneHref}`} class="flex items-center gap-1 text-on-surface hover:text-primary transition-colors">
+            <span class="material-symbols-outlined text-sm text-primary" aria-hidden="true">call</span>
+            <span>{agent.phone}</span>
+          </a>
+        )}
+        {agent.email && (
+          <a href={`mailto:${agent.email}`} class="flex min-w-0 items-center gap-1 text-on-surface hover:text-primary transition-colors" title={agent.email}>
+            <span class="material-symbols-outlined shrink-0 text-sm text-primary" aria-hidden="true">mail</span>
+            <span class="truncate">{agent.email}</span>
+          </a>
+        )}
+      </div>
     </div>
-  </div>
-  <div class="mt-5 flex flex-col items-start gap-2 text-sm font-body">
-    {agent.phone && (
-      <a href={`tel:${phoneHref}`} class="flex w-full items-center gap-1.5 text-left text-on-surface hover:text-primary transition-colors">
-        <span class="material-symbols-outlined shrink-0 text-base text-primary" aria-hidden="true">call</span>
-        <span class="min-w-0 whitespace-nowrap">{agent.phone}</span>
-      </a>
-    )}
-    {agent.email && (
-      <a href={`mailto:${agent.email}`} class="flex w-full min-w-0 items-center gap-1.5 text-left text-on-surface hover:text-primary transition-colors" title={agent.email}>
-        <span class="material-symbols-outlined shrink-0 text-base text-primary" aria-hidden="true">mail</span>
-        <span class="min-w-0 truncate">{agent.email}</span>
-      </a>
-    )}
   </div>
 </section>

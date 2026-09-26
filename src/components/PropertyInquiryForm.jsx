@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PhoneInput from './PhoneInput';
 import { isValidPhoneNumber } from '../utils/phoneValidation';
 
-const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl, agentName }) => {
+const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
@@ -54,11 +54,6 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl, agentName
 
     return (
         <form onSubmit={handleSubmit} className="space-y-6">
-            {agentName ? (
-                <p className="rounded-sm bg-primary/5 px-4 py-3 text-sm font-body text-on-surface">
-                    Twoje zapytanie trafi bezpośrednio do: <strong>{agentName}</strong>.
-                </p>
-            ) : null}
             <input
                 type="text"
                 name="website"
@@ -113,7 +108,8 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl, agentName
                 ></textarea>
             </div>
 
-            <label className="flex items-start gap-3 cursor-pointer pt-2">
+            <div className="space-y-2 pt-2">
+              <label className="flex items-start gap-3 cursor-pointer">
                 <div className="relative flex items-start pt-1">
                     <input
                         type="checkbox"
@@ -129,11 +125,16 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl, agentName
                         </svg>
                     </div>
                 </div>
-                <span className="text-[10px] text-outline leading-relaxed text-justify">
-                    Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko, adres e-mail, numer telefonu. Administratorem danych osobowych jest firma Smart Trade Sp. z o.o. Dane osobowe będą przetwarzane w celu odpowiedzi na zapytanie skierowane przy użyciu formularza kontaktowego oraz prowadzenie ewentualnego dalszego kontaktu na Pani/Pana życzenie.{' '}
-                    <a href={`${import.meta.env.BASE_URL}privacy-policy`} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-70 transition-opacity">Polityka Prywatności</a>
+                <span className="text-[10px] text-outline leading-relaxed">
+                    Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko, adres e-mail, numer telefonu. Administratorem danych osobowych jest firma Smart Trade Sp. z o.o. Dane osobowe będą przetwarzane w celu odpowiedzi na zapytanie skierowane przy użyciu formularza kontaktowego oraz prowadzenie ewentualnego dalszego kontaktu na Pani/Pana życzenie.
                 </span>
-            </label>
+              </label>
+              <div className="pl-7 text-[10px] leading-relaxed text-outline">
+                <p>
+                    <a href={`${import.meta.env.BASE_URL}privacy-policy`} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-70 transition-opacity">Polityka Prywatności</a>
+                </p>
+              </div>
+            </div>
 
             <button
                 type="submit"

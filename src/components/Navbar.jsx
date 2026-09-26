@@ -203,7 +203,7 @@ const Navbar = ({ isPropertyDetail = false }) => {
       )}
 
       {isPropertyDetail && !isInquiryVisible && !isMenuOpen && (
-        <div className="fixed inset-x-0 bottom-0 z-[9998] border-t border-outline/10 bg-surface/95 px-4 pt-3 backdrop-blur-xl md:hidden" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+        <div className="fixed inset-x-0 bottom-0 z-[9998] border-t border-outline/10 bg-surface/95 px-4 pt-3 backdrop-blur-xl lg:hidden" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
           <a
             href="#property-inquiry"
             className="editorial-gradient block w-full rounded-sm px-4 py-3 text-center font-label text-sm font-semibold uppercase tracking-[0.12em] text-on-primary shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
