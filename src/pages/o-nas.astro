@@ -2,6 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import AgentGrid from '../components/AgentGrid';
+import { loadConfiguredNieruchomosciOnlineAgents } from '../server/offerService.js';
+
+const agents = loadConfiguredNieruchomosciOnlineAgents();
 ---
 
 <Layout title="O nas | Global S Home">
@@ -154,6 +158,8 @@ import Footer from '../components/Footer';
 
       </div>
     </section>
+
+    {agents.length > 0 ? <AgentGrid client:load agents={agents} /> : null}
   </main>
 
   <Footer client:load />
