@@ -17,9 +17,7 @@ Administratorem danych osobowych jest:
 
 Smart Trade Sp. z o.o.
 
-ul. Agnieszki Osieckiej 18
-
-45-807 Opole, Polska
+NIP: PL7543065094
 
 Kontakt w sprawach dotyczących danych osobowych:
 

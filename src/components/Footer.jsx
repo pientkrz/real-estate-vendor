@@ -17,10 +17,12 @@ const Footer = () => {
           <h4 className="text-amber-800 font-bold mb-6 uppercase tracking-widest text-xs font-label">Dane firmowe</h4>
           <p className="text-stone-500 mb-4 leading-relaxed">
             Smart Trade Sp. z o.o.<br />
-            ul. Agnieszki Osieckiej 18<br />
-            45-807 Opole
+            NIP: PL7543065094
           </p>
-          <p className="text-stone-500 underline underline-offset-4 decoration-amber-700/30">info@globalshome.com</p>
+          <p className="text-stone-500 flex items-center gap-2">
+            <span className="material-symbols-outlined text-amber-800" aria-hidden="true">mail</span>
+            <a href="mailto:info@globalshome.com" className="underline underline-offset-4 decoration-amber-700/30">info@globalshome.com</a>
+          </p>
         </div>
       </div>
       <div className="max-w-screen-2xl mx-auto mt-24 pt-8 border-t border-stone-200 flex flex-col md:flex-row justify-between gap-6 font-body text-xs">
