@@ -4,7 +4,7 @@ const navigationItems = [
   { label: 'Nieruchomości', path: '' },
   { label: 'Blog', path: 'blog' },
   { label: 'O Nas', path: 'o-nas' },
-  { label: 'Kontakt', path: 'contact' },
+  { label: 'Kontakt', path: 'kontakt' },
 ];
 
 const getFocusableElements = (element) => (
@@ -108,7 +108,7 @@ const Navbar = () => {
           </div>
           <div className="flex shrink-0 items-center gap-3 sm:gap-6">
             <a
-              href={joinBasePath(base, 'contact')}
+              href={joinBasePath(base, 'kontakt')}
               className="editorial-gradient inline-block rounded-lg px-4 py-2 text-sm font-semibold tracking-tight text-on-primary transition-transform active:scale-95 text-center sm:px-8 sm:py-3 sm:text-base"
             >
               Zapytaj Teraz
@@ -173,7 +173,7 @@ const Navbar = () => {
                 </a>
               ))}
               <a
-                href={joinBasePath(base, 'contact')}
+                href={joinBasePath(base, 'kontakt')}
                 onClick={closeMenu}
                 className="editorial-gradient mt-6 rounded-lg px-4 py-3 text-center font-headline text-lg font-semibold text-on-primary"
               >

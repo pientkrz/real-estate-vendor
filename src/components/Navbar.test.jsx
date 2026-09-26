@@ -23,7 +23,7 @@ describe('Navbar', () => {
     expect(within(panel).getByRole('link', { name: 'Nieruchomości' })).toHaveAttribute('href', '/');
     expect(within(panel).getByRole('link', { name: 'Blog' })).toHaveAttribute('href', '/blog');
     expect(within(panel).getByRole('link', { name: 'O Nas' })).toHaveAttribute('href', '/o-nas');
-    expect(within(panel).getByRole('link', { name: 'Kontakt' })).toHaveAttribute('href', '/contact');
+    expect(within(panel).getByRole('link', { name: 'Kontakt' })).toHaveAttribute('href', '/kontakt');
   });
 
   it('closes with Escape, backdrop click, and a navigation link', () => {

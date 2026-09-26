@@ -23,7 +23,7 @@ Aplikacja działa jako **serwer Node.js (Astro SSR)**. Strona główna jest rend
 | `/property/[id]` | `src/pages/property/[id].astro` | Szczegółowa strona nieruchomości |
 | `/blog` | `src/pages/blog/index.astro` | Lista wpisów blogowych z zakładkami kategorii |
 | `/blog/[slug]` | `src/pages/blog/[...slug].astro` | Pojedynczy wpis blogowy |
-| `/contact` | `src/pages/contact.astro` | Formularz kontaktowy + dane biura |
+| `/kontakt` | `src/pages/kontakt.astro` | Formularz kontaktowy + dane biura |
 | `/o-nas` | `src/pages/o-nas.astro` | Strona „O nas" (statyczna, treść po polsku) |
 
 ---
