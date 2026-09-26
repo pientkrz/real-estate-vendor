@@ -27,7 +27,7 @@ const AgentGrid = ({ agents = [] }) => {
             <p className="max-w-md text-on-surface-variant font-body text-lg leading-relaxed">
               Nasz zespół doświadczonych profesjonalistów przeprowadzi Cię przez każdy etap transakcji na rynku luksusowych nieruchomości.
             </p>
-            <div className="flex gap-4">
+            <div className="hidden md:flex gap-4">
               <button
                 onClick={() => scroll('left')}
                 className="w-12 h-12 rounded-full border border-primary/20 flex items-center justify-center text-primary hover:bg-primary hover:text-bone transition-all duration-300"
