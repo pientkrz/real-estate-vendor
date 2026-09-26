@@ -176,8 +176,8 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
                         </div>
                     </div>
 
-                    <!-- Inquiry card stays in normal page flow so the complete form and agent details can be reached at every viewport height. -->
-                    <aside class="lg:col-span-4 h-fit">
+                    <!-- Keep the inquiry card visible while reading offer details on desktop. -->
+                    <aside class="lg:col-span-4 h-fit lg:sticky lg:top-[calc(var(--navbar-height)+5rem)] lg:self-start">
                         <div id="property-inquiry" tabindex="-1" class="scroll-mt-[calc(var(--navbar-height)+6rem)] bg-surface-container-low border border-outline/5 p-6 md:p-8 rounded-sm shadow-xl">
                             <h3 class="text-2xl font-headline font-bold text-on-surface mb-2">Zapytaj o ofertę</h3>
                             <p class="text-sm text-on-surface-variant font-body mb-6">Otrzymaj kompletną dokumentację i analizę inwestycyjną w ciągu 24 godzin.</p>
