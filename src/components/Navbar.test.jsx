@@ -56,6 +56,19 @@ describe('Navbar', () => {
     expect(within(panel).getByRole('link', { name: 'Blog' })).not.toHaveAttribute('aria-current', 'page');
   });
 
+  it('uses the offer form as the mobile action on property detail pages', () => {
+    render(<Navbar isPropertyDetail />);
+
+    expect(screen.queryByRole('link', { name: 'Zapytaj Teraz' })).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Zapytaj o ofertę' })).toHaveAttribute('href', '#property-inquiry');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Otwórz menu nawigacji' }));
+    const panel = screen.getByRole('dialog', { name: 'Menu' });
+    expect(within(panel).getByRole('link', { name: 'Kontakt' })).toHaveAttribute('href', '/kontakt');
+    expect(within(panel).queryByRole('link', { name: 'Zapytaj Teraz' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Zapytaj o ofertę' })).not.toBeInTheDocument();
+  });
+
   it('keeps focus inside the open mobile panel when tabbing', () => {
     render(<Navbar />);
     fireEvent.click(screen.getByRole('button', { name: 'Otwórz menu nawigacji' }));

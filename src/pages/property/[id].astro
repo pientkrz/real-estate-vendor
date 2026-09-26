@@ -74,9 +74,9 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
 ---
 
 <Layout title={`${city} | Global S Home`} description={opisExcerpt}>
-    <Navbar client:load />
+    <Navbar client:load isPropertyDetail />
     
-    <main class="min-h-screen bg-surface">
+    <main class="min-h-screen bg-surface pb-24 md:pb-0">
         <!-- Editorial Hero Section -->
         <section class="pt-32 pb-16">
             <div class="max-w-7xl mx-auto px-6 md:px-12">
@@ -176,7 +176,7 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
 
                     <!-- Sticky Collector Card -->
                     <aside class="lg:col-span-4 h-fit sticky top-48">
-                        <div class="bg-surface-container-low border border-outline/5 p-10 rounded-sm shadow-xl">
+                        <div id="property-inquiry" tabindex="-1" class="scroll-mt-[calc(var(--navbar-height)+1rem)] bg-surface-container-low border border-outline/5 p-10 rounded-sm shadow-xl">
                             <h3 class="text-2xl font-headline font-bold text-on-surface mb-2">Zapytaj o ofertę</h3>
                             <p class="text-sm text-on-surface-variant font-body mb-8">Otrzymaj kompletną dokumentację i analizę inwestycyjną w ciągu 24 godzin.</p>
 

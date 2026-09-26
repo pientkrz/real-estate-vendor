@@ -14,8 +14,9 @@ const getFocusableElements = (element) => (
 
 const joinBasePath = (base, path) => `${base}${path}`;
 
-const Navbar = () => {
+const Navbar = ({ isPropertyDetail = false }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isInquiryVisible, setIsInquiryVisible] = useState(false);
   const [currentPath, setCurrentPath] = useState('');
   const menuButtonRef = useRef(null);
   const menuPanelRef = useRef(null);
@@ -25,6 +26,19 @@ const Navbar = () => {
   useEffect(() => {
     setCurrentPath(window.location.pathname);
   }, []);
+
+  useEffect(() => {
+    if (!isPropertyDetail || !('IntersectionObserver' in window)) return undefined;
+
+    const inquiry = document.getElementById('property-inquiry');
+    if (!inquiry) return undefined;
+
+    const observer = new IntersectionObserver(([entry]) => {
+      setIsInquiryVisible(entry.isIntersecting);
+    }, { threshold: 0 });
+    observer.observe(inquiry);
+    return () => observer.disconnect();
+  }, [isPropertyDetail]);
 
   const isActive = (path) => {
     const href = joinBasePath(base, path);
@@ -107,12 +121,14 @@ const Navbar = () => {
             ))}
           </div>
           <div className="flex shrink-0 items-center gap-3 sm:gap-6">
-            <a
-              href={joinBasePath(base, 'kontakt')}
-              className="editorial-gradient inline-block rounded-lg px-4 py-2 text-sm font-semibold tracking-tight text-on-primary transition-transform active:scale-95 text-center sm:px-8 sm:py-3 sm:text-base"
-            >
-              Zapytaj Teraz
-            </a>
+            {!isPropertyDetail && (
+              <a
+                href={joinBasePath(base, 'kontakt')}
+                className="editorial-gradient inline-block rounded-lg px-4 py-2 text-sm font-semibold tracking-tight text-on-primary transition-transform active:scale-95 text-center sm:px-8 sm:py-3 sm:text-base"
+              >
+                Zapytaj Teraz
+              </a>
+            )}
             <button
               ref={menuButtonRef}
               type="button"
@@ -172,16 +188,29 @@ const Navbar = () => {
                   {item.label}
                 </a>
               ))}
-              <a
-                href={joinBasePath(base, 'kontakt')}
-                onClick={closeMenu}
-                className="editorial-gradient mt-6 rounded-lg px-4 py-3 text-center font-headline text-lg font-semibold text-on-primary"
-              >
-                Zapytaj Teraz
-              </a>
+              {!isPropertyDetail && (
+                <a
+                  href={joinBasePath(base, 'kontakt')}
+                  onClick={closeMenu}
+                  className="editorial-gradient mt-6 rounded-lg px-4 py-3 text-center font-headline text-lg font-semibold text-on-primary"
+                >
+                  Zapytaj Teraz
+                </a>
+              )}
             </nav>
           </aside>
         </>
+      )}
+
+      {isPropertyDetail && !isInquiryVisible && !isMenuOpen && (
+        <div className="fixed inset-x-0 bottom-0 z-[9998] border-t border-outline/10 bg-surface/95 px-4 pt-3 backdrop-blur-xl md:hidden" style={{ paddingBottom: 'max(0.75rem, env(safe-area-inset-bottom))' }}>
+          <a
+            href="#property-inquiry"
+            className="editorial-gradient block w-full rounded-sm px-4 py-3 text-center font-label text-sm font-semibold uppercase tracking-[0.12em] text-on-primary shadow-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+          >
+            Zapytaj o ofertę
+          </a>
+        </div>
       )}
     </>
   );
