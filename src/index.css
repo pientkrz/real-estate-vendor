@@ -17,24 +17,24 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --navbar-height: 76px;
+  --navbar-height: 60px;
 }
 
 @media (min-width: 640px) {
   :root {
-    --navbar-height: 84px;
+    --navbar-height: 72px;
   }
 }
 
 @media (min-width: 768px) {
   :root {
-    --navbar-height: 88px;
+    --navbar-height: 72px;
   }
 }
 
 @media (min-width: 1024px) {
   :root {
-    --navbar-height: 96px;
+    --navbar-height: 80px;
   }
 }
 
