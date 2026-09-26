@@ -24,6 +24,7 @@
     "@fontsource/cormorant-garamond": "^5.2.11",
     "all-the-cities": "^3.1.0",
     "astro": "^7.3.4",
+    "cookie": "1.1.1",
     "fast-xml-parser": "^5.11.1",
     "gray-matter": "^4.0.3",
     "isomorphic-dompurify": "^4.3.0",
