@@ -3,6 +3,7 @@ allowBuilds:
   sharp: true
 
 overrides:
+  "cookie": "1.1.1"
   "vite@^7.3.2": "7.3.5"
   "undici": "^7.29.0"
   "brace-expansion": "1.1.15"
