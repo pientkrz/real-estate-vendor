@@ -1,4 +1,28 @@
 import React from 'react';
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa6';
+
+const socialLinks = [
+  {
+    label: 'Facebook',
+    href: 'https://www.facebook.com/profile.php?id=100094281734576',
+    Icon: FaFacebookF,
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com/globalshome/',
+    Icon: FaInstagram,
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://www.linkedin.com/company/global-s-home/?viewAsMember=true',
+    Icon: FaLinkedinIn,
+  },
+  {
+    label: 'YouTube',
+    href: 'https://www.youtube.com/channel/UCl2baAyxsvev43K_CQoX29w',
+    Icon: FaYoutube,
+  },
+];
 
 const Footer = () => {
   return (
@@ -7,10 +31,19 @@ const Footer = () => {
         <div className="md:col-start-2">
           <div className="text-lg font-bold text-stone-900 mb-6 font-headline">Global S Home</div>
           <p className="text-stone-500 mb-8 max-w-xs leading-relaxed">Pomagamy znaleźć i nabyć wyjątkowe nieruchomości w Polsce i za granicą.</p>
-          <div className="flex gap-4">
-            <span className="material-symbols-outlined text-amber-800 cursor-pointer">public</span>
-            <span className="material-symbols-outlined text-amber-800 cursor-pointer">camera</span>
-            <span className="material-symbols-outlined text-amber-800 cursor-pointer">mail</span>
+          <div className="flex gap-3" aria-label="Media społecznościowe">
+            {socialLinks.map(({ label, href, Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Global S Home na platformie ${label}`}
+                className="flex h-10 w-10 items-center justify-center rounded-lg border-2 border-amber-800/50 text-amber-800 transition-colors hover:bg-amber-800 hover:text-stone-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-800 focus-visible:ring-offset-2 focus-visible:ring-offset-stone-100"
+              >
+                <Icon aria-hidden="true" size={18} />
+              </a>
+            ))}
           </div>
         </div>
         <div className="md:col-start-4">
