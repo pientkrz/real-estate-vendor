@@ -8,12 +8,12 @@ describe('PropertyInquiryForm', () => {
     render(<PropertyInquiryForm />);
 
     const consent = screen.getByRole('checkbox');
-    const preview = 'Akceptuję. Dane osobowe ulegające przetwarzaniu ...';
+    const preview = 'Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko ...';
     expect(screen.getByText(preview)).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Polityka Prywatności' })).not.toBeInTheDocument();
     const expandButton = screen.getByRole('button', { name: 'Czytaj więcej' });
     expect(expandButton).toHaveAttribute('aria-expanded', 'false');
-    expect(expandButton.parentElement.textContent).toMatch(/Akceptuję\. Dane osobowe ulegające przetwarzaniu \.\.\.\s*Czytaj więcej\.\.\./);
+    expect(expandButton.parentElement.textContent).toMatch(/Akceptuję\. Dane osobowe ulegające przetwarzaniu: imię i nazwisko \.\.\.Czytaj więcej\.\.\./);
     expect(consent).not.toBeChecked();
 
     fireEvent.click(expandButton);

@@ -127,18 +127,17 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
                         </svg>
                     </div>
                 </div>
-                <div className="min-w-0 flex-1 text-[10px] leading-relaxed text-outline">
+                <div className="min-w-0 flex-1 text-[9px] leading-relaxed text-outline">
                   <div id="property-privacy-details" className="inline">
                     <label htmlFor="property-inquiry-accepted" className="cursor-pointer">
                       {isPrivacyExpanded
                         ? 'Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko, adres e-mail, numer telefonu. Administratorem danych osobowych jest firma Smart Trade Sp. z o.o. Dane osobowe będą przetwarzane w celu odpowiedzi na zapytanie skierowane przy użyciu formularza kontaktowego oraz prowadzenie ewentualnego dalszego kontaktu na Pani/Pana życzenie.'
-                        : 'Akceptuję. Dane osobowe ulegające przetwarzaniu ...'}
+                        : 'Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko ...'}
                     </label>
                     {isPrivacyExpanded && (
                       <a href={`${import.meta.env.BASE_URL}privacy-policy`} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-70 transition-opacity">Polityka Prywatności</a>
                     )}
                   </div>
-                  {' '}
                   <button
                     type="button"
                     aria-expanded={isPrivacyExpanded}
