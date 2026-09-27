@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import PhoneInput from './PhoneInput';
 import { isValidPhoneNumber } from '../utils/phoneValidation';
 
@@ -17,6 +17,10 @@ const ContactForm = () => {
     const [phoneError, setPhoneError] = useState('');
     const [status, setStatus] = useState('idle'); // idle | submitting | success | error
     const [statusMessage, setStatusMessage] = useState('');
+    const [consentError, setConsentError] = useState(false);
+    const [consentAttempt, setConsentAttempt] = useState(0);
+    const consentRef = useRef(null);
+    const consentContainerRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -31,6 +35,10 @@ const ContactForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!formData.accepted) {
+            showConsentError();
+            return;
+        }
         if (!validatePhone()) return;
 
         setStatus('submitting');
@@ -51,6 +59,18 @@ const ContactForm = () => {
             setStatus('error');
             setStatusMessage(err.message);
         }
+    };
+
+    const showConsentError = () => {
+        setConsentError(true);
+        setConsentAttempt((attempt) => attempt + 1);
+        consentRef.current?.focus({ preventScroll: true });
+        consentContainerRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+    };
+
+    const handleConsentChange = (e) => {
+        handleChange(e);
+        if (e.target.checked) setConsentError(false);
     };
 
     return (
@@ -199,23 +219,28 @@ const ContactForm = () => {
                         required
                         value={formData.message}
                         onChange={handleChange}
-                        className="w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 resize-none placeholder:text-outline/50"
+                        className="block w-full bg-surface border-none border-b-2 border-outline/20 focus:border-primary px-4 py-3 text-on-surface font-body outline-none transition-colors duration-300 resize-none placeholder:text-outline/50"
                         placeholder="Opisz nieruchomość, której szukasz lub którą chcesz wystawić..."
                     ></textarea>
                 </div>
 
-                <div className="pt-2">
+                <div ref={consentContainerRef} className="scroll-mt-24">
                     <label className="flex items-start gap-3 cursor-pointer group">
-                        <div className="relative flex items-start pt-1">
+                        <div className="relative flex items-start">
                             <input 
                                 type="checkbox" 
                                 name="accepted"
-                                required
                                 checked={formData.accepted}
-                                onChange={handleChange}
+                                onChange={handleConsentChange}
+                                ref={consentRef}
+                                aria-invalid={consentError}
+                                aria-describedby={consentError ? 'contact-consent-error' : undefined}
                                 className="peer sr-only"
                             />
-                            <div className="w-4 h-4 min-w-[16px] border border-outline/50 rounded-sm bg-surface transition-all peer-checked:bg-primary peer-checked:border-primary flex items-center justify-center">
+                            <div
+                                key={consentAttempt}
+                                className={`w-4 h-4 min-w-[16px] border rounded-sm bg-surface transition-all peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 flex items-center justify-center ${consentError ? 'border-error text-error peer-focus-visible:ring-error' : 'border-outline/50 peer-focus-visible:ring-primary'} peer-checked:bg-primary peer-checked:border-primary ${consentError ? 'consent-shake' : ''}`}
+                            >
                                 <svg className="w-3 h-3 text-on-primary opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                                     <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                                 </svg>
@@ -226,12 +251,21 @@ const ContactForm = () => {
                             <a href={`${import.meta.env.BASE_URL}privacy-policy`} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-70 transition-opacity">Polityka Prywatności</a>
                         </span>
                     </label>
+                    <div className="mt-2 min-h-4 pl-7">
+                        {consentError && <p id="contact-consent-error" role="alert" className="text-xs text-error">Zaznacz zgodę, aby wysłać zapytanie.</p>}
+                    </div>
                 </div>
 
                 <div className="pt-6">
                     <button
                         type="submit"
-                        disabled={!formData.accepted || status === 'submitting'}
+                        onClick={(e) => {
+                            if (!formData.accepted) {
+                                e.preventDefault();
+                                showConsentError();
+                            }
+                        }}
+                        disabled={status === 'submitting'}
                         className="w-full editorial-gradient text-on-primary font-label uppercase tracking-[0.2em] py-4 text-sm hover:opacity-90 transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-low disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {status === 'submitting' ? 'Wysyłanie...' : 'Wyślij zapytanie'}

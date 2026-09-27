@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import PhoneInput from './PhoneInput';
 import { isValidPhoneNumber } from '../utils/phoneValidation';
 
@@ -14,6 +14,10 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
     const [status, setStatus] = useState('idle'); // idle | submitting | success | error
     const [statusMessage, setStatusMessage] = useState('');
     const [isPrivacyExpanded, setIsPrivacyExpanded] = useState(false);
+    const [consentError, setConsentError] = useState(false);
+    const [consentAttempt, setConsentAttempt] = useState(0);
+    const consentRef = useRef(null);
+    const consentContainerRef = useRef(null);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -28,6 +32,10 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!formData.accepted) {
+            showConsentError();
+            return;
+        }
         if (!validatePhone()) return;
 
         setStatus('submitting');
@@ -51,6 +59,18 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
             setStatus('error');
             setStatusMessage(err.message);
         }
+    };
+
+    const showConsentError = () => {
+        setConsentError(true);
+        setConsentAttempt((attempt) => attempt + 1);
+        consentRef.current?.focus({ preventScroll: true });
+        consentContainerRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+    };
+
+    const handleConsentChange = (e) => {
+        handleChange(e);
+        if (e.target.checked) setConsentError(false);
     };
 
     return (
@@ -105,28 +125,33 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
                     required
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full bg-surface border-b border-outline/20 px-3 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm resize-none"
+                    className="block w-full bg-surface border-b border-outline/20 px-3 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm resize-none"
                 ></textarea>
             </div>
 
-            <div className="space-y-2 pt-2">
+            <div ref={consentContainerRef} className="space-y-2 scroll-mt-24">
               <div className="flex items-start gap-3">
-                <div className="relative flex items-start pt-1">
+                <label htmlFor="property-inquiry-accepted" className="relative flex items-start cursor-pointer">
                     <input
                         type="checkbox"
                         name="accepted"
                         id="property-inquiry-accepted"
-                        required
                         checked={formData.accepted}
-                        onChange={handleChange}
+                        onChange={handleConsentChange}
+                        ref={consentRef}
+                        aria-invalid={consentError}
+                        aria-describedby={consentError ? 'property-consent-error' : undefined}
                         className="peer sr-only"
                     />
-                    <div className="w-4 h-4 min-w-[16px] border border-outline/50 rounded-sm bg-surface transition-all peer-checked:bg-primary peer-checked:border-primary flex items-center justify-center">
+                    <div
+                        key={consentAttempt}
+                        className={`w-4 h-4 min-w-[16px] border rounded-sm bg-surface transition-all peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 flex items-center justify-center ${consentError ? 'border-error text-error peer-focus-visible:ring-error' : 'border-outline/50 peer-focus-visible:ring-primary'} peer-checked:bg-primary peer-checked:border-primary ${consentError ? 'consent-shake' : ''}`}
+                    >
                         <svg className="w-3 h-3 text-on-primary opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
                     </div>
-                </div>
+                </label>
                 <div className="min-w-0 flex-1 text-[9px] leading-relaxed text-outline">
                   <div id="property-privacy-details" className="inline">
                     <label htmlFor="property-inquiry-accepted" className="cursor-pointer">
@@ -150,11 +175,20 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
                   {!isPrivacyExpanded && <span aria-hidden="true">...</span>}
                 </div>
               </div>
+              <div className="min-h-4 pl-7">
+                {consentError && <p id="property-consent-error" role="alert" className="text-xs text-error">Zaznacz zgodę, aby wysłać zapytanie.</p>}
+              </div>
             </div>
 
             <button
                 type="submit"
-                disabled={!formData.accepted || status === 'submitting'}
+                onClick={(e) => {
+                    if (!formData.accepted) {
+                        e.preventDefault();
+                        showConsentError();
+                    }
+                }}
+                disabled={status === 'submitting'}
                 className="w-full editorial-gradient text-on-primary font-label uppercase tracking-[0.2em] py-4 text-sm hover:opacity-90 transition-opacity duration-300 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface-container-low disabled:opacity-50 disabled:cursor-not-allowed"
             >
                 {status === 'submitting' ? 'Wysyłanie...' : 'Wyślij zapytanie'}

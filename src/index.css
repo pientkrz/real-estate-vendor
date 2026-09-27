@@ -115,6 +115,22 @@
   }
 }
 
+@keyframes consent-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-3px); }
+  75% { transform: translateX(3px); }
+}
+
+.consent-shake {
+  animation: consent-shake 220ms ease-in-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .consent-shake {
+    animation: none;
+  }
+}
+
 /* Neutral backdrop used while satellite tiles load. */
 .listings-map.leaflet-container {
   background: #d7d2c5;
