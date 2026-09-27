@@ -13,6 +13,7 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
     const [phoneError, setPhoneError] = useState('');
     const [status, setStatus] = useState('idle'); // idle | submitting | success | error
     const [statusMessage, setStatusMessage] = useState('');
+    const [isPrivacyExpanded, setIsPrivacyExpanded] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -73,7 +74,7 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm"
+                    className="w-full bg-surface border-b border-outline/20 px-3 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm"
                 />
             </div>
             <div>
@@ -84,7 +85,7 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm"
+                    className="w-full bg-surface border-b border-outline/20 px-3 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm"
                 />
             </div>
 
@@ -104,16 +105,17 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
                     required
                     value={formData.message}
                     onChange={handleChange}
-                    className="w-full bg-surface border-b border-outline/20 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm resize-none"
+                    className="w-full bg-surface border-b border-outline/20 px-3 py-3 focus:outline-none focus:border-primary transition-colors font-body text-sm resize-none"
                 ></textarea>
             </div>
 
             <div className="space-y-2 pt-2">
-              <label className="flex items-start gap-3 cursor-pointer">
+              <div className="flex items-start gap-3">
                 <div className="relative flex items-start pt-1">
                     <input
                         type="checkbox"
                         name="accepted"
+                        id="property-inquiry-accepted"
                         required
                         checked={formData.accepted}
                         onChange={handleChange}
@@ -125,14 +127,29 @@ const PropertyInquiryForm = ({ propertyId, propertyTitle, propertyUrl }) => {
                         </svg>
                     </div>
                 </div>
-                <span className="text-[10px] text-outline leading-relaxed">
-                    Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko, adres e-mail, numer telefonu. Administratorem danych osobowych jest firma Smart Trade Sp. z o.o. Dane osobowe będą przetwarzane w celu odpowiedzi na zapytanie skierowane przy użyciu formularza kontaktowego oraz prowadzenie ewentualnego dalszego kontaktu na Pani/Pana życzenie.
-                </span>
-              </label>
-              <div className="pl-7 text-[10px] leading-relaxed text-outline">
-                <p>
-                    <a href={`${import.meta.env.BASE_URL}privacy-policy`} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-70 transition-opacity">Polityka Prywatności</a>
-                </p>
+                <div className="min-w-0 flex-1 text-[10px] leading-relaxed text-outline">
+                  <div id="property-privacy-details" className="inline">
+                    <label htmlFor="property-inquiry-accepted" className="cursor-pointer">
+                      {isPrivacyExpanded
+                        ? 'Akceptuję. Dane osobowe ulegające przetwarzaniu: imię i nazwisko, adres e-mail, numer telefonu. Administratorem danych osobowych jest firma Smart Trade Sp. z o.o. Dane osobowe będą przetwarzane w celu odpowiedzi na zapytanie skierowane przy użyciu formularza kontaktowego oraz prowadzenie ewentualnego dalszego kontaktu na Pani/Pana życzenie.'
+                        : 'Akceptuję. Dane osobowe ulegające przetwarzaniu ...'}
+                    </label>
+                    {isPrivacyExpanded && (
+                      <a href={`${import.meta.env.BASE_URL}privacy-policy`} target="_blank" rel="noopener noreferrer" className="text-primary underline hover:opacity-70 transition-opacity">Polityka Prywatności</a>
+                    )}
+                  </div>
+                  {' '}
+                  <button
+                    type="button"
+                    aria-expanded={isPrivacyExpanded}
+                    aria-controls="property-privacy-details"
+                    onClick={() => setIsPrivacyExpanded((expanded) => !expanded)}
+                    className="inline rounded-sm px-0.5 font-label text-primary underline underline-offset-2 hover:opacity-70 focus:outline-none focus:ring-2 focus:ring-primary"
+                  >
+                    {isPrivacyExpanded ? 'Zwiń' : 'Czytaj więcej'}
+                  </button>
+                  {!isPrivacyExpanded && <span aria-hidden="true">...</span>}
+                </div>
               </div>
             </div>
 

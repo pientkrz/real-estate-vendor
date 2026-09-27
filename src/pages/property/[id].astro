@@ -180,16 +180,11 @@ const agents = loadConfiguredNieruchomosciOnlineAgents();
                     <aside class="lg:col-span-4 h-fit lg:sticky lg:top-[calc(var(--navbar-height)+5rem)] lg:self-start">
                         <div id="property-inquiry" tabindex="-1" class="scroll-mt-[calc(var(--navbar-height)+6rem)] bg-surface-container-low border border-outline/5 p-6 md:p-8 rounded-sm shadow-xl">
                             <h3 class="text-2xl font-headline font-bold text-on-surface mb-2">Zapytaj o ofertę</h3>
-                            <p class="text-sm text-on-surface-variant font-body mb-6">Otrzymaj kompletną dokumentację i analizę inwestycyjną w ciągu 24 godzin.</p>
 
                             {assignedAgent && <PropertyAgentCard agent={assignedAgent} />}
                             <div class="mt-4">
                                 <PropertyInquiryForm client:load propertyId={offer.id} propertyTitle={params?.tytul || city} propertyUrl={Astro.url.href} />
                             </div>
-
-                            <p class="mt-5 text-[10px] text-outline leading-relaxed text-center italic">
-                                Oferta wyłączna Global S Home — <br/>Przesyłając formularz, akceptujesz naszą politykę prywatności.
-                            </p>
                         </div>
                     </aside>
                 </div>
