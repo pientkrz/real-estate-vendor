@@ -11,7 +11,7 @@ const AgentGrid = ({ agents = [] }) => {
               Skontaktuj się z naszymi specjalistami
             </h2>
           </div>
-          <p className="max-w-md mt-8 text-on-surface-variant font-body text-lg leading-relaxed">
+          <p className="mt-8 max-w-3xl text-on-surface-variant font-body text-lg leading-relaxed">
             Nasz zespół doświadczonych profesjonalistów przeprowadzi Cię przez każdy etap transakcji na rynku luksusowych nieruchomości.
           </p>
         </div>
