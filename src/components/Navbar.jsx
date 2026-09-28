@@ -110,11 +110,11 @@ const Navbar = ({ isPropertyDetail = false }) => {
           >
             <BrandLogo alt="" className="h-full w-full object-contain object-left" />
           </a>
-          <div className="hidden md:flex items-center space-x-12">
+          <div className="hidden items-center space-x-8 md:flex lg:space-x-12">
             {navigationItems.map((item) => (
               <a
                 key={item.path || 'home'}
-                className="text-stone-600 hover:text-stone-900 font-headline transition-colors duration-300 ease-in-out"
+                className="whitespace-nowrap font-headline text-stone-700 transition-colors duration-300 ease-in-out hover:text-stone-900 lg:text-lg lg:font-medium lg:leading-6 2xl:text-xl 2xl:leading-7"
                 href={joinBasePath(base, item.path)}
                 aria-current={isActive(item.path) ? 'page' : undefined}
               >
@@ -126,7 +126,7 @@ const Navbar = ({ isPropertyDetail = false }) => {
             {!isPropertyDetail && (
               <a
                 href={joinBasePath(base, 'kontakt')}
-                className="editorial-gradient inline-block rounded-lg px-4 py-2 text-sm font-semibold tracking-tight text-on-primary transition-transform active:scale-95 text-center sm:px-8 sm:py-3 sm:text-base"
+                className="editorial-gradient inline-block rounded-lg px-4 py-2 text-center text-sm font-semibold tracking-tight text-on-primary transition-transform active:scale-95 sm:px-8 sm:py-3 sm:text-base lg:text-lg lg:leading-6"
               >
                 Zapytaj Teraz
               </a>
