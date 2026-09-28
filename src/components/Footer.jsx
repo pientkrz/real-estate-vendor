@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube } from 'react-icons/fa6';
+import BrandLogo from './BrandLogo';
 
 const socialLinks = [
   {
@@ -29,7 +30,9 @@ const Footer = () => {
     <footer className="bg-stone-100 w-full py-16 px-12">
       <div className="max-w-screen-2xl mx-auto grid grid-cols-1 md:grid-cols-5 gap-12 items-start font-body text-sm tracking-wide">
         <div className="md:col-start-2">
-          <div className="text-lg font-bold text-stone-900 mb-6 font-headline">Global S Home</div>
+          <div className="mb-6 h-12 w-44">
+            <BrandLogo alt="Global S Home" className="h-full w-full object-contain object-left" />
+          </div>
           <p className="text-stone-500 mb-8 max-w-xs leading-relaxed">Pomagamy znaleźć i nabyć wyjątkowe nieruchomości w Polsce i za granicą.</p>
           <div className="flex gap-3" aria-label="Media społecznościowe">
             {socialLinks.map(({ label, href, Icon }) => (

@@ -12,7 +12,9 @@ describe('Navbar', () => {
   it('exposes the home link and opens the mobile navigation with all routes', () => {
     render(<Navbar />);
 
-    expect(screen.getAllByRole('link', { name: 'Global S Home' })[0]).toHaveAttribute('href', '/');
+    const logoLink = screen.getAllByRole('link', { name: 'Global S Home' })[0];
+    expect(logoLink).toHaveAttribute('href', '/');
+    expect(logoLink.querySelector('img')).toHaveAttribute('src', '/assets/global-s-home-logo.svg');
     const menuButton = screen.getByRole('button', { name: 'Otwórz menu nawigacji' });
     fireEvent.click(menuButton);
 

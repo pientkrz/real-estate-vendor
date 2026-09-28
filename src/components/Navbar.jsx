@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import BrandLogo from './BrandLogo';
 
 const navigationItems = [
   { label: 'Nieruchomości', path: '' },
@@ -104,9 +105,10 @@ const Navbar = ({ isPropertyDetail = false }) => {
         <nav className="flex min-w-0 items-center justify-between px-5 py-4 sm:px-8 sm:py-5 lg:px-12 lg:py-6 max-w-screen-2xl mx-auto">
           <a
             href={base}
-            className="whitespace-nowrap text-xl font-bold tracking-tighter text-amber-800 font-headline sm:text-2xl"
+            aria-label="Global S Home"
+            className="flex h-10 w-28 shrink-0 items-center sm:h-12 sm:w-40"
           >
-            Global S Home
+            <BrandLogo alt="" className="h-full w-full object-contain object-left" />
           </a>
           <div className="hidden md:flex items-center space-x-12">
             {navigationItems.map((item) => (

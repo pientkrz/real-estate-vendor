@@ -1,0 +1,13 @@
+---
+interface Props {
+  alt?: string;
+  class?: string;
+  width?: number;
+  height?: number;
+}
+
+const { alt = 'Global S Home', class: className = 'h-full w-full object-contain', width = 1100, height = 565 } = Astro.props;
+const src = `${import.meta.env.BASE_URL}assets/global-s-home-logo.svg`;
+---
+
+<img src={src} alt={alt} class={className} width={width} height={height} />
