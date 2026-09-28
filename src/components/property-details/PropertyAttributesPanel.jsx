@@ -11,7 +11,7 @@ const PropertyAttributesPanel = ({ params }) => {
       <span className="text-primary font-label text-sm tracking-[0.3em] uppercase mb-6 block">
         Pełne informacje
       </span>
-      <h3 className="text-3xl font-headline font-bold text-on-surface mb-12">
+      <h3 className="text-3xl font-serif font-bold text-on-surface mb-12">
         Szczegóły nieruchomości
       </h3>
       <div className="flex flex-col gap-12">

@@ -29,7 +29,7 @@ const RoomDetailsPanel = ({ details }) => {
             <DetailRow icon="deck"       label="Balkon"                    value={bool(details.balcony)} />
             <DetailRow icon="event"      label="Wolne od"                  value={details.freeFrom} />
             <DetailRow icon="chair"      label="Umeblowane"                value={bool(details.furnished)} />
-            <DetailRow icon="no_smoking" label="Tylko dla niepalących"     value={bool(details.nonSmokersOnly)} />
+            <DetailRow icon="smoke_free" label="Tylko dla niepalących"     value={bool(details.nonSmokersOnly)} />
           </ul>
         </div>
 

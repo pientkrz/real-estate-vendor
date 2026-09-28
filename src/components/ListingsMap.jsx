@@ -111,7 +111,7 @@ const createPropertyPin = (prop, latLng) => {
   });
 
   pin.bindPopup(`
-    <div style="min-width:200px;font-family:'Work Sans',sans-serif;padding:4px;">
+    <div style="min-width:200px;font-family:'DM Sans Variable','DM Sans',sans-serif;padding:4px;">
       ${photo ? `<img src="${escapeHtml(photo)}"${photoSrcSet ? ` srcset="${photoSrcSet}" sizes="200px"` : ''} alt="${escapeHtml(title)}" loading="lazy" decoding="async" style="width:100%;height:120px;object-fit:cover;border-radius:2px;display:block;margin:0 0 8px;"/>` : ''}
       <p style="font-size:9px;text-transform:uppercase;letter-spacing:0.2em;color:#7a590c;margin:0 0 4px;">${escapeHtml(prop.tab || 'Nieruchomość')}</p>
       <h4 style="font-size:15px;font-weight:700;margin:0 0 2px;color:#1c1b1b;">${escapeHtml(title)}</h4>
@@ -186,7 +186,7 @@ const ListingsMap = ({ properties = [] }) => {
               border-radius: 9999px;
               box-shadow: 0 2px 10px rgba(0,0,0,0.25);
               color: #fcf9f8;
-              font-family: 'Work Sans', sans-serif;
+              font-family: 'DM Sans Variable', 'DM Sans', sans-serif;
               font-weight: 700;
               font-size: ${count < 10 ? 14 : 16}px;
               cursor: pointer;

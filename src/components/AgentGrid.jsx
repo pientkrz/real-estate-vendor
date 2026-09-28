@@ -7,7 +7,7 @@ const AgentGrid = ({ agents = [] }) => {
         <div className="mb-16">
           <div>
             <span className="text-primary font-label text-sm tracking-[0.3em] uppercase mb-4 block">Nasi eksperci</span>
-            <h2 className="text-5xl md:text-6xl font-headline font-bold text-on-surface tracking-tight">
+            <h2 className="text-5xl md:text-6xl font-serif font-bold text-on-surface tracking-tight">
               Skontaktuj się z naszymi specjalistami
             </h2>
           </div>

@@ -98,7 +98,7 @@ const FeaturedProperties = ({
 }) => (
   <div>
     <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end">
-      <h2 className="font-headline text-2xl lg:text-4xl font-bold tracking-tight text-on-surface">
+      <h2 className="font-serif text-2xl lg:text-4xl font-bold tracking-tight text-on-surface">
         {title}
       </h2>
       <p className="font-label text-xs text-outline tracking-widest uppercase">

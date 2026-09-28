@@ -80,7 +80,7 @@ const ContactForm = () => {
             
             <div className="mb-10 text-center">
                 <span className="text-primary font-label text-xs tracking-[0.2em] uppercase mb-4 block">Prywatna konsultacja</span>
-                <h2 className="text-4xl md:text-5xl font-headline font-bold text-on-surface tracking-tighter">Skontaktuj się z nami</h2>
+                <h2 className="text-4xl md:text-5xl font-serif font-bold text-on-surface tracking-tighter">Skontaktuj się z nami</h2>
                 <p className="mt-4 text-on-surface-variant font-body text-sm md:text-base leading-relaxed max-w-md mx-auto">
                     Dyskrecja i precyzja to nasze znaki rozpoznawcze. Zostaw swoje dane, a nasi wyspecjalizowani agenci umówią prywatne spotkanie.
                 </p>
