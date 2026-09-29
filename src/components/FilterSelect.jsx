@@ -176,7 +176,8 @@ const FilterSelect = ({ label, value, options, multiple = false, onApply, summar
       });
       return;
     }
-    setDraftValue(optionValue);
+    if (!valuesEqual(optionValue, normalizedValue)) onApply(optionValue);
+    close();
   };
 
   const optionList = (
@@ -267,7 +268,7 @@ const FilterSelect = ({ label, value, options, multiple = false, onApply, summar
             </div>
             <div id={isMobile ? undefined : titleId} className="hidden pb-2 font-label text-[10px] uppercase tracking-widest text-primary md:block">{label}</div>
             {optionList}
-            {actions}
+            {multiple ? actions : null}
           </section>
         );
 

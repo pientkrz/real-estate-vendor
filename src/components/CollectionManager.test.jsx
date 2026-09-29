@@ -343,7 +343,7 @@ describe('CollectionManager — offer pagination', () => {
     expect(screen.getByRole('radio', { name: '15 ofert' })).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: '30 ofert' })).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: '60 ofert' })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Anuluj' }));
+    fireEvent.click(screen.getByRole('button', { name: /15 ofert/i }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Strona 5' }));
     await waitFor(() => expect(cardCount()).toBe(1));
@@ -386,7 +386,6 @@ describe('CollectionManager — offer pagination', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /15 ofert/i }));
     fireEvent.click(screen.getByRole('radio', { name: '30 ofert' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Zastosuj' }));
     await waitFor(() => expect(cardCount()).toBe(30));
     expect(screen.getByRole('heading', { name: 'City 61' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Strona 1' })).toHaveAttribute('aria-current', 'page');

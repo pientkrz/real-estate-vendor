@@ -52,16 +52,37 @@ describe('FilterSelect', () => {
     expect(screen.getByRole('checkbox', { name: 'Cyprus' })).not.toBeChecked();
   });
 
-  it('uses radios for a single-select filter and closes on Escape', () => {
+  it('applies a single-choice selection immediately and closes without actions', () => {
+    const onApply = vi.fn();
+    const options = [{ value: '', label: 'Dowolna' }, { value: '3', label: '3+' }];
+    render(<FilterSelect label="Pokoje" value="" options={options} summary="Dowolna" onApply={onApply} />);
+
+    const trigger = screen.getByRole('button', { name: /dowolna/i });
+    fireEvent.click(trigger);
+    fireEvent.click(screen.getByRole('radio', { name: '3+' }));
+
+    expect(screen.queryByRole('dialog', { name: 'Pokoje' })).not.toBeInTheDocument();
+    expect(onApply).toHaveBeenCalledWith('3');
+    expect(screen.queryByRole('button', { name: 'Anuluj' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Zastosuj' })).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
+  it('applies and dismisses a single-choice mobile sheet while restoring scrolling', () => {
+    setViewport(true);
     const onApply = vi.fn();
     render(<FilterSelect label="Pokoje" value="" options={[{ value: '', label: 'Dowolna' }, { value: '3', label: '3+' }]} summary="Dowolna" onApply={onApply} />);
 
-    fireEvent.click(screen.getByRole('button', { name: /dowolna/i }));
-    fireEvent.click(screen.getByRole('radio', { name: '3+' }));
-    fireEvent.keyDown(document, { key: 'Escape' });
+    const trigger = screen.getByRole('button', { name: /dowolna/i });
+    fireEvent.click(trigger);
+    expect(document.body.style.overflow).toBe('hidden');
 
+    fireEvent.click(screen.getByRole('radio', { name: '3+' }));
+
+    expect(onApply).toHaveBeenCalledWith('3');
     expect(screen.queryByRole('dialog', { name: 'Pokoje' })).not.toBeInTheDocument();
-    expect(onApply).not.toHaveBeenCalled();
+    expect(document.body.style.overflow).toBe('');
+    expect(trigger).toHaveFocus();
   });
 
   it('uses non-modal popover semantics on desktop and restores trigger focus', () => {
