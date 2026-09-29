@@ -339,9 +339,11 @@ describe('CollectionManager — offer pagination', () => {
     await waitFor(() => expect(cardCount()).toBe(15));
     expect(screen.getByText('61 nieruchomości')).toBeInTheDocument();
     expect(screen.getByTestId('map')).toHaveAttribute('data-count', '61');
-    expect(screen.getByRole('option', { name: '15 ofert' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: '30 ofert' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: '60 ofert' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /15 ofert/i }));
+    expect(screen.getByRole('radio', { name: '15 ofert' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: '30 ofert' })).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: '60 ofert' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Anuluj' }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Strona 5' }));
     await waitFor(() => expect(cardCount()).toBe(1));
@@ -364,12 +366,12 @@ describe('CollectionManager — offer pagination', () => {
     fireEvent(window, new Event('resize'));
     await waitFor(() => expect(cardCount()).toBe(10));
     expect(screen.getByRole('heading', { name: 'City 61' })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: '10 ofert' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /10 ofert/i })).toBeInTheDocument();
 
     window.innerWidth = 767;
     fireEvent(window, new Event('resize'));
     await waitFor(() => expect(cardCount()).toBe(5));
-    expect(screen.getByRole('option', { name: '5 ofert' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /5 ofert/i })).toBeInTheDocument();
 
     window.innerWidth = originalWidth;
   });
@@ -382,7 +384,9 @@ describe('CollectionManager — offer pagination', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Strona 2' }));
     await waitFor(() => expect(screen.getByRole('heading', { name: 'City 46' })).toBeInTheDocument());
 
-    fireEvent.change(screen.getByRole('combobox', { name: 'Oferty na stronie' }), { target: { value: '10' } });
+    fireEvent.click(screen.getByRole('button', { name: /15 ofert/i }));
+    fireEvent.click(screen.getByRole('radio', { name: '30 ofert' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Zastosuj' }));
     await waitFor(() => expect(cardCount()).toBe(30));
     expect(screen.getByRole('heading', { name: 'City 61' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Strona 1' })).toHaveAttribute('aria-current', 'page');

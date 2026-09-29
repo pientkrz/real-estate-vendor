@@ -1,6 +1,7 @@
 import React from 'react';
 import { formatPrice } from '../utils/formatPrice';
 import { convertPrice } from '../utils/exchangeRates';
+import FilterSelect from './FilterSelect';
 
 const displayCount = (value) => (Number(value) > 0 ? value : '—');
 const hasCount = (value) => Number(value) > 0;
@@ -110,19 +111,16 @@ const FeaturedProperties = ({
 
     {pagination && (
       <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <label className="flex items-center gap-3 font-label text-xs uppercase tracking-widest text-outline">
-          Oferty na stronie
-          <select
-            aria-label="Oferty na stronie"
-            value={pagination.rowsPerPage}
-            onChange={(event) => pagination.onRowsPerPageChange(Number(event.target.value))}
-            className="min-h-11 rounded-sm bg-surface-container-low px-3 text-sm normal-case tracking-normal text-on-surface"
-          >
-            {[5, 10, 20].map((rows) => (
-              <option key={rows} value={rows}>{rows * (pagination.pageSize / pagination.rowsPerPage)} ofert</option>
-            ))}
-          </select>
-        </label>
+        <FilterSelect
+          label="Oferty na stronie"
+          value={pagination.rowsPerPage}
+          options={[5, 10, 20].map((rows) => ({
+            value: rows,
+            label: `${rows * (pagination.pageSize / pagination.rowsPerPage)} ofert`,
+          }))}
+          summary={`${pagination.pageSize} ofert`}
+          onApply={(rows) => pagination.onRowsPerPageChange(Number(rows))}
+        />
         {pagination.pageCount > 1 && (
           <Pagination {...pagination} />
         )}
