@@ -1,4 +1,4 @@
-import React, { useState, useMemo, lazy, Suspense } from 'react';
+import React, { useState, useMemo, useEffect, lazy, Suspense } from 'react';
 import ListingFilterBar from './ListingFilterBar';
 import FeaturedProperties from './FeaturedProperties';
 import { convertPrice, FALLBACK_RATES } from '../utils/exchangeRates';
@@ -11,6 +11,9 @@ const ListingsMap = lazy(() =>
 );
 
 const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimestamp, initialRatesSource }) => {
+  const [columns, setColumns] = useState(3);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
     priceMin: null,
     priceMax: null,
@@ -22,9 +25,27 @@ const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimes
   const [displayCurrency, setDisplayCurrency] = useState('EUR');
   const [rates] = useState(initialRates ?? FALLBACK_RATES);
 
+  useEffect(() => {
+    const updateColumns = () => {
+      const width = window.innerWidth;
+      const nextColumns = width < 768 ? 1 : width < 1024 ? 2 : 3;
+      setColumns(nextColumns);
+      setCurrentPage(1);
+    };
+
+    updateColumns();
+    window.addEventListener('resize', updateColumns);
+    return () => window.removeEventListener('resize', updateColumns);
+  }, []);
+
+  const setFiltersAndResetPage = (nextFilters) => {
+    setCurrentPage(1);
+    setFilters(nextFilters);
+  };
+
   const handleCurrencyChange = (currency) => {
     setDisplayCurrency(currency);
-    setFilters(f => ({ ...f, priceMin: null, priceMax: null }));
+    setFiltersAndResetPage(f => ({ ...f, priceMin: null, priceMax: null }));
   };
 
   const filteredOffers = useMemo(() => {
@@ -55,6 +76,11 @@ const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimes
     return result;
   }, [initialOffers, filters, displayCurrency, rates]);
 
+  const pageSize = rowsPerPage * columns;
+  const pageCount = Math.max(1, Math.ceil(filteredOffers.length / pageSize));
+  const safeCurrentPage = Math.min(currentPage, pageCount);
+  const paginatedOffers = filteredOffers.slice((safeCurrentPage - 1) * pageSize, safeCurrentPage * pageSize);
+
   return (
     <div className="pt-[var(--navbar-height)] overflow-x-hidden">
       {/* Map — full width */}
@@ -75,7 +101,7 @@ const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimes
         <ListingFilterBar
           offers={initialOffers}
           filters={filters}
-          setFilters={setFilters}
+          setFilters={setFiltersAndResetPage}
           displayCurrency={displayCurrency}
           setDisplayCurrency={handleCurrencyChange}
           rates={rates}
@@ -87,7 +113,19 @@ const CollectionManager = ({ initialOffers = [], initialRates, initialRatesTimes
       {/* Listings grid */}
       <div className="px-4 lg:px-8 py-6 w-full">
         <FeaturedProperties
-          properties={filteredOffers}
+          properties={paginatedOffers}
+          totalCount={filteredOffers.length}
+          pagination={{
+            currentPage: safeCurrentPage,
+            pageCount,
+            rowsPerPage,
+            pageSize,
+            onPageChange: setCurrentPage,
+            onRowsPerPageChange: (rows) => {
+              setRowsPerPage(rows);
+              setCurrentPage(1);
+            },
+          }}
           displayCurrency={displayCurrency}
           rates={rates}
         />

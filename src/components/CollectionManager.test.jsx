@@ -8,7 +8,7 @@ import MOCK_XML from '../../test/fixtures/mock-offers.xml?raw';
 // ── Mocks ─────────────────────────────────────────────────────────────────────
 
 // ListingsMap depends on Leaflet which requires a real browser DOM — stub it out.
-vi.mock('./ListingsMap', () => ({ default: () => <div data-testid="map" /> }));
+vi.mock('./ListingsMap', () => ({ default: ({ properties }) => <div data-testid="map" data-count={properties?.length} /> }));
 
 // reverseGeocode iterates 135 000 cities on every call — replace with a fast,
 // deterministic stub keyed on longitude (mirrors the fixture's coordinate scheme,
@@ -54,6 +54,15 @@ const categoryOffers = [
 }));
 
 const renderCategoryApp = () => render(<CollectionManager initialOffers={categoryOffers} />);
+
+const manyOffers = Array.from({ length: 61 }, (_, index) => ({
+  id: `pagination-${index + 1}`,
+  typ: 'sprzedaz',
+  price: 100000 + index * 1000,
+  currency: 'EUR',
+  location: { city: `City ${index + 1}`, country: index % 2 === 0 ? 'Spain' : 'Greece' },
+  params: { miasto: `City ${index + 1}`, powierzchnia: 50, liczbapokoi: 2 },
+}));
 
 /** Wait for the listings heading so Suspense / effects have settled. */
 const waitForListings = () =>
@@ -319,5 +328,79 @@ describe('CollectionManager — multi-category filter', () => {
 
     await waitFor(() => expect(cardCount()).toBe(3));
     expect(screen.getByRole('button', { name: /wszystkie typy/i })).toBeInTheDocument();
+  });
+});
+
+describe('CollectionManager — offer pagination', () => {
+  it('limits the grid, reports the full match count, and keeps every match on the map', async () => {
+    render(<CollectionManager initialOffers={manyOffers} />);
+    await waitForListings();
+
+    await waitFor(() => expect(cardCount()).toBe(15));
+    expect(screen.getByText('61 nieruchomości')).toBeInTheDocument();
+    expect(screen.getByTestId('map')).toHaveAttribute('data-count', '61');
+    expect(screen.getByRole('option', { name: '15 ofert' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: '30 ofert' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: '60 ofert' })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Strona 5' }));
+    await waitFor(() => expect(cardCount()).toBe(1));
+    expect(screen.getByRole('heading', { name: 'City 1' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Poprzednia strona' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Następna strona' })).toBeDisabled();
+  });
+
+  it('adjusts the offer limit to one, two, or three columns and resets to page one on resize', async () => {
+    const originalWidth = window.innerWidth;
+    window.innerWidth = 1024;
+    render(<CollectionManager initialOffers={manyOffers} />);
+    await waitForListings();
+    await waitFor(() => expect(cardCount()).toBe(15));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Strona 2' }));
+    await waitFor(() => expect(cardCount()).toBe(15));
+
+    window.innerWidth = 768;
+    fireEvent(window, new Event('resize'));
+    await waitFor(() => expect(cardCount()).toBe(10));
+    expect(screen.getByRole('heading', { name: 'City 61' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: '10 ofert' })).toBeInTheDocument();
+
+    window.innerWidth = 767;
+    fireEvent(window, new Event('resize'));
+    await waitFor(() => expect(cardCount()).toBe(5));
+    expect(screen.getByRole('option', { name: '5 ofert' })).toBeInTheDocument();
+
+    window.innerWidth = originalWidth;
+  });
+
+  it('applies a selected page size and returns to page one when it changes', async () => {
+    render(<CollectionManager initialOffers={manyOffers} />);
+    await waitForListings();
+    await waitFor(() => expect(cardCount()).toBe(15));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Strona 2' }));
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'City 46' })).toBeInTheDocument());
+
+    fireEvent.change(screen.getByRole('combobox', { name: 'Oferty na stronie' }), { target: { value: '10' } });
+    await waitFor(() => expect(cardCount()).toBe(30));
+    expect(screen.getByRole('heading', { name: 'City 61' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Strona 1' })).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('returns to page one when a filter changes', async () => {
+    render(<CollectionManager initialOffers={manyOffers} />);
+    await waitForListings();
+    await waitFor(() => expect(cardCount()).toBe(15));
+
+    fireEvent.click(screen.getByRole('button', { name: 'Strona 2' }));
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'City 46' })).toBeInTheDocument());
+
+    openCountryDropdown();
+    checkCountry('Spain');
+    applyFilter();
+
+    await waitFor(() => expect(screen.getByRole('heading', { name: 'City 61' })).toBeInTheDocument());
+    expect(screen.getByRole('button', { name: 'Strona 1' })).toHaveAttribute('aria-current', 'page');
   });
 });

@@ -95,6 +95,8 @@ const FeaturedProperties = ({
   title = 'Wyselekcjonowane oferty',
   displayCurrency = 'EUR',
   rates = {},
+  totalCount = properties.length,
+  pagination,
 }) => (
   <div>
     <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:justify-between sm:items-end">
@@ -102,9 +104,30 @@ const FeaturedProperties = ({
         {title}
       </h2>
       <p className="font-label text-xs text-outline tracking-widest uppercase">
-        {properties.length} nieruchomości
+        {totalCount} nieruchomości
       </p>
     </div>
+
+    {pagination && (
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <label className="flex items-center gap-3 font-label text-xs uppercase tracking-widest text-outline">
+          Oferty na stronie
+          <select
+            aria-label="Oferty na stronie"
+            value={pagination.rowsPerPage}
+            onChange={(event) => pagination.onRowsPerPageChange(Number(event.target.value))}
+            className="min-h-11 rounded-sm bg-surface-container-low px-3 text-sm normal-case tracking-normal text-on-surface"
+          >
+            {[5, 10, 20].map((rows) => (
+              <option key={rows} value={rows}>{rows * (pagination.pageSize / pagination.rowsPerPage)} ofert</option>
+            ))}
+          </select>
+        </label>
+        {pagination.pageCount > 1 && (
+          <Pagination {...pagination} />
+        )}
+      </div>
+    )}
 
     {properties.length === 0 ? (
       <div className="py-16 text-center">
@@ -143,5 +166,52 @@ const FeaturedProperties = ({
     )}
   </div>
 );
+
+const Pagination = ({ currentPage, pageCount, onPageChange }) => {
+  const visiblePages = new Set([1, pageCount]);
+  for (let page = currentPage - 1; page <= currentPage + 1; page += 1) {
+    if (page > 0 && page <= pageCount) visiblePages.add(page);
+  }
+  const pages = [...visiblePages].sort((left, right) => left - right);
+
+  return (
+    <nav aria-label="Paginacja ofert" className="flex flex-wrap items-center justify-center gap-1">
+      <button
+        type="button"
+        onClick={() => onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+        aria-label="Poprzednia strona"
+        className="min-h-11 min-w-11 rounded-sm px-3 text-sm text-on-surface-variant hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        ‹
+      </button>
+      {pages.map((page, index) => (
+        <React.Fragment key={page}>
+          {index > 0 && pages[index - 1] !== page - 1 && (
+            <span aria-hidden="true" className="px-1 text-outline">…</span>
+          )}
+          <button
+            type="button"
+            onClick={() => onPageChange(page)}
+            aria-label={`Strona ${page}`}
+            aria-current={page === currentPage ? 'page' : undefined}
+            className={`min-h-11 min-w-11 rounded-sm px-3 text-sm ${page === currentPage ? 'bg-primary text-surface' : 'text-on-surface-variant hover:bg-surface-container-low'}`}
+          >
+            {page}
+          </button>
+        </React.Fragment>
+      ))}
+      <button
+        type="button"
+        onClick={() => onPageChange(currentPage + 1)}
+        disabled={currentPage === pageCount}
+        aria-label="Następna strona"
+        className="min-h-11 min-w-11 rounded-sm px-3 text-sm text-on-surface-variant hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
+      >
+        ›
+      </button>
+    </nav>
+  );
+};
 
 export default FeaturedProperties;
