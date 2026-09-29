@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar';
 import CollectionManager from '../components/CollectionManager';
+import Footer from '../components/Footer';
 import { loadConfiguredOffers } from '../server/offerService.js';
 import { getRates } from '../server/rateService';
 
@@ -18,4 +19,5 @@ const { rates, timestamp, source } = getRates();
 		initialRatesTimestamp={timestamp}
 		initialRatesSource={source}
 	/>
+	<Footer />
 </Layout>
