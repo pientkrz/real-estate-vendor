@@ -99,4 +99,5 @@ describe('FeaturedProperties — metryki karty oferty', () => {
     expect(image).toHaveAttribute('data-fallback-applied', 'true');
     expect(image).not.toHaveAttribute('srcset');
   });
+
 });

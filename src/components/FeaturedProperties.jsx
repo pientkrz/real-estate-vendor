@@ -110,7 +110,7 @@ const FeaturedProperties = ({
     </div>
 
     {pagination && (
-      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mb-6">
         <FilterSelect
           label="Oferty na stronie"
           value={pagination.rowsPerPage}
@@ -121,9 +121,6 @@ const FeaturedProperties = ({
           summary={`${pagination.pageSize} ofert`}
           onApply={(rows) => pagination.onRowsPerPageChange(Number(rows))}
         />
-        {pagination.pageCount > 1 && (
-          <Pagination {...pagination} />
-        )}
       </div>
     )}
 
@@ -135,6 +132,7 @@ const FeaturedProperties = ({
         </p>
       </div>
     ) : (
+      <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
         {properties.map((prop, index) => (
           <div key={prop.id || index}>
@@ -161,6 +159,12 @@ const FeaturedProperties = ({
           </div>
         ))}
       </div>
+      {pagination?.pageCount > 1 && (
+        <div className="mt-10 flex justify-center">
+          <Pagination {...pagination} />
+        </div>
+      )}
+      </>
     )}
   </div>
 );
