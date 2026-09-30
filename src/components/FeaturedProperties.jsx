@@ -109,21 +109,6 @@ const FeaturedProperties = ({
       </p>
     </div>
 
-    {pagination && (
-      <div className="mb-6">
-        <FilterSelect
-          label="Oferty na stronie"
-          value={pagination.rowsPerPage}
-          options={[5, 10, 20].map((rows) => ({
-            value: rows,
-            label: `${rows * (pagination.pageSize / pagination.rowsPerPage)} ofert`,
-          }))}
-          summary={`${pagination.pageSize} ofert`}
-          onApply={(rows) => pagination.onRowsPerPageChange(Number(rows))}
-        />
-      </div>
-    )}
-
     {properties.length === 0 ? (
       <div className="py-16 text-center">
         <span className="material-symbols-outlined text-4xl text-outline/30 mb-4 block">search_off</span>
@@ -159,12 +144,34 @@ const FeaturedProperties = ({
           </div>
         ))}
       </div>
-      {pagination?.pageCount > 1 && (
-        <div className="mt-10 flex justify-center">
-          <Pagination {...pagination} />
-        </div>
-      )}
       </>
+    )}
+
+    {pagination && (
+      <div className="mt-8 grid grid-cols-1 justify-items-center gap-3 md:mt-10 md:grid-cols-[1fr_auto_1fr] md:items-center md:justify-items-stretch">
+        <div className="order-3 md:order-1 md:justify-self-start">
+          <FilterSelect
+            label="Oferty na stronie"
+            value={pagination.rowsPerPage}
+            options={[5, 10, 20].map((rows) => ({
+              value: rows,
+              label: `${rows * (pagination.pageSize / pagination.rowsPerPage)} ofert`,
+            }))}
+            summary={`${pagination.pageSize} ofert`}
+            onApply={(rows) => pagination.onRowsPerPageChange(Number(rows))}
+          />
+        </div>
+        {pagination.pageCount > 1 && (
+          <div className="order-1 md:order-2 md:justify-self-center">
+            <Pagination {...pagination} />
+          </div>
+        )}
+        {totalCount > 0 && (
+          <p className="order-2 m-0 text-center font-label text-xs tabular-nums text-outline md:order-3 md:justify-self-end">
+            {(pagination.currentPage - 1) * pagination.pageSize + 1}–{Math.min(pagination.currentPage * pagination.pageSize, totalCount)} z {totalCount} ofert
+          </p>
+        )}
+      </div>
     )}
   </div>
 );
@@ -183,9 +190,9 @@ const Pagination = ({ currentPage, pageCount, onPageChange }) => {
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
         aria-label="Poprzednia strona"
-        className="min-h-11 min-w-11 rounded-sm px-3 text-sm text-on-surface-variant hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-sm px-2 text-sm text-on-surface-variant hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40 sm:px-3"
       >
-        ‹
+        <span aria-hidden="true">‹</span><span className="hidden sm:inline">Poprzednia</span>
       </button>
       {pages.map((page, index) => (
         <React.Fragment key={page}>
@@ -208,9 +215,9 @@ const Pagination = ({ currentPage, pageCount, onPageChange }) => {
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === pageCount}
         aria-label="Następna strona"
-        className="min-h-11 min-w-11 rounded-sm px-3 text-sm text-on-surface-variant hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40"
+        className="flex min-h-11 min-w-11 items-center justify-center gap-1 rounded-sm px-2 text-sm text-on-surface-variant hover:bg-surface-container-low disabled:cursor-not-allowed disabled:opacity-40 sm:px-3"
       >
-        ›
+        <span className="hidden sm:inline">Następna</span><span aria-hidden="true">›</span>
       </button>
     </nav>
   );
